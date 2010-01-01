@@ -1420,7 +1420,7 @@ void Spell::SetTargetMap(uint32 effIndex, uint32 targetMode, UnitList& targetUni
         case TARGET_AREAEFFECT_CUSTOM_2:
         {
             // used for targeting gameobjects
-            TagUnitMap.push_back(m_caster);
+            targetUnitMap.push_back(m_caster);
             break;
         }
         case TARGET_RANDOM_ENEMY_CHAIN_IN_AREA:
