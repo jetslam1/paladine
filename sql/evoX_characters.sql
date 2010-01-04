@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50137
 File Encoding         : 65001
 
-Date: 2010-01-04 19:55:45
+Date: 2010-01-04 20:56:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -22,7 +22,7 @@ CREATE TABLE `account_data` (
   `account` int(11) unsigned NOT NULL DEFAULT '0',
   `type` int(11) unsigned NOT NULL DEFAULT '0',
   `time` bigint(11) unsigned NOT NULL DEFAULT '0',
-  `data` longtext NOT NULL,
+  `data` longblob NOT NULL,
   PRIMARY KEY (`account`,`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -136,7 +136,7 @@ CREATE TABLE `character_account_data` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0',
   `type` int(11) unsigned NOT NULL DEFAULT '0',
   `time` bigint(11) unsigned NOT NULL DEFAULT '0',
-  `data` longtext NOT NULL,
+  `data` longblob NOT NULL,
   PRIMARY KEY (`guid`,`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -594,6 +594,7 @@ CREATE TABLE `character_ticket` (
   `ticket_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `guid` int(11) unsigned NOT NULL DEFAULT '0',
   `ticket_text` text,
+  `response_text` text,
   `ticket_lastchange` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ticket_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
