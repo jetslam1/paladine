@@ -18,10 +18,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "Player.h"
 #include "BattleGround.h"
 #include "BattleGroundDS.h"
 #include "Language.h"
+#include "Player.h"
+#include "Object.h"
+#include "ObjectMgr.h"
+#include "WorldPacket.h"
 
 BattleGroundDS::BattleGroundDS()
 {
@@ -53,6 +56,7 @@ void BattleGroundDS::StartingEventCloseDoors()
 
 void BattleGroundDS::StartingEventOpenDoors()
 {
+    OpenDoorEvent(BG_EVENT_DOOR);
 }
 
 void BattleGroundDS::AddPlayer(Player *plr)
@@ -62,19 +66,69 @@ void BattleGroundDS::AddPlayer(Player *plr)
     BattleGroundDSScore* sc = new BattleGroundDSScore;
 
     m_PlayerScores[plr->GetGUID()] = sc;
+
+    UpdateArenaWorldState();
 }
 
 void BattleGroundDS::RemovePlayer(Player * /*plr*/, uint64 /*guid*/)
 {
+    if (GetStatus() == STATUS_WAIT_LEAVE)
+        return;
+
+    UpdateArenaWorldState();
+    CheckArenaWinConditions();
 }
 
 void BattleGroundDS::HandleKillPlayer(Player* player, Player* killer)
 {
-    BattleGround::HandleKillPlayer(player, killer);
+    if (GetStatus() != STATUS_IN_PROGRESS)
+        return;
+
+    if (!killer)
+    {
+        sLog.outError("BattleGroundDS: Killer player not found");
+        return;
+    }
+
+    BattleGround::HandleKillPlayer(player,killer);
+
+    UpdateArenaWorldState();
+    CheckArenaWinConditions();
 }
 
-void BattleGroundDS::HandleAreaTrigger(Player * /*Source*/, uint32 /*Trigger*/)
+void BattleGroundDS::HandleAreaTrigger(Player *Source, uint32 Trigger)
 {
+    if (GetStatus() != STATUS_IN_PROGRESS)
+        return;
+
+    switch(Trigger)
+    {
+        case 5347:
+        case 5348:
+            break;
+        default:
+            sLog.outError("WARNING: Unhandled AreaTrigger in Battleground: %u", Trigger);
+            Source->GetSession()->SendAreaTriggerMessage("Warning: Unhandled AreaTrigger in Battleground: %u", Trigger);
+            break;
+    }
+}
+
+bool BattleGroundDS::HandlePlayerUnderMap(Player *player)
+{
+    player->TeleportTo(GetMapId(), 1299.046, 784.825, 9.338, 2.422, false);
+    return true;
+}
+
+void BattleGroundDS::FillInitialWorldStates(WorldPacket &data)
+{
+    data << uint32(3610) << uint32(1);           // 9
+    UpdateArenaWorldState();
+}
+
+void BattleGroundDS::Reset()
+{
+    //call parent's class reset
+    BattleGround::Reset();
 }
 
 bool BattleGroundDS::SetupBattleGround()
