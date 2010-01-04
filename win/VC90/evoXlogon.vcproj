@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="realmd"
+	Name="evoXlogon"
 	ProjectGUID="{563E9905-3657-460C-AE63-0AC39D162E23}"
-	RootNamespace="realmd"
+	RootNamespace="evoXlogon"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="0"
 	>
@@ -48,7 +48,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\dep\include;..\..\src\framework;..\..\src\shared;..\..\src\realmd;..\..\dep\ACE_wrappers"
+				AdditionalIncludeDirectories="..\..\dep\include;..\..\src\framework;..\..\src\shared;..\..\src\evoXlogon;..\..\dep\ACE_wrappers"
 				PreprocessorDefinitions="VERSION=&quot;0.15.0-DEV&quot;;WIN32;NDEBUG;_CONSOLE;_SECURE_SCL=0"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -81,7 +81,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="libmySQL.lib libeay32.lib ws2_32.lib winmm.lib odbc32.lib odbccp32.lib advapi32.lib dbghelp.lib"
-				OutputFile="..\..\bin\$(PlatformName)_$(ConfigurationName)\realmd.exe"
+				OutputFile="..\..\bin\$(PlatformName)_$(ConfigurationName)\evoXlogon.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\dep\lib\$(PlatformName)_$(ConfigurationName)"
@@ -146,7 +146,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\dep\include;..\..\src\framework;..\..\src\shared;..\..\src\realmd;..\..\dep\ACE_wrappers"
+				AdditionalIncludeDirectories="..\..\dep\include;..\..\src\framework;..\..\src\shared;..\..\src\evoXlogon;..\..\dep\ACE_wrappers"
 				PreprocessorDefinitions="VERSION=&quot;0.15.0-DEV&quot;;WIN32;NDEBUG;_CONSOLE;_SECURE_SCL=0"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -178,7 +178,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libmySQL.lib libeay32.lib ws2_32.lib winmm.lib odbc32.lib odbccp32.lib advapi32.lib dbghelp.lib"
-				OutputFile="..\..\bin\$(PlatformName)_$(ConfigurationName)\realmd.exe"
+				OutputFile="..\..\bin\$(PlatformName)_$(ConfigurationName)\evoXlogon.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\dep\lib\$(PlatformName)_$(ConfigurationName)"
@@ -242,7 +242,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\dep\include;..\..\src\framework;..\..\src\shared;..\..\src\realmd;..\..\dep\ACE_wrappers"
+				AdditionalIncludeDirectories="..\..\dep\include;..\..\src\framework;..\..\src\shared;..\..\src\evoXlogon;..\..\dep\ACE_wrappers"
 				PreprocessorDefinitions="VERSION=&quot;0.15.0-DEV&quot;;WIN32;_DEBUG;MANGOS_DEBUG;_CONSOLE"
 				IgnoreStandardIncludePath="false"
 				BasicRuntimeChecks="3"
@@ -275,7 +275,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="libmySQL.lib libeay32.lib ws2_32.lib winmm.lib odbc32.lib odbccp32.lib advapi32.lib dbghelp.lib"
-				OutputFile="..\..\bin\$(PlatformName)_$(ConfigurationName)\realmd.exe"
+				OutputFile="..\..\bin\$(PlatformName)_$(ConfigurationName)\evoXlogon.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\dep\lib\$(PlatformName)_$(ConfigurationName)"
@@ -341,7 +341,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\dep\include;..\..\src\framework;..\..\src\shared;..\..\src\realmd;..\..\dep\ACE_wrappers"
+				AdditionalIncludeDirectories="..\..\dep\include;..\..\src\framework;..\..\src\shared;..\..\src\evoXlogon;..\..\dep\ACE_wrappers"
 				PreprocessorDefinitions="VERSION=&quot;0.15.0-DEV&quot;;WIN32;_DEBUG;MANGOS_DEBUG;_CONSOLE"
 				IgnoreStandardIncludePath="false"
 				BasicRuntimeChecks="3"
@@ -373,7 +373,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libmySQL.lib libeay32.lib ws2_32.lib winmm.lib odbc32.lib odbccp32.lib advapi32.lib dbghelp.lib"
-				OutputFile="..\..\bin\$(PlatformName)_$(ConfigurationName)\realmd.exe"
+				OutputFile="..\..\bin\$(PlatformName)_$(ConfigurationName)\evoXlogon.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\dep\lib\$(PlatformName)_$(ConfigurationName)"
@@ -438,7 +438,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\dep\include;..\..\src\framework;..\..\src\shared;..\..\src\realmd;..\..\dep\ACE_wrappers"
+				AdditionalIncludeDirectories="..\..\dep\include;..\..\src\framework;..\..\src\shared;..\..\src\evoXlogon;..\..\dep\ACE_wrappers"
 				PreprocessorDefinitions="VERSION=&quot;0.15.0-DEV&quot;;WIN32;_DEBUG;MANGOS_DEBUG;_CONSOLE"
 				IgnoreStandardIncludePath="false"
 				BasicRuntimeChecks="3"
@@ -471,7 +471,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="libmySQL.lib libeay32.lib ws2_32.lib winmm.lib odbc32.lib odbccp32.lib advapi32.lib dbghelp.lib"
-				OutputFile="..\..\bin\$(PlatformName)_$(ConfigurationName)\realmd.exe"
+				OutputFile="..\..\bin\$(PlatformName)_$(ConfigurationName)\evoXlogon.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\dep\lib\$(PlatformName)_debug"
@@ -537,7 +537,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\dep\include;..\..\src\framework;..\..\src\shared;..\..\src\realmd;..\..\dep\ACE_wrappers"
+				AdditionalIncludeDirectories="..\..\dep\include;..\..\src\framework;..\..\src\shared;..\..\src\evoXlogon;..\..\dep\ACE_wrappers"
 				PreprocessorDefinitions="VERSION=&quot;0.15.0-DEV&quot;;WIN32;_DEBUG;MANGOS_DEBUG;_CONSOLE"
 				IgnoreStandardIncludePath="false"
 				BasicRuntimeChecks="3"
@@ -569,7 +569,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libmySQL.lib libeay32.lib ws2_32.lib winmm.lib odbc32.lib odbccp32.lib advapi32.lib dbghelp.lib"
-				OutputFile="..\..\bin\$(PlatformName)_$(ConfigurationName)\realmd.exe"
+				OutputFile="..\..\bin\$(PlatformName)_$(ConfigurationName)\evoXlogon.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\dep\lib\$(PlatformName)_debug"
@@ -610,31 +610,31 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\src\realmd\AuthCodes.h"
+			RelativePath="..\..\src\evoXlogon\AuthCodes.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\realmd\AuthSocket.cpp"
+			RelativePath="..\..\src\evoXlogon\AuthSocket.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\realmd\AuthSocket.h"
+			RelativePath="..\..\src\evoXlogon\AuthSocket.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\realmd\Main.cpp"
+			RelativePath="..\..\src\evoXlogon\Main.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\realmd\realmd.rc"
+			RelativePath="..\..\src\evoXlogon\evoXlogon.rc"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\realmd\RealmList.cpp"
+			RelativePath="..\..\src\evoXlogon\RealmList.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\realmd\RealmList.h"
+			RelativePath="..\..\src\evoXlogon\RealmList.h"
 			>
 		</File>
 		<File

@@ -20,38 +20,16 @@
 SUBDIRS = dep doc sql src
 
 ## Additional files to include when running 'make dist'
-# Win32 project workspace for Visual Studio .NET 2005
-EXTRA_DIST = \
-	win/mangosdVC80.sln \
-	win/VC80/framework.vcproj \
-	win/VC80/game.vcproj \
-	win/VC80/mangosd.vcproj \
-	win/VC80/realmd.vcproj \
-	win/VC80/shared.vcproj \
-	win/VC80/zlib.vcproj \
-	win/VC80/g3dlite.vcproj
-
 # Win32 project workspace for Visual Studio .NET 2008
 EXTRA_DIST += \
 	win/mangosdVC90.sln \
 	win/VC90/framework.vcproj \
 	win/VC90/game.vcproj \
-	win/VC90/mangosd.vcproj \
-	win/VC90/realmd.vcproj \
+	win/VC90/evoXworld.vcproj \
+	win/VC90/evoXlogon.vcproj \
 	win/VC90/shared.vcproj \
 	win/VC90/zlib.vcproj \
 	win/VC90/g3dlite.vcproj
-
-# Win32 project workspace for Visual Studio .NET 2010
-EXTRA_DIST += \
-	win/mangosdVC100.sln \
-	win/VC100/framework.vcxproj \
-	win/VC100/game.vcxproj \
-	win/VC100/mangosd.vcxproj \
-	win/VC100/realmd.vcxproj \
-	win/VC100/shared.vcxproj \
-	win/VC100/zlib.vcxproj \
-	win/VC100/g3dlite.vcxproj
 
 ACLOCAL_AMFLAGS = -I m4
 

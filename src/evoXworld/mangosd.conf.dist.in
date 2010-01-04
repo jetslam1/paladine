@@ -1,5 +1,5 @@
 #####################################
-# MaNGOS Configuration file         #
+# evo-X world Configuration file    #
 #####################################
 ConfVersion=2008080101
 
@@ -49,9 +49,9 @@ ConfVersion=2008080101
 RealmID = 1
 DataDir = "."
 LogsDir = ""
-LoginDatabaseInfo     = "127.0.0.1;3306;root;mangos;realmd"
-WorldDatabaseInfo     = "127.0.0.1;3306;root;mangos;mangos"
-CharacterDatabaseInfo = "127.0.0.1;3306;root;mangos;characters"
+LoginDatabaseInfo     = "127.0.0.1;3306;root;evoX;evoXlogon"
+WorldDatabaseInfo     = "127.0.0.1;3306;root;evoX;evoXworld"
+CharacterDatabaseInfo = "127.0.0.1;3306;root;evoX;evoXcharacters"
 MaxPingTime = 30
 WorldServerPort = 8085
 BindIP = "0.0.0.0"

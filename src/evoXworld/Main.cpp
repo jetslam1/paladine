@@ -34,9 +34,9 @@
 
 #ifdef WIN32
 #include "ServiceWin32.h"
-char serviceName[] = "mangosd";
-char serviceLongName[] = "MaNGOS world service";
-char serviceDescription[] = "Massive Network Game Object Server";
+char serviceName[] = "evoXworld";
+char serviceLongName[] = "evo-X world service";
+char serviceDescription[] = "evo-X Game Server";
 /*
  * -1 - not in service mode
  *  0 - stopped
