@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
+ * Copyright (C) 2009-2010 evo-X <http://evo-X-Project.com/evo-X/>
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -147,17 +149,16 @@ extern int main(int argc, char **argv)
     sLog.outString( "%s [world-daemon]", _FULLVERSION(REVISION_DATE,REVISION_TIME,REVISION_NR,REVISION_ID) );
     sLog.outString( "<Ctrl-C> to stop.\n\n" );
 
-    sLog.outTitle( "MM   MM         MM   MM  MMMMM   MMMM   MMMMM");
-    sLog.outTitle( "MM   MM         MM   MM MMM MMM MM  MM MMM MMM");
-    sLog.outTitle( "MMM MMM         MMM  MM MMM MMM MM  MM MMM");
-    sLog.outTitle( "MM M MM         MMMM MM MMM     MM  MM  MMM");
-    sLog.outTitle( "MM M MM  MMMMM  MM MMMM MMM     MM  MM   MMM");
-    sLog.outTitle( "MM M MM M   MMM MM  MMM MMMMMMM MM  MM    MMM");
-    sLog.outTitle( "MM   MM     MMM MM   MM MM  MMM MM  MM     MMM");
-    sLog.outTitle( "MM   MM MMMMMMM MM   MM MMM MMM MM  MM MMM MMM");
-    sLog.outTitle( "MM   MM MM  MMM MM   MM  MMMMMM  MMMM   MMMMM");
-    sLog.outTitle( "        MM  MMM http://getmangos.com");
-    sLog.outTitle( "        MMMMMM\n\n");
+	sLog.outTitle( "################################################");
+	sLog.outTitle( "################################################");
+	sLog.outTitle( "###                                          ###");
+	sLog.outTitle( "###                                          ###");
+	sLog.outTitle( "###         evo-X Project 2009-2010          ###");
+	sLog.outTitle( "###                                          ###");
+	sLog.outTitle( "###                                          ###");
+	sLog.outTitle( "################################################");
+	sLog.outTitle( "################################################");
+    sLog.outTitle( "         http://evo-X-Project.com/evo-X");
 
     sLog.outString("Using configuration file %s.", cfg_file);
 
