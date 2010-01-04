@@ -207,7 +207,7 @@ extern int main(int argc, char **argv)
     ListenSocket<AuthSocket> authListenSocket(h);
     if ( authListenSocket.Bind(bind_ip.c_str(),rmport))
     {
-        sLog.outError( "MaNGOS realmd can not bind to %s:%d",bind_ip.c_str(), rmport );
+        sLog.outError( "evoXlogon can not bind to %s:%d",bind_ip.c_str(), rmport );
         return 1;
     }
 
@@ -256,9 +256,9 @@ extern int main(int argc, char **argv)
         if(Prio)
         {
             if(SetPriorityClass(hProcess,HIGH_PRIORITY_CLASS))
-                sLog.outString("realmd process priority class set to HIGH");
+                sLog.outString("evoXlogon process priority class set to HIGH");
             else
-                sLog.outError("ERROR: Can't set realmd process priority class.");
+                sLog.outError("ERROR: Can't set evoXlogon process priority class.");
             sLog.outString();
         }
     }
