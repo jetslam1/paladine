@@ -684,7 +684,7 @@ OffhandCheckAtSpellUnlearn = 0
 ClientCacheVersion = 0
 Event.Announce = 0
 BeepAtStart = 1
-Motd = "Welcome to the Massive Network Game Object Server."
+Motd = "Welcome to evo-X Game Server."
 
 ###################################################################################################################
 # PLAYER INTERACTION
