@@ -22,7 +22,7 @@ SUBDIRS = dep doc sql src
 ## Additional files to include when running 'make dist'
 # Win32 project workspace for Visual Studio .NET 2008
 EXTRA_DIST += \
-	win/mangosdVC90.sln \
+	win/evoXVC90.sln \
 	win/VC90/framework.vcproj \
 	win/VC90/game.vcproj \
 	win/VC90/evoXworld.vcproj \
