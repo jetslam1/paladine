@@ -43,10 +43,13 @@ class BattleGroundRV : public BattleGround
         virtual void AddPlayer(Player *plr);
         virtual void StartingEventCloseDoors();
         virtual void StartingEventOpenDoors();
+        virtual void Reset();
+        virtual void FillInitialWorldStates(WorldPacket &d);
 
         void RemovePlayer(Player *plr, uint64 guid);
         void HandleAreaTrigger(Player *Source, uint32 Trigger);
         bool SetupBattleGround();
         void HandleKillPlayer(Player* player, Player *killer);
+		bool HandlePlayerUnderMap(Player * plr);
 };
 #endif
