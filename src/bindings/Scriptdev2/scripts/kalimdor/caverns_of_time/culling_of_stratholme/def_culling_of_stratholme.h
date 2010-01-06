@@ -52,7 +52,7 @@ enum Data
 	NPC_MEATHOOK                   = 26529,  // Meathook
 	NPC_SALRAMM                    = 26530,  // Salramm
 	NPC_EPOCH                      = 26532,  // Lord Epoch
-	NPC_MALGANIS                   = 26533,  // Mal'Ganis
+	NPC_MALGANIS                   = 26533   // Mal'Ganis
 };
 
 #endif

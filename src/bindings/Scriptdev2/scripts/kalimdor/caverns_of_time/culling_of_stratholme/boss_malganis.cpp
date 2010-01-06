@@ -101,10 +101,14 @@ struct MANGOS_DLL_DECL boss_malganisAI : public ScriptedAI
 		Sleep_Timer = 17300;
 		Vampire_Timer = 30000;
 
-
 		if(Finish == true) {}
 		else
 			Finish = false;
+
+		if(m_pInstance->GetData(TYPE_MALGANIS_EVENT) == DONE || m_pInstance->GetData(TYPE_ARTHAS_EVENT) == DONE)
+		{
+			m_creature->SetDeadByDefault(true);
+		}
 	}
 
 	void Aggro(Unit* who)

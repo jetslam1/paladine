@@ -124,11 +124,15 @@ struct MANGOS_DLL_DECL boss_lord_epochAI : public ScriptedAI
 			switch(Step)
 			{
 				case 1:
+					++Step;
+					Steptim = 5000;
+					break;
+				case 3:
 					DoScriptText(SAY_EPOCH_INTRO, m_creature);
 					++Step;
 					Steptim = 26000;
 					break;
-				case 4:
+				case 5:
 					m_creature->setFaction(14);
 					++Step;
 					Steptim = 1000;

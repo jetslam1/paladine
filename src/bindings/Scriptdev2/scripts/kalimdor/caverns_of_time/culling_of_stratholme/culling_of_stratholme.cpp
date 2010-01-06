@@ -129,9 +129,7 @@ struct MANGOS_DLL_DECL npc_arthasAI : public npc_escortAI
         m_bIsHeroic = pCreature->GetMap()->IsRegularDifficulty();
 		ArthasGUID = 0;
 		SalrammGUID = 0;
-		x=0;
-		y=0;
-		z=0;
+		PhaseC = false;
         Reset();
    }
 
@@ -168,9 +166,6 @@ struct MANGOS_DLL_DECL npc_arthasAI : public npc_escortAI
 	uint32 uiZombie_counter;
 	uint32 tmpZombie;
 	uint32 PatriciaEvent;
-	float x;
-	float y;
-	float z;
 
 	void Reset() 
 	{
@@ -182,15 +177,12 @@ struct MANGOS_DLL_DECL npc_arthasAI : public npc_escortAI
 		phasetim = 20000;  
 		Exorcism_Timer = 7300;
 		Arthas=m_creature;
-		x=Arthas->GetPositionX();
-		y=Arthas->GetPositionY();
-		z=Arthas->GetPositionZ();
 
 		if(m_pInstance->GetData(TYPE_ARTHAS_EVENT) == DONE) 
 			Arthas->SetVisibility(VISIBILITY_OFF);
 
 		// this is Arthas's start position in the instance he will give gossip only here and in front of the gate at Mal'Ganis
-		if(x == 1920.250000f && y ==  1286.599976f && z == 142.789001f && m_pInstance->GetData(TYPE_ARTHAS_EVENT) != DONE)
+		if(PhaseC == false && m_pInstance->GetData(TYPE_ARTHAS_EVENT) != DONE)
 		{
 			Arthas->SetVisibility(VISIBILITY_ON);
 			Arthas->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
@@ -236,7 +228,7 @@ struct MANGOS_DLL_DECL npc_arthasAI : public npc_escortAI
     {
          if (m_pInstance)
 		 {
-            m_pInstance->SetData(TYPE_ARTHAS_EVENT, DONE);
+            m_pInstance->SetData(TYPE_ARTHAS_EVENT, FAIL);
 		 }
     }
 
@@ -385,7 +377,7 @@ struct MANGOS_DLL_DECL npc_arthasAI : public npc_escortAI
                         GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(DATA_GO_MAL_GATE1));
                         pGate->SetGoState(GO_STATE_ACTIVE);
 					}                    
-                    ++phaseAI;
+					++phaseAI;
                     phasetim = 3000;
                     break;
               case 97:
@@ -395,7 +387,7 @@ struct MANGOS_DLL_DECL npc_arthasAI : public npc_escortAI
                     break;
               case 99:
                     Arthas->setFaction(culling_faction->getFaction());
-                    ++phaseAI;
+					++phaseAI;
                     phasetim = 3000;
                     break;                       
            }
@@ -437,12 +429,16 @@ struct MANGOS_DLL_DECL npc_arthasAI : public npc_escortAI
 			switch(phase)
             {
 				case 1:
+					PhaseC = true;
                     Arthas = m_creature;                   
                     Arthas->RemoveMonsterMoveFlag(MONSTER_MOVE_WALK);
                     Uther = Arthas->SummonCreature(26528,1794.357f,1272.183f,140.558f,1.37f,TEMPSUMMON_TIMED_DESPAWN,180000);
 
 					if (Creature* pJaina = GetClosestCreatureWithEntry(Arthas, NPC_JAINA, 50.0f))
 						Jaina = pJaina;
+
+					if (m_pInstance)
+						m_pInstance->SetData(TYPE_ARTHAS_EVENT, NOT_STARTED);
 
 					Uther->RemoveMonsterMoveFlag(MONSTER_MOVE_WALK);
                     Arthas->GetMotionMaster()->MovePoint(0, 1903.167f, 1291.573f, 143.32f);
@@ -681,6 +677,7 @@ struct MANGOS_DLL_DECL npc_arthasAI : public npc_escortAI
 				case 81:
                     TempMalganis = Arthas->SummonCreature(26533,2117.349f,1288.624f,136.271f,1.37f,TEMPSUMMON_TIMED_DESPAWN,29000);
                     DoScriptText(SAY_ENTER06, TempMalganis);
+					TempMalganis->SetVisibility(VISIBILITY_ON);
                     Arthas->SetUInt64Value(UNIT_FIELD_TARGET, TempMalganis->GetGUID());
                     TempMalganis->SetUInt64Value(UNIT_FIELD_TARGET, Arthas->GetGUID());
                     TempMalganis->setFaction(35);
