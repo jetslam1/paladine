@@ -149,16 +149,14 @@ extern int main(int argc, char **argv)
     sLog.outString( "%s [world-daemon]", _FULLVERSION(REVISION_DATE,REVISION_TIME,REVISION_NR,REVISION_ID) );
     sLog.outString( "<Ctrl-C> to stop.\n\n" );
 
-	sLog.outTitle( "################################################");
-	sLog.outTitle( "################################################");
-	sLog.outTitle( "###                                          ###");
-	sLog.outTitle( "###                                          ###");
-	sLog.outTitle( "###         evo-X Project 2009-2010          ###");
-	sLog.outTitle( "###                                          ###");
-	sLog.outTitle( "###                                          ###");
-	sLog.outTitle( "################################################");
-	sLog.outTitle( "################################################");
-    sLog.outTitle( "         http://evo-X-Project.com/evo-X");
+	sLog.outTitle( ".########.##.....##..#######..........##.....##");
+	sLog.outTitle( ".##.......##.....##.##.....##..........##...##.");
+	sLog.outTitle( ".##.......##.....##.##.....##...........##.##..");
+	sLog.outTitle( ".######...##.....##.##.....##.#######....###...");
+	sLog.outTitle( ".##........##...##..##.....##...........##.##..");
+	sLog.outTitle( ".##.........##.##...##.....##..........##...##.");
+	sLog.outTitle( ".########....###.....#######..........##.....##");
+	sLog.outTitle( "          http://evo-X-Project.com/evo-X");
 
     sLog.outString("Using configuration file %s.", cfg_file);
 
