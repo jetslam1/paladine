@@ -1914,6 +1914,7 @@ void AchievementGlobalMgr::LoadAchievementCriteriaRequirements()
 
         // this will allocate empty data set storage
         AchievementCriteriaRequirementSet& dataSet = m_criteriaRequirementMap[criteria_id];
+        dataSet.SetCriteriaId(criteria_id);
 
         // counting disable criteria requirements
         if (data.requirementType == ACHIEVEMENT_CRITERIA_REQUIRE_DISABLED)
