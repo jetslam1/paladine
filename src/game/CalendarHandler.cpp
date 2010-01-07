@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2009 MaNGOS <http://www.mangosproject.org/>
+ * Copyright (C) 2005-2010 MaNGOS <http://www.mangosproject.org/>
  *
  * Copyright (C) 2009-2010 evo-X <http://evo-X-Project.com/evo-X/>
  *
