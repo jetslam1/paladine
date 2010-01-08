@@ -94,7 +94,7 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 		Saronite_Barrier_Timer = 35000;
 		Saronite_Vapors_Timer = 20000;
 		Saronite_Vapors_h_Timer = 20000;
-		Berserk_Timer = 900000;
+		Berserk_Timer = 600000; //10 Minutes
 		if (m_pInstance)
             m_pInstance->SetData(TYPE_VEZAX, NOT_STARTED);
     }
