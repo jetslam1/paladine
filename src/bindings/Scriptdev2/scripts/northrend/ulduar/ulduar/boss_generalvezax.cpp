@@ -56,6 +56,12 @@ EndScriptData */
 #define SAY_UR_Vezax_Enrage02 "The black blood of Yogg-Saron courses through me! I...AM...UNSTOPPABLE!"
 #define SAY_UR_Vezax_Death01  "Ha-ha-ha! Oh, what horrors await..."
 
+// Saronite Vapors
+#define MOB_SAROBITE_VAPORS        33488
+
+// Saronite Vapors Spells
+#define SPELL_SAROBITE_VAPORS      63322
+
 struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 {
     boss_generalvezaxAI(Creature* pCreature) : ScriptedAI(pCreature) 
@@ -74,7 +80,8 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 	uint32 Mark_of_the_Faceless_Timer;
 	uint32 Surge_of_Darkness_Timer;
 	uint32 Saronite_Barrier_Timer;
-	uint32 Saronite_Vapors_Timer;  //Spawn 8x the entire battle
+	uint32 Saronite_Vapors_Timer;    //Spawn 8x the entire battle
+	uint32 Saronite_Vapors_h_Timer;  //Spawn 6x the entire battle
 	uint32 Berserk_Timer;
 	bool berserk;
 
@@ -86,6 +93,7 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 		Surge_of_Darkness_Timer = 30000;
 		Saronite_Barrier_Timer = 35000;
 		Saronite_Vapors_Timer = 20000;
+		Saronite_Vapors_h_Timer = 20000;
 		Berserk_Timer = 900000;
 		if (m_pInstance)
             m_pInstance->SetData(TYPE_VEZAX, NOT_STARTED);
@@ -182,6 +190,11 @@ struct MANGOS_DLL_DECL mob_saronite_vaporsrAI : public ScriptedAI
 
     void Reset()
     {
+    }
+
+	void JustDied(Unit *victim)
+    {
+		DoCast(m_creature, SPELL_SAROBITE_VAPORS);
     }
 
     void UpdateAI(const uint32 diff)
