@@ -16,7 +16,7 @@
 
 /* ScriptData
 SDName: Freya
-SD%Complete: 0
+SD%Complete: 85%
 SDComment: PH.
 SDCategory: Ulduar
 EndScriptData */
@@ -33,12 +33,25 @@ EndScriptData */
 #define H_SP_SUNBEAM 62872
 #define SP_BERSERK 47008
  
- 
 #define CR_DETONATING_LASHER 32918
 #define CR_ANCIENT_CONSERVATOR 33203
 #define CR_WATER_SPIRIT 33202
 #define CR_STORM_LASHER 32919
 #define CR_SNAPLASHER 32916
+
+// Freya Sounds
+#define SOUND_UR_Freya_Adds01       15528
+#define SOUND_UR_Freya_Adds02       15533
+#define SOUND_UR_Freya_Adds03       15534
+#define SOUND_UR_Freya_Aggro01      15526
+#define SOUND_UR_Freya_AggroElder01 15527
+#define SOUND_UR_Freya_Attack       15537
+#define SOUND_UR_Freya_Berserk01    15532
+#define SOUND_UR_Freya_Death01      15531
+#define SOUND_UR_Freya_Slay01       15529
+#define SOUND_UR_Freya_Slay02       15530
+#define SOUND_UR_Freya_Wound        15536
+#define SOUND_UR_Freya_YSHelp01     15535
  
 class MANGOS_DLL_DECL AttunedToNatureAura : public Aura
 {
@@ -91,11 +104,21 @@ struct MANGOS_DLL_DECL boss_freyaAI : public ScriptedAI
 
     void KilledUnit(Unit *victim)
     {
+				switch(urand(0, 1))
+                {
+                    case 0: 
+						DoPlaySoundToSet(m_creature, SOUND_UR_Freya_Slay01); 
+						break;
+                    case 1:
+						DoPlaySoundToSet(m_creature, SOUND_UR_Freya_Slay02);
+						break;
+                }
     }
 
     void JustDied(Unit *victim)
     {
 		if(pInstance) pInstance->SetData(TYPE_FREYA, DONE);
+		DoPlaySoundToSet(m_creature, SOUND_UR_Freya_Death01);
     }
 
     void Aggro(Unit* pWho)
@@ -103,7 +126,8 @@ struct MANGOS_DLL_DECL boss_freyaAI : public ScriptedAI
         if(!m_creature->HasAura(SP_ATTUNED_TO_NATURE, 0))
             m_creature->AddAura(new AttunedToNatureAura(sp, 0, &bp, m_creature, m_creature));
         m_creature->GetAura(SP_ATTUNED_TO_NATURE, 0)->SetStackAmount(150);
- 
+
+        DoPlaySoundToSet(m_creature, SOUND_UR_Freya_Aggro01);
         DoCast(m_creature, Regular ? SP_TOUCH_OF_EONAR : H_SP_TOUCH_OF_EONAR);
  
         if(pInstance) pInstance->SetData(TYPE_FREYA, IN_PROGRESS);
