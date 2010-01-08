@@ -16,7 +16,7 @@
 
 /* ScriptData
 SDName: General Vezax
-SD%Complete: 10%
+SD%Complete: 35%
 SDComment: PH.
 SDCategory: Ulduar
 EndScriptData */
@@ -69,6 +69,7 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 	uint32 Mark_of_the_Faceless_Timer;
 	uint32 Surge_of_Darkness_Timer;
 	uint32 Saronite_Barrier_Timer;
+	uint32 Saronite_Vapors_Timer;
 	uint32 Berserk_Timer;
 	bool berserk;
 
@@ -79,6 +80,7 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 		Mark_of_the_Faceless_Timer = 40000;
 		Surge_of_Darkness_Timer = 30000;
 		Saronite_Barrier_Timer = 35000;
+		Saronite_Vapors_Timer = 20000;
 		Berserk_Timer = 900000;
 		if (m_pInstance)
             m_pInstance->SetData(TYPE_VEZAX, NOT_STARTED);
@@ -157,6 +159,32 @@ CreatureAI* GetAI_boss_generalvezax(Creature* pCreature)
     return new boss_generalvezaxAI(pCreature);
 }
 
+struct MANGOS_DLL_DECL mob_saronite_vaporsrAI : public ScriptedAI
+{
+    mob_saronite_vaporsrAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+    }
+
+    ScriptedInstance* m_pInstance;
+    bool m_bIsRegularMode;
+
+    void Reset()
+    {
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_mob_saronite_vaporsr(Creature* pCreature)
+{
+    return new mob_saronite_vaporsrAI(pCreature);
+}
+
 void AddSC_boss_vezax()
 {
     Script *newscript;
@@ -165,5 +193,11 @@ void AddSC_boss_vezax()
     newscript->GetAI = &GetAI_boss_generalvezax;
     newscript->RegisterSelf();
 
+    newscript = new Script;
+    newscript->Name = "mob_saronite_vaporsr";
+    newscript->GetAI = &GetAI_mob_saronite_vaporsr;
+    newscript->RegisterSelf();
+
 }
-/*UPDATE `creature_template` SET `ScriptName`='boss_generalvezax' WHERE (`entry`='33271') LIMIT 1*/
+/*UPDATE `creature_template` SET `ScriptName`='boss_generalvezax' WHERE (`entry`='33271') LIMIT 1
+  UPDATE `creature_template` SET `ScriptName`='mob_saronite_vaporsr' WHERE (`entry`='33488') LIMIT 1*/
