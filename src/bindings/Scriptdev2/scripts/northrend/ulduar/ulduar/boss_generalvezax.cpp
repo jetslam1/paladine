@@ -24,9 +24,11 @@ EndScriptData */
 #include "precompiled.h"
 #include "ulduar.h"
 
+// General Vezax Aura
+#define AURA_AURA_OF_DESPAIR       62692
+
 // General Vezax Spells
 #define SPELL_BERSERK              26662
-#define SPELL_AURA_OF_DESPAIR      62692
 #define SPELL_MARK_OF_THE_FACELESS 63276
 #define SPELL_SARONITE_BARRIER     63364
 #define SPELL_SEARING_FLAMES       62661
@@ -72,7 +74,7 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 	uint32 Mark_of_the_Faceless_Timer;
 	uint32 Surge_of_Darkness_Timer;
 	uint32 Saronite_Barrier_Timer;
-	uint32 Saronite_Vapors_Timer;
+	uint32 Saronite_Vapors_Timer;  //Spawn 8x the entire battle
 	uint32 Berserk_Timer;
 	bool berserk;
 
@@ -84,7 +86,7 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 		Surge_of_Darkness_Timer = 30000;
 		Saronite_Barrier_Timer = 35000;
 		Saronite_Vapors_Timer = 20000;
-		Berserk_Timer = 900000;
+		Berserk_Timer = 900000;;
 		if (m_pInstance)
             m_pInstance->SetData(TYPE_VEZAX, NOT_STARTED);
     }
@@ -116,6 +118,7 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_VEZAX, IN_PROGRESS);
+		DoCast(m_creature, AURA_AURA_OF_DESPAIR);
 		DoPlaySoundToSet(m_creature, SOUND_UR_Vezax_Aggro01);
 		m_creature->MonsterYell(SAY_UR_Vezax_Aggro01, LANG_UNIVERSAL, 0);
     }
@@ -195,6 +198,7 @@ CreatureAI* GetAI_mob_saronite_vaporsr(Creature* pCreature)
 void AddSC_boss_vezax()
 {
     Script *newscript;
+
     newscript = new Script;
     newscript->Name = "boss_generalvezax";
     newscript->GetAI = &GetAI_boss_generalvezax;
