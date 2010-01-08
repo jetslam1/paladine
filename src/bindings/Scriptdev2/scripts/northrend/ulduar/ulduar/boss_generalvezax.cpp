@@ -53,16 +53,27 @@ EndScriptData */
 
 struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 {
-    boss_generalvezaxAI(Creature* pCreature) : ScriptedAI(pCreature)
+    boss_generalvezaxAI(Creature* pCreature) : ScriptedAI(pCreature) 
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+
         Reset();
     }
 
     ScriptedInstance* m_pInstance;
+	bool m_bIsRegularMode;
+
+	uint32 Searing_Flames_Timer;
+	uint32 Berserk_Timer;
+	bool berserk;
 
     void Reset()
     {
+		Searing_Flames_Timer = 10000; 
+		Berserk_Timer = 900000;
+		if (m_pInstance)
+            m_pInstance->SetData(TYPE_VEZAX, NOT_STARTED);
     }
 
     void KilledUnit(Unit *victim)
@@ -71,24 +82,30 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 
     void JustDied(Unit *victim)
     {
+		if (m_pInstance)
+            m_pInstance->SetData(TYPE_VEZAX, DONE);
+		DoPlaySoundToSet(m_creature, SOUND_UR_Vezax_Death01);
     }
 
     void Aggro(Unit* pWho)
     {
-        DoScriptText(SOUND_UR_Vezax_Aggro01, m_creature);
-        m_creature->SetInCombatWithZone();
-
         if (m_pInstance)
             m_pInstance->SetData(TYPE_VEZAX, IN_PROGRESS);
+		DoPlaySoundToSet(m_creature, SOUND_UR_Vezax_Aggro01);
     }
 
     void UpdateAI(const uint32 diff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
-//SPELLS TODO:
 
-//
+        if (Searing_Flames_Timer < diff )
+        {
+            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                DoCast(target, m_bIsRegularMode ? SPELL_SEARING_FLAMES : SPELL_SEARING_FLAMES);
+            Searing_Flames_Timer = 25000;
+        }else Searing_Flames_Timer -= diff;
+
         DoMeleeAttackIfReady();
 
         EnterEvadeIfOutOfCombatArea(diff);
