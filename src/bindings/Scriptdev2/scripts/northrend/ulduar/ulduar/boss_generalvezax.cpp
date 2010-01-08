@@ -26,8 +26,8 @@ EndScriptData */
 
 // General Vezax Spells
 #define SPELL_BERSERK              26662
-#define SPELL_AURA_OF DESPAIR      62692
-#define SPELL_MARK_OF_THE FACELESS 63276
+#define SPELL_AURA_OF_DESPAIR      62692
+#define SPELL_MARK_OF_THE_FACELESS 63276
 #define SPELL_SARONITE_BARRIER     63364
 #define SPELL_SEARING_FLAMES       62661
 #define SPELL_SHADOW_CRASH         62660
@@ -65,12 +65,20 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 	bool m_bIsRegularMode;
 
 	uint32 Searing_Flames_Timer;
+	uint32 Shadow_Crash_Timer;
+	uint32 Mark_of_the_Faceless_Timer;
+	uint32 Surge_of_Darkness_Timer;
+	uint32 Saronite_Barrier_Timer;
 	uint32 Berserk_Timer;
 	bool berserk;
 
     void Reset()
     {
-		Searing_Flames_Timer = 10000; 
+		Searing_Flames_Timer = 10000;
+		Shadow_Crash_Timer = 15000;
+		Mark_of_the_Faceless_Timer = 40000;
+		Surge_of_Darkness_Timer = 30000;
+		Saronite_Barrier_Timer = 35000;
 		Berserk_Timer = 900000;
 		if (m_pInstance)
             m_pInstance->SetData(TYPE_VEZAX, NOT_STARTED);
@@ -78,6 +86,15 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 
     void KilledUnit(Unit *victim)
     {
+		switch(urand(0, 1))
+                {
+                    case 0: 
+						DoPlaySoundToSet(m_creature, SOUND_UR_Vezax_Slay01); 
+						break;
+                    case 1:
+						DoPlaySoundToSet(m_creature, SOUND_UR_Vezax_Slay02);
+						break;
+                }
     }
 
     void JustDied(Unit *victim)
@@ -102,9 +119,30 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
         if (Searing_Flames_Timer < diff )
         {
             if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
-                DoCast(target, m_bIsRegularMode ? SPELL_SEARING_FLAMES : SPELL_SEARING_FLAMES);
+                DoCast(m_creature->getVictim(), SPELL_SEARING_FLAMES);
             Searing_Flames_Timer = 25000;
         }else Searing_Flames_Timer -= diff;
+
+		if (Shadow_Crash_Timer < diff )
+        {
+            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                DoCast(m_creature->getVictim(), SPELL_SHADOW_CRASH);
+            Shadow_Crash_Timer = 15000;
+        }else Shadow_Crash_Timer -= diff;
+
+		if (Mark_of_the_Faceless_Timer < diff )
+        {
+            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                DoCast(m_creature->getVictim(), SPELL_MARK_OF_THE_FACELESS);
+            Mark_of_the_Faceless_Timer = 40000;
+        }else Mark_of_the_Faceless_Timer -= diff;
+
+		if (Berserk_Timer < diff && !berserk)
+        {
+            m_creature->CastStop();
+            DoCast(m_creature, SPELL_BERSERK);
+            berserk = true;
+        }else Berserk_Timer -= diff;
 
         DoMeleeAttackIfReady();
 
