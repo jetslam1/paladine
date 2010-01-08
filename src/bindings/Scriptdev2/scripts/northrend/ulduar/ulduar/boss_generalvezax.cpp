@@ -46,10 +46,13 @@ EndScriptData */
 #define SOUND_UR_Vezax_WoundCrit   15551
 
 // General Vezax Says
-/*
-#define SAY_AGGRO -1
-#define SAY_SLAY -1
-*/
+#define SAY_UR_Vezax_Aggro01  "Your destruction will herald a new age of suffering!"
+#define SAY_UR_Vezax_Slay01   "You thought to stand before the legions of death and survive?"
+#define SAY_UR_Vezax_Slay02   "Defiance... *laughs* A flaw of mortality!"
+#define SAY_UR_Vezax_Spawns   "Behold now! Terror, absolute!"
+#define SAY_UR_Vezax_Enrage01 "Your defeat was inevitable."
+#define SAY_UR_Vezax_Enrage02 "The black blood of Yogg-Saron courses through me! I...AM...UNSTOPPABLE!"
+#define SAY_UR_Vezax_Death01  "Ha-ha-ha! Oh, what horrors await..."
 
 struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 {
@@ -92,9 +95,11 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
                 {
                     case 0: 
 						DoPlaySoundToSet(m_creature, SOUND_UR_Vezax_Slay01); 
+						m_creature->MonsterYell(SAY_UR_Vezax_Slay01, LANG_UNIVERSAL, 0);
 						break;
                     case 1:
 						DoPlaySoundToSet(m_creature, SOUND_UR_Vezax_Slay02);
+						m_creature->MonsterYell(SAY_UR_Vezax_Slay02, LANG_UNIVERSAL, 0);
 						break;
                 }
     }
@@ -104,6 +109,7 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 		if (m_pInstance)
             m_pInstance->SetData(TYPE_VEZAX, DONE);
 		DoPlaySoundToSet(m_creature, SOUND_UR_Vezax_Death01);
+		m_creature->MonsterYell(SAY_UR_Vezax_Death01, LANG_UNIVERSAL, 0);
     }
 
     void Aggro(Unit* pWho)
@@ -111,6 +117,7 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
         if (m_pInstance)
             m_pInstance->SetData(TYPE_VEZAX, IN_PROGRESS);
 		DoPlaySoundToSet(m_creature, SOUND_UR_Vezax_Aggro01);
+		m_creature->MonsterYell(SAY_UR_Vezax_Aggro01, LANG_UNIVERSAL, 0);
     }
 
     void UpdateAI(const uint32 diff)
