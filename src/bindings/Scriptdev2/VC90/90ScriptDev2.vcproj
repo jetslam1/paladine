@@ -2155,6 +2155,30 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="icecrown_citadel"
+					>
+					<Filter
+						Name="the_forge_of_souls"
+						>
+						<File
+							RelativePath="..\scripts\northrend\icecrown_citadel\the_forge_of_souls\boss_bronjahm.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\icecrown_citadel\the_forge_of_souls\boss_devourer.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\icecrown_citadel\the_forge_of_souls\instance_the_forge_of_souls.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\icecrown_citadel\the_forge_of_souls\the_forge_of_souls.h"
+							>
+						</File>
+					</Filter>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="outland"

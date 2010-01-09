@@ -423,6 +423,10 @@ scripts/northrend/violet_hold/boss_zuramat.cpp \
 scripts/northrend/violet_hold/def_violet_hold.h \
 scripts/northrend/violet_hold/instance_violet_hold.cpp \
 scripts/northrend/violet_hold/violet_hold.cpp \
+scripts/northrend/icecrown_citadel/the_forge_of_souls/boss_bronjahm.cpp \
+scripts/northrend/icecrown_citadel/the_forge_of_souls/boss_devourer.cpp \
+scripts/northrend/icecrown_citadel/the_forge_of_souls/instance_the_forge_of_souls.cpp \
+scripts/northrend/icecrown_citadel/the_forge_of_souls/the_forge_of_souls.h \
 scripts/outland/blades_edge_mountains.cpp \
 scripts/outland/boss_doomlord_kazzak.cpp \
 scripts/outland/boss_doomwalker.cpp \

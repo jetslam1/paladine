@@ -347,6 +347,9 @@ extern void AddSC_boss_black_knight();
 extern void AddSC_boss_grand_champions();
 extern void AddSC_instance_trial_of_the_champion();
 extern void AddSC_trial_of_the_champion();
+extern void AddSC_instance_the_forge_of_souls();           // IceCrownCitadel : The Forge of Souls
+extern void AddSC_boss_bronjahm();
+extern void AddSC_boss_devourer();
 
 extern void AddSC_borean_tundra();
 extern void AddSC_dalaran();
@@ -780,6 +783,9 @@ void AddScripts()
     AddSC_boss_grand_champions();
     AddSC_instance_trial_of_the_champion();
     AddSC_trial_of_the_champion();
+    AddSC_instance_the_forge_of_souls();                    // IceCrownCitadel : The Forge of Souls
+    AddSC_boss_bronjahm();
+    AddSC_boss_devourer();
 
     AddSC_borean_tundra();
     AddSC_dalaran();
