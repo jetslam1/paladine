@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -47,11 +47,6 @@ enum
     SPELL_SELF_SPAWN_5          = 29105,                    //This spawns 5 corpse scarabs ontop of us (most likely the pPlayer casts this on death)
     SPELL_SELF_SPAWN_10         = 28864,                    //This is used by the crypt guards when they die
 
-    SPELL_ACID_SPIT             = 28969,
-    SPELL_ACID_SPIT_H           = 56098,
-    SPELL_CLEAVE                = 40504,
-    SPELL_FRENZY                = 8269,
-
     NPC_CRYPT_GUARD             = 16573
 };
 
@@ -60,13 +55,13 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
     boss_anubrekhanAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_bIsHeroicMode = false;//pCreature->GetMap()->IsRaidOrHeroicDungeon();
+        m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
         m_bHasTaunted = false;
         Reset();
     }
 
     ScriptedInstance* m_pInstance;
-    bool m_bIsHeroicMode;
+    bool m_bIsRegularMode;
 
     uint32 m_uiImpaleTimer;
     uint32 m_uiLocustSwarmTimer;
@@ -77,7 +72,7 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
     {
         m_uiImpaleTimer = 15000;                            // 15 seconds
         m_uiLocustSwarmTimer = urand(80000, 120000);        // Random time between 80 seconds and 2 minutes for initial cast
-        m_uiSummonTimer = 25000;                            // 15 seconds after initial locust swarm
+        m_uiSummonTimer = m_uiLocustSwarmTimer + 45000;     // 45 seconds after initial locust swarm
     }
 
     void KilledUnit(Unit* pVictim)
@@ -148,7 +143,7 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
             if (!m_creature->HasAura(SPELL_LOCUSTSWARM) || !m_creature->HasAura(SPELL_LOCUSTSWARM_H))
             {
                 if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
-                    DoCast(target, m_bIsHeroicMode ? SPELL_IMPALE_H : SPELL_IMPALE);
+                    DoCast(target, m_bIsRegularMode ? SPELL_IMPALE : SPELL_IMPALE_H);
             }
 
             m_uiImpaleTimer = 15000;
@@ -159,97 +154,20 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
         // Locust Swarm
         if (m_uiLocustSwarmTimer < uiDiff)
         {
-            DoCast(m_creature, m_bIsHeroicMode?SPELL_LOCUSTSWARM_H:SPELL_LOCUSTSWARM);
+            DoCast(m_creature, m_bIsRegularMode ? SPELL_LOCUSTSWARM :SPELL_LOCUSTSWARM_H);
             m_uiLocustSwarmTimer = 90000;
-            m_uiSummonTimer = 15000;
         }
         else
             m_uiLocustSwarmTimer -= uiDiff;
 
-        if (m_uiSummonTimer < uiDiff)
+        // Summon
+        /*if (m_uiSummonTimer < uiDiff)
         {
-            //DoCast(m_creature, SPELL_SUMMONGUARD);
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
-                if (Creature* pTemp = m_creature->SummonCreature(NPC_CRYPT_GUARD, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
-                {
-                    pTemp->AddThreat(pTarget, 0.0f);
-                    pTemp->AI()->AttackStart(pTarget);
-                }
-            m_uiSummonTimer = 240000;
-        }else m_uiSummonTimer -= uiDiff;
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-struct MANGOS_DLL_DECL mob_crypt_guardAI : public ScriptedAI
-{
-    mob_crypt_guardAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_bIsHeroicMode = pCreature->GetMap()->IsRaidOrHeroicDungeon();
-        Reset();
-    }
-
-    ScriptedInstance* m_pInstance;
-    bool m_bIsHeroicMode;
-
-    uint32 AcidSpit_Timer;
-    uint32 Cleave_Timer;
-    uint32 Berserk_Timer;
-
-    void Reset()
-    {
-        AcidSpit_Timer = 10000 + rand()%1000;
-        Cleave_Timer = 5000 + rand()%5000;
-        Berserk_Timer = 120000;
-    }
-
-    void KilledUnit(Unit* pVictim)
-    {
-        //Force the player to spawn corpse scarabs via spell
-        if (pVictim->GetTypeId() == TYPEID_PLAYER)
-            pVictim->CastSpell(pVictim, SPELL_SELF_SPAWN_5, true);
-    }
-
-    void JustDied(Unit* Killer)
-    {
-        m_creature->CastSpell(m_creature, SPELL_SELF_SPAWN_10, true);
-    }
-
-    void Aggro(Unit *who)
-    {
-        if (m_pInstance)
-        {
-            if (Creature* pAnubRekhan = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_ANUB_REKHAN))))
-                if (pAnubRekhan->isAlive() && !pAnubRekhan->getVictim())
-                    pAnubRekhan->AI()->AttackStart(who);
+            DoCast(m_creature, SPELL_SUMMONGUARD);
+            Summon_Timer = 45000;
         }
-    }
-
-    void UpdateAI(const uint32 diff)
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
-            return;
-
-        if (Berserk_Timer)
-            if (Berserk_Timer < diff)
-            {
-                DoCast(m_creature, SPELL_FRENZY);
-                Berserk_Timer = 0;
-            }else Berserk_Timer -= diff;
-
-        if (AcidSpit_Timer < diff)
-        {
-            DoCast(m_creature->getVictim(), m_bIsHeroicMode ? SPELL_ACID_SPIT_H : SPELL_ACID_SPIT);
-            AcidSpit_Timer = 10000 + rand()%1000;
-        }else AcidSpit_Timer -= diff;
-
-        if (Cleave_Timer < diff)
-        {
-            DoCast(m_creature->getVictim(), SPELL_CLEAVE);
-            Cleave_Timer = 5000 + rand()%5000;
-        }else Cleave_Timer -= diff;
+        else
+            m_uiSummonTimer -= uiDiff;*/
 
         DoMeleeAttackIfReady();
     }
@@ -260,20 +178,11 @@ CreatureAI* GetAI_boss_anubrekhan(Creature* pCreature)
     return new boss_anubrekhanAI(pCreature);
 }
 
-CreatureAI* GetAI_mob_crypt_guard(Creature* pCreature)
-{
-    return new mob_crypt_guardAI(pCreature);
-}
 void AddSC_boss_anubrekhan()
 {
     Script* NewScript;
     NewScript = new Script;
     NewScript->Name = "boss_anubrekhan";
     NewScript->GetAI = &GetAI_boss_anubrekhan;
-    NewScript->RegisterSelf();
-
-    NewScript = new Script;
-    NewScript->Name = "mob_crypt_guard";
-    NewScript->GetAI = &GetAI_mob_crypt_guard;
     NewScript->RegisterSelf();
 }
