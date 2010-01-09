@@ -37,12 +37,12 @@ EndScriptData */
 #define SOUND_FS_Jaina_FS09  16624
 
 #define SAY_FS_Jaina_FS01  "Thanks the Light for seeing you here safely! We have much work to do if we are to defeat the Lich King and put an end to the Scourge."
-#define SAY_FS_Jaina_FS02  ""
-#define SAY_FS_Jaina_FS03  ""
-#define SAY_FS_Jaina_FS04  ""
-#define SAY_FS_Jaina_FS05  ""
-#define SAY_FS_Jaina_FS06  ""
-#define SAY_FS_Jaina_FS07  ""
+#define SAY_FS_Jaina_FS02  "Our allies within the Argend Cursade and the Knights of the Ebon Blade have broken through the front gate of Icecrown and are attemping to establish a foothold within the citadel."
+#define SAY_FS_Jaina_FS03  "Their success hinges upon waht we discover within these cursed halls. Although our mission is a wrought with peril, we must persevere!"
+#define SAY_FS_Jaina_FS04  "With the attention of the Lich King drawn towards the front gate, we will be working our way through the side in the search of Information that will enabele us to defeat the Scourge - once and for all."
+#define SAY_FS_Jaina_FS05  "King Varian´s S1:7 agents have gathered Information about a private sanctum of the Lich King´s deep within a place calle the Halls of Reflection."
+#define SAY_FS_Jaina_FS06  "We will carve a path through this wrerched place and find a way to enter the Halls of Reflection. I sense powerful magic hidden away within tohse halls. Magic that could be the key to destroying the Scourge!"
+#define SAY_FS_Jaina_FS07  "Make haste, champions ! I will prepare the troops to fall in behind you."
 #define SAY_FS_Jaina_FS08  ""
 #define SAY_FS_Jaina_FS09  ""
 
