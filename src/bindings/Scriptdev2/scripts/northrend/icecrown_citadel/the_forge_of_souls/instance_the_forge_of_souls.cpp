@@ -184,28 +184,28 @@ struct MANGOS_DLL_DECL npc_windrunnerAI : public ScriptedAI
 
 	void StartEvent(Player* pPlayer)
     {
-	    m_creature->MonsterSay(SAY_SOUND_FS_Sylvanas_FS01, LANG_UNIVERSAL, 0);
-        DoPlaySoundToSet(m_creature, SOUND_SOUND_FS_Sylvanas_FS01);
+	    m_creature->MonsterSay(SAY_FS_Sylvanas_FS01, LANG_UNIVERSAL, 0);
+        DoPlaySoundToSet(m_creature, SOUND_FS_Sylvanas_FS01);
         Sleep(9000);
 
-	    m_creature->MonsterSay(SAY_SOUND_FS_Sylvanas_FS02, LANG_UNIVERSAL, 0);
-        DoPlaySoundToSet(m_creature, SOUND_SOUND_FS_Sylvanas_FS02);
+	    m_creature->MonsterSay(SAY_FS_Sylvanas_FS02, LANG_UNIVERSAL, 0);
+        DoPlaySoundToSet(m_creature, SOUND_FS_Sylvanas_FS02);
         Sleep(9000);
 
-	    m_creature->MonsterSay(SAY_SOUND_FS_Sylvanas_FS03, LANG_UNIVERSAL, 0);
-        DoPlaySoundToSet(m_creature, SOUND_SOUND_FS_Sylvanas_FS03);
+	    m_creature->MonsterSay(SAY_FS_Sylvanas_FS03, LANG_UNIVERSAL, 0);
+        DoPlaySoundToSet(m_creature, SOUND_FS_Sylvanas_FS03);
         Sleep(9000);
 
-	    m_creature->MonsterSay(SAY_SOUND_FS_Sylvanas_FS04, LANG_UNIVERSAL, 0);
-        DoPlaySoundToSet(m_creature, SOUND_SOUND_FS_Sylvanas_FS04);
+	    m_creature->MonsterSay(SAY_FS_Sylvanas_FS04, LANG_UNIVERSAL, 0);
+        DoPlaySoundToSet(m_creature, SOUND_FS_Sylvanas_FS04);
         Sleep(9000);
 
-	    m_creature->MonsterSay(SAY_SOUND_FS_Sylvanas_FS05, LANG_UNIVERSAL, 0);
-        DoPlaySoundToSet(m_creature, SOUND_SOUND_FS_Sylvanas_FS05);
+	    m_creature->MonsterSay(SAY_FS_Sylvanas_FS05, LANG_UNIVERSAL, 0);
+        DoPlaySoundToSet(m_creature, SOUND_FS_Sylvanas_FS05);
         Sleep(9000);
 
-	    m_creature->MonsterSay(SAY_SOUND_FS_Sylvanas_FS06, LANG_UNIVERSAL, 0);
-        DoPlaySoundToSet(m_creature, SOUND_SOUND_FS_Sylvanas_FS06);
+	    m_creature->MonsterSay(SAY_FS_Sylvanas_FS06, LANG_UNIVERSAL, 0);
+        DoPlaySoundToSet(m_creature, SOUND_FS_Sylvanas_FS06);
         Sleep(9000);
     }
 

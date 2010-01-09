@@ -77,7 +77,7 @@ struct MANGOS_DLL_DECL boss_devourerAI : public ScriptedAI
 
 CreatureAI* GetAI_boss_devourer(Creature* pCreature)
 {
-    return new boss_bronjahmAI(pCreature);
+    return new boss_devourerAI(pCreature);
 }
 
 void AddSC_boss_devourer()
