@@ -108,11 +108,12 @@ struct MANGOS_DLL_DECL boss_devourerAI : public ScriptedAI
                 break;
 		}
         if (m_pInstance)
-            m_pInstance->SetData(BOSS_DEVOURER, IDONE);
+            m_pInstance->SetData(BOSS_DEVOURER, DONE);
     }
 
     void Aggro(Unit* pWho)
     {
+	switch(urand(0, 2))
         {
             case 0: 
                 DoPlaySoundToSet(m_creature, SOUND_FS_DevourerFemale01_Aggro);

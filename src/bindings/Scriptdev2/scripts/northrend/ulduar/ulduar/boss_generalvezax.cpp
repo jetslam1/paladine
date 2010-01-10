@@ -101,7 +101,7 @@ struct MANGOS_DLL_DECL boss_generalvezaxAI : public ScriptedAI
 
     void KilledUnit(Unit *victim)
     {
-		switch(urand(0, 1))
+		switch(urand(0, 2))
                 {
                     case 0: 
 						DoPlaySoundToSet(m_creature, SOUND_UR_Vezax_Slay01); 
