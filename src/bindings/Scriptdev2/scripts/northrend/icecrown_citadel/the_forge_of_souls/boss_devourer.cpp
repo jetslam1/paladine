@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -23,6 +23,30 @@ EndScriptData */
 
 #include "precompiled.h"
 #include "the_forge_of_souls.h"
+
+#define SAY_FS_DevourerFemale01_Aggro      "You dare look upon the host of souls? I shall devour you ..."
+#define SAY_FS_DevourerFemale01_DarkGlare  "Stare into the abyss and see your end!"
+#define SAY_FS_DevourerMale02_Death        "The swell of souls will not be abated. You only delay the inevitable!"
+#define SAY_FS_DevourerMale02_Slay1        "Damnation!"
+#define SAY_FS_DevourerMale02_Slay2        "Doomed for eternity!"
+#define SAY_FS_DevourerMale02_SoulAttack   "Suffering! Anguish! Chaos! Rise and feed!"
+
+#define SOUND_FS_DevourerFemale01_Aggro	         16890
+#define SOUND_FS_FS_DevourerFemale01_DarkGlare	 16895
+#define SOUND_FS_FS_DevourerFemale01_Death1	     16893
+#define SOUND_FS_FS_DevourerFemale01_Slay1	     16891
+#define SOUND_FS_FS_DevourerFemale01_Slay2	     16892
+#define SOUND_FS_FS_DevourerFemale01_SoulAttack1 16894
+#define SOUND_FS_FS_DevourerMale01_Aggro	     16884
+#define SOUND_FS_FS_DevourerMale01_DarkGlare	 16888
+#define SOUND_FS_FS_DevourerMale01_Death2	     16887
+#define SOUND_FS_FS_DevourerMale01_Slay1	     16885
+#define SOUND_FS_FS_DevourerMale01_Slay2	     16886
+#define SOUND_FS_FS_DevourerMale01_SoulAttack2	 16889
+#define SOUND_FS_FS_DevourerMale02_Death3	     16898
+#define SOUND_FS_FS_DevourerMale02_Slay1	     16896
+#define SOUND_FS_FS_DevourerMale02_Slay2	     16897
+#define SOUND_FS_FS_DevourerMale02_SoulAttack3	 16899
 
 #define SPELL_MIRRORED_SOUL    69051
 #define SPELL_PHANTOM_BLAST    68982
