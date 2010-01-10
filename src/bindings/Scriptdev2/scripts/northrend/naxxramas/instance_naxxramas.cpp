@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -24,12 +24,45 @@ EndScriptData */
 #include "precompiled.h"
 #include "naxxramas.h"
 
+#define SPELL_ERUPTION 29371 
+
+const float HeiganPos[2] = {2796, -3707};
+const float HeiganEruptionSlope[3] =
+{
+    (-3685 - HeiganPos[1]) /(2724 - HeiganPos[0]),
+    (-3647 - HeiganPos[1]) /(2749 - HeiganPos[0]),
+    (-3637 - HeiganPos[1]) /(2771 - HeiganPos[0]),
+};
+
+// 0  H      x
+//  1        ^
+//   2       |
+//    3  y<--o
+inline uint32 GetEruptionSection(float x, float y)
+{
+    y -= HeiganPos[1];
+    if (y < 1.0f)
+        return 0;
+
+    x -= HeiganPos[0];
+    if (x > -1.0f)
+        return 3;
+
+    float slope = y/x;
+    for (uint32 i = 0; i < 3; ++i)
+        if (slope > HeiganEruptionSlope[i])
+            return i;
+    return 3;
+}
+
 struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
 {
     instance_naxxramas(Map* pMap) : ScriptedInstance(pMap) {Initialize();}
 
     std::string strInstData;
     uint32 m_auiEncounter[MAX_ENCOUNTER];
+
+    std::set<GameObject*> HeiganEruption[4];
 
     uint64 m_uiAracEyeRampGUID;
     uint64 m_uiPlagEyeRampGUID;
@@ -52,6 +85,7 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
     uint64 m_uiThaddiusGUID;
     uint64 m_uiStalaggGUID;
     uint64 m_uiFeugenGUID;
+    uint64 m_uiHeiganGUID;
 
     uint64 m_uiPathExitDoorGUID;
     uint64 m_uiGlutExitDoorGUID;
@@ -69,6 +103,7 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
     uint64 m_uiGothikExitDoorGUID;
     uint64 m_uiHorsemenDoorGUID;
     uint64 m_uiHorsemenChestGUID;
+    uint64 m_uiHorsemenChestHeroGUID;
 
     uint64 m_uiNothEntryDoorGUID;
     uint64 m_uiNothExitDoorGUID;
@@ -77,6 +112,15 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
     uint64 m_uiLoathebDoorGUID;
 
     uint64 m_uiKelthuzadDoorGUID;
+
+    bool BlaumeuxDead;
+    bool RivendareDead;
+    bool ZeliekDead;
+    bool KorthazzDead;
+
+    int32 DeadTimer;
+    uint32 HorsemanDeadCount;
+    bool UpdateCheck;
 
     void Initialize()
     {
@@ -103,6 +147,7 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
         m_uiThaddiusGUID        = 0;
         m_uiStalaggGUID         = 0;
         m_uiFeugenGUID          = 0;
+        m_uiHeiganGUID          = 0;
 
         m_uiPathExitDoorGUID    = 0;
         m_uiGlutExitDoorGUID    = 0;
@@ -120,6 +165,7 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
         m_uiGothikExitDoorGUID  = 0;
         m_uiHorsemenDoorGUID    = 0;
         m_uiHorsemenChestGUID   = 0;
+        m_uiHorsemenChestHeroGUID = 0;
 
         m_uiNothEntryDoorGUID   = 0;
         m_uiNothExitDoorGUID    = 0;
@@ -128,6 +174,14 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
         m_uiLoathebDoorGUID     = 0;
 
         m_uiKelthuzadDoorGUID   = 0;
+
+        BlaumeuxDead  = false;
+        RivendareDead = false; 
+        ZeliekDead    = false; 
+        KorthazzDead  = false;
+        
+        HorsemanDeadCount = 0;
+        UpdateCheck          = true;
     }
 
     void OnCreatureCreate(Creature* pCreature)
@@ -143,11 +197,20 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
             case NPC_THANE:       m_uiThaneGUID = pCreature->GetGUID();      break;
             case NPC_BLAUMEUX:    m_uiBlaumeuxGUID = pCreature->GetGUID();   break;
             case NPC_RIVENDARE:   m_uiRivendareGUID = pCreature->GetGUID();  break;
+            case NPC_HEIGAN:      m_uiHeiganGUID = pCreature->GetGUID();     break;     
         }
     }
 
     void OnObjectCreate(GameObject* pGo)
     {
+        if (pGo->GetGOInfo()->displayId == 6785 || pGo->GetGOInfo()->displayId == 1287)
+        {
+            uint32 section = GetEruptionSection(pGo->GetPositionX(), pGo->GetPositionY());
+            HeiganEruption[section].insert(pGo);
+
+            return;
+        }
+
         switch(pGo->GetEntry())
         {
             case GO_ARAC_ANUB_DOOR:
@@ -216,6 +279,10 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
 
             case GO_CHEST_HORSEMEN_NORM:
                 m_uiHorsemenChestGUID = pGo->GetGUID();
+                break;
+
+            case GO_CHEST_HORSEMEN_HERO:
+                m_uiHorsemenChestHeroGUID = pGo->GetGUID();
                 break;
 
             case GO_CONS_PATH_EXIT_DOOR:
@@ -289,6 +356,8 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
     {
         switch(uiType)
         {
+            /*case DATA_HEIGAN_ERUPT:
+                HeiganErupt(uiData); */
             case TYPE_ANUB_REKHAN:
                 m_auiEncounter[0] = uiData;
                 DoUseDoorOrButton(m_uiAnubDoorGUID);
@@ -351,14 +420,36 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
                      DoUseDoorOrButton(m_uiHorsemenDoorGUID);
                 }
                 break;
+            case TYPE_BLAUMEUX:
+                if (uiData == DONE)
+                    BlaumeuxDead = true;
+                    Horseman();
+                break;
+            case TYPE_RIVENDARE:
+                if (uiData == DONE)
+                    RivendareDead = true;
+                    Horseman();
+                break;
+            case TYPE_ZELIEK:
+                if (uiData == DONE)
+                    ZeliekDead = true;
+                    Horseman();
+                break;
+            case TYPE_KORTHAZZ:
+                if (uiData == DONE)
+                    KorthazzDead = true;
+                    Horseman();
+                break;
             case TYPE_FOUR_HORSEMEN:
                 m_auiEncounter[8] = uiData;
-                DoUseDoorOrButton(m_uiHorsemenDoorGUID);
+                if (uiData == DONE)
+                    DoUseDoorOrButton(IN_PROGRESS);
                 if (uiData == DONE)
                 {
                     DoUseDoorOrButton(m_uiMiliEyeRampGUID);
                     DoRespawnGameObject(m_uiMiliPortalGUID, 30*MINUTE);
                     DoRespawnGameObject(m_uiHorsemenChestGUID, 30*MINUTE);
+                    DoRespawnGameObject(m_uiHorsemenChestHeroGUID, 30*MINUTE);
                 }
                 break;
             case TYPE_PATCHWERK:
@@ -413,6 +504,50 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
             OUT_SAVE_INST_DATA_COMPLETE;
         }
     }
+
+    void Horseman()
+    {
+        if (HorsemanDeadCount = 0)
+            DeadTimer = 15000;
+            HorsemanDeadCount ++;
+
+        if (BlaumeuxDead && RivendareDead && ZeliekDead && KorthazzDead)
+        {
+            SetData(TYPE_FOUR_HORSEMEN, DONE);
+    
+            AchievementEntry const *AchievHorsemen = GetAchievementStore()->LookupEntry(instance->IsRegularDifficulty() ? ACHIEVEMENT_HORSEMEN : H_ACHIEVEMENT_HORSEMEN);
+            if(AchievHorsemen && this)
+            {
+                Map::PlayerList const &lPlayers = instance->GetPlayers();
+                if (!lPlayers.isEmpty())
+                {
+                    for(Map::PlayerList::const_iterator itr = lPlayers.begin(); itr != lPlayers.end(); ++itr)
+                    {
+                        if (Player* pPlayer = itr->getSource())
+                            pPlayer->GetAchievementMgr().CompletedAchievement(AchievHorsemen);
+                    }
+                }
+            }
+        }
+    }
+    
+
+/*    void HeiganErupt(uint32 section)
+    {
+        for (uint32 i = 0; i < 4; ++i)
+        {
+            if (i == section)
+                continue;
+
+            for (std::set<GameObject*>::iterator itr = HeiganEruption[i].begin(); itr != HeiganEruption[i].end(); ++itr)
+            {
+
+                (*itr)->SendCustomAnim();
+                //(*itr)->SummonCreature(15384, (*itr)->GetPositionX(), (*itr)->GetPositionY(), (*itr)->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN, 0);
+
+            }
+        }
+    } */
 
     const char* Save()
     {
@@ -506,8 +641,34 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
                 return m_uiStalaggGUID;
             case NPC_FEUGEN:
                 return m_uiFeugenGUID;
+            case NPC_HEIGAN:
+                return m_uiHeiganGUID;
         }
         return 0;
+    }
+
+    void Update(uint32 uiDiff)
+    {
+        if (DeadTimer > uiDiff && UpdateCheck)
+        {
+            if (BlaumeuxDead && RivendareDead && ZeliekDead && KorthazzDead)
+            {
+                AchievementEntry const *AchievHorsemen = GetAchievementStore()->LookupEntry(instance->IsRegularDifficulty() ? ACHIEVEMENT_TOGETHER : H_ACHIEVEMENT_TOGETHER);
+                if(AchievHorsemen && this)
+                {
+                    Map::PlayerList const &lPlayers = instance->GetPlayers();
+                    if (!lPlayers.isEmpty())
+                    {
+                        for(Map::PlayerList::const_iterator itr = lPlayers.begin(); itr != lPlayers.end(); ++itr)
+                        {
+                            if (Player* pPlayer = itr->getSource())
+                                pPlayer->GetAchievementMgr().CompletedAchievement(AchievHorsemen);
+                        }
+                    }
+                }
+                UpdateCheck = false;
+            }
+        }else DeadTimer -= uiDiff;
     }
 };
 
