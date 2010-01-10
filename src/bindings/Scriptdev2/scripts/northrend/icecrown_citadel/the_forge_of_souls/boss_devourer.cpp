@@ -24,6 +24,13 @@ EndScriptData */
 #include "precompiled.h"
 #include "the_forge_of_souls.h"
 
+#define SPELL_MIRRORED_SOUL    69051
+#define SPELL_PHANTOM_BLAST    68982
+#define SPELL_PHANTOM_BLAST_H  70322
+#define SPELL_UNLEASHED_SOULS  68939
+#define SPELL_WAILING_SOULS    68899
+#define SPELL_WAILING_SOULS_H  68912
+#define SPELL_WELL_OF_SOULS    68820
 /*
 #define SAY_AGGRO -1
 #define SAY_SLAY -1
