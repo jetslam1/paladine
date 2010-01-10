@@ -55,10 +55,6 @@ EndScriptData */
 #define SPELL_WAILING_SOULS    68899
 #define SPELL_WAILING_SOULS_H  68912
 #define SPELL_WELL_OF_SOULS    68820
-/*
-#define SAY_AGGRO -1
-#define SAY_SLAY -1
-*/
 
 struct MANGOS_DLL_DECL boss_devourerAI : public ScriptedAI
 {
@@ -76,15 +72,58 @@ struct MANGOS_DLL_DECL boss_devourerAI : public ScriptedAI
 
     void KilledUnit(Unit *victim)
     {
+	switch (urand(0,2))
+        {
+            case 0:
+                DoPlaySoundToSet(m_creature, SOUND_FS_FS_DevourerFemale01_Slay1);
+                m_creature->MonsterYell(SAY_FS_DevourerMale02_Slay1, LANG_UNIVERSAL, 0);
+                break;
+           	case 1:
+                DoPlaySoundToSet(m_creature, SOUND_FS_FS_DevourerMale01_Slay1);
+                m_creature->MonsterYell(SAY_FS_DevourerMale02_Slay1, LANG_UNIVERSAL, 0);
+                break;
+          
+			case 2:
+                DoPlaySoundToSet(m_creature, SOUND_FS_FS_DevourerMale02_Slay1);
+                m_creature->MonsterYell(SAY_FS_DevourerMale02_Slay1, LANG_UNIVERSAL, 0);
+                break;
+         }
     }
 
     void JustDied(Unit *victim)
     {
+	switch (urand(0,2))
+        {	
+            case 0:
+                DoPlaySoundToSet(m_creature, SOUND_FS_FS_DevourerFemale01_Death1);
+                m_creature->MonsterYell(SAY_FS_DevourerMale02_Death, LANG_UNIVERSAL, 0);
+                break;					
+            case 1:
+                DoPlaySoundToSet(m_creature, SOUND_FS_FS_DevourerMale01_Death2);
+                m_creature->MonsterYell(SAY_FS_DevourerMale02_Death, LANG_UNIVERSAL, 0);
+                break;
+			case 2:
+                DoPlaySoundToSet(m_creature, SOUND_FS_FS_DevourerMale02_Death3);
+                m_creature->MonsterYell(SAY_FS_DevourerMale02_Death, LANG_UNIVERSAL, 0);
+                break;
+		}
+        if (m_pInstance)
+            m_pInstance->SetData(BOSS_DEVOURER, IDONE);
     }
 
     void Aggro(Unit* pWho)
     {
-//        DoScriptText(SAY_AGGRO, m_creature);
+        {
+            case 0: 
+                DoPlaySoundToSet(m_creature, SOUND_FS_DevourerFemale01_Aggro);
+                m_creature->MonsterYell(SAY_FS_DevourerFemale01_Aggro, LANG_UNIVERSAL, 0);
+                break;
+            case 1:
+                DoPlaySoundToSet(m_creature, SOUND_FS_FS_DevourerMale01_Aggro);
+                m_creature->MonsterYell(SAY_FS_DevourerFemale01_Aggro, LANG_UNIVERSAL, 0);
+                break;
+        }
+
         m_creature->SetInCombatWithZone();
 
         if (m_pInstance)
