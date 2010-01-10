@@ -154,9 +154,9 @@ public:
             std::string stringip = sConfig.GetStringDefault ("Ra.IP", "0.0.0.0");
             ipaddr_t raip;
             if (!Utility::u2ip (stringip, raip))
-                sLog.outError ("MaNGOS RA can not bind to ip %s", stringip.c_str ());
+                sLog.outError ("evoXworld RA can not bind to ip %s", stringip.c_str ());
             else if (RAListenSocket.Bind (raip, raport))
-                sLog.outError ("MaNGOS RA can not bind to port %d on %s", raport, stringip.c_str ());
+                sLog.outError ("evoXworld RA can not bind to port %d on %s", raport, stringip.c_str ());
             else
             {
                 h.Add (&RAListenSocket);
@@ -288,9 +288,9 @@ int Master::Run()
         if(Prio)
         {
             if(SetPriorityClass(hProcess,HIGH_PRIORITY_CLASS))
-                sLog.outString("mangosd process priority class set to HIGH");
+                sLog.outString("evoXworld process priority class set to HIGH");
             else
-                sLog.outError("ERROR: Can't set mangosd process priority class.");
+                sLog.outError("ERROR: Can't set evoXworld process priority class.");
             sLog.outString();
         }
     }
