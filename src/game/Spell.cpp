@@ -1423,8 +1423,6 @@ void Spell::SetTargetMap(uint32 effIndex, uint32 targetMode, UnitList& targetUni
         case TARGET_SELF:
         case TARGET_SELF2:
         case TARGET_AREAEFFECT_CUSTOM:
-            targetUnitMap.push_back(m_caster);
-            break;
         case TARGET_AREAEFFECT_CUSTOM_2:
         {
             // used for targeting gameobjects
@@ -2226,7 +2224,7 @@ void Spell::SetTargetMap(uint32 effIndex, uint32 targetMode, UnitList& targetUni
             // FOR EVERY TARGET TYPE THERE IS A DIFFERENT FILL!!
             if (m_spellInfo->SpellFamilyFlags2 & UI64LIT (0x00000020) && m_spellInfo->SpellIconID == 3217)
             {
-                targetUnitMap.push_back(m_caster);
+                TagUnitMap.push_back(m_caster);
                 break;
             }
             switch(m_spellInfo->Effect[effIndex])
@@ -3055,7 +3053,7 @@ void Spell::finish(bool ok)
         m_caster->resetAttackTimer(RANGED_ATTACK);*/
 
     // Clear combo at finish state
-	if((m_caster->GetTypeId() == TYPEID_PLAYER || ((Creature*)m_caster)->isVehicle())&& NeedsComboPoints(m_spellInfo))
+    if((m_caster->GetTypeId() == TYPEID_PLAYER || ((Creature*)m_caster)->isVehicle()) && NeedsComboPoints(m_spellInfo))
     {
         // Not drop combopoints if negative spell and if any miss on enemy exist
         bool needDrop = true;

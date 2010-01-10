@@ -1,8 +1,6 @@
 /*
  * Copyright (C) 2005-2010 MaNGOS <http://getmangos.com/>
  *
- * Copyright (C) 2009-2010 evo-X <http://evo-X-Project.com/evo-X/>
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -41,8 +39,8 @@
 #ifdef WIN32
 #include "ServiceWin32.h"
 char serviceName[] = "evoXlogon";
-char serviceLongName[] = "evo-X logon service";
-char serviceDescription[] = "evo-X Game Server";
+char serviceLongName[] = "evoXlogon service";
+char serviceDescription[] = "evoX Game Server";
 /*
  * -1 - not in service mode
  *  0 - stopped
@@ -207,7 +205,7 @@ extern int main(int argc, char **argv)
     ListenSocket<AuthSocket> authListenSocket(h);
     if ( authListenSocket.Bind(bind_ip.c_str(),rmport))
     {
-        sLog.outError( "evoXlogon can not bind to %s:%d",bind_ip.c_str(), rmport );
+        sLog.outError( "MaNGOS realmd can not bind to %s:%d",bind_ip.c_str(), rmport );
         return 1;
     }
 
@@ -256,9 +254,9 @@ extern int main(int argc, char **argv)
         if(Prio)
         {
             if(SetPriorityClass(hProcess,HIGH_PRIORITY_CLASS))
-                sLog.outString("evoXlogon process priority class set to HIGH");
+                sLog.outString("realmd process priority class set to HIGH");
             else
-                sLog.outError("ERROR: Can't set evoXlogon process priority class.");
+                sLog.outError("ERROR: Can't set realmd process priority class.");
             sLog.outString();
         }
     }

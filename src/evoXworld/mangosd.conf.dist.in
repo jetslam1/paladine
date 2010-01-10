@@ -1,5 +1,5 @@
 #####################################
-# evo-X world Configuration file    #
+# MaNGOS Configuration file         #
 #####################################
 ConfVersion=2008080101
 
@@ -51,7 +51,7 @@ DataDir = "."
 LogsDir = ""
 LoginDatabaseInfo     = "127.0.0.1;3306;root;evoX;evoXlogon"
 WorldDatabaseInfo     = "127.0.0.1;3306;root;evoX;evoXworld"
-CharacterDatabaseInfo = "127.0.0.1;3306;root;evoX;evoXcharacters"
+CharacterDatabaseInfo = "127.0.0.1;3306;root;evoX;evoX_characters"
 MaxPingTime = 30
 WorldServerPort = 8085
 BindIP = "0.0.0.0"

@@ -646,13 +646,12 @@ class MANGOS_DLL_SPEC Creature : public Unit
         float CombatStartX;
         float CombatStartY;
         float CombatStartZ;
-
+        Vehicle* m_vehicleKit;
         float m_summonXpoint;
         float m_summonYpoint;
         float m_summonZpoint;
         float m_summonOrientation;
 
-        Vehicle* m_vehicleKit;
     private:
         GridReference<Creature> m_gridRef;
         CreatureInfo const* m_creatureInfo;                 // in difficulty mode > 0 can different from ObjMgr::GetCreatureTemplate(GetEntry())

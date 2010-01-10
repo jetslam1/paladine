@@ -24,7 +24,7 @@ CREATE TABLE `db_version` (
   `version` varchar(120) default NULL,
   `creature_ai_version` varchar(120) default NULL,
   `cache_id` int(10) default '0',
-  `required_9133_01_mangos_spell_proc_event` bit(1) default NULL
+  `required_9136_06_mangos_spell_proc_event` bit(1) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Used DB version notes';
 
 --
@@ -13657,6 +13657,53 @@ LOCK TABLES `quest_end_scripts` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `quest_poi`
+--
+
+DROP TABLE IF EXISTS `quest_poi`;
+CREATE TABLE `quest_poi` (
+  `questid` int(11) unsigned NOT NULL DEFAULT '0',
+  `objIndex` int(11) NOT NULL DEFAULT '0',
+  `mapId` int(11) unsigned NOT NULL DEFAULT '0',
+  `unk1` int(11) unsigned NOT NULL DEFAULT '0',
+  `unk2` int(11) unsigned NOT NULL DEFAULT '0',
+  `unk3` int(11) unsigned NOT NULL DEFAULT '0',
+  `unk4` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`questid`,`objIndex`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `quest_poi`
+--
+
+LOCK TABLES `quest_poi` WRITE;
+/*!40000 ALTER TABLE `quest_poi` DISABLE KEYS */;
+/*!40000 ALTER TABLE `quest_poi` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `quest_poi_points`
+--
+
+DROP TABLE IF EXISTS `quest_poi_points`;
+CREATE TABLE `quest_poi_points` (
+  `questId` int(11) unsigned NOT NULL DEFAULT '0',
+  `objIndex` int(11) NOT NULL DEFAULT '0',
+  `x` int(11) NOT NULL DEFAULT '0',
+  `y` int(11) NOT NULL DEFAULT '0',
+  KEY `idx` (`questId`,`objIndex`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `quest_poi_points`
+--
+
+LOCK TABLES `quest_poi_points` WRITE;
+/*!40000 ALTER TABLE `quest_poi_points` DISABLE KEYS */;
+/*!40000 ALTER TABLE `quest_poi_points` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `quest_start_scripts`
 --
 
@@ -14204,16 +14251,6 @@ INSERT INTO spell_chain VALUES
 /*------------------
 --(0) Not associated with skills
 ------------------*/
-/* Fire Nova Totem Casted by Totem */
-(8443,0,8443,1,0),
-(8504,8443,8443,2,0),
-(8505,8504,8443,3,0),
-(11310,8505,8443,4,0),
-(11311,11310,8443,5,0),
-(25538,11311,8443,6,0),
-(25539,25538,8443,7,0),
-(61651,25539,8443,8,0),
-(61660,61651,8443,9,0),
 /* Flametongue Weapon Proc */
 (8026,0,8026,1,0),
 (8028,8026,8026,2,0),
@@ -18527,7 +18564,7 @@ INSERT INTO `spell_proc_event` VALUES
 (63108, 0x00000000,  5, 0x00000002, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0.000000, 0.000000,  0),
 (63156, 0x00000000,  0, 0x00000001, 0x00000040, 0x00000000, 0x00000000, 0x00000000, 0.000000, 0.000000,  0),
 (63245, 0x00000000,  5, 0x00000100, 0x00800000, 0x00000000, 0x00000000, 0x00000002, 0.000000, 0.000000,  0),
-(63320, 0x00000000,  5, 0x00040000, 0x00000000, 0x00008000, 0x00004000, 0x00000000, 0.000000, 0.000000,  0),
+(63320, 0x00000000,  5, 0x00040000, 0x00000000, 0x00008000, 0x00004000, 0x00000001, 0.000000, 0.000000,  0),
 (63373, 0x00000000, 11, 0x80000000, 0x00000000, 0x00000000, 0x00010000, 0x00000000, 0.000000, 0.000000,  0),
 (63534, 0x00000000,  6, 0x00000040, 0x00000000, 0x00000000, 0x00004000, 0x00000000, 0.000000, 0.000000,  0),
 (63625, 0x00000000,  6, 0x02000000, 0x00000000, 0x00000000, 0x00010000, 0x00000000, 0.000000, 0.000000,  0),

@@ -1,8 +1,6 @@
 /*
  * Copyright (C) 2005-2010 MaNGOS <http://getmangos.com/>
  *
- * Copyright (C) 2009-2010 evo-X <http://evo-X-Project.com/evo-X/>
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -156,9 +154,9 @@ public:
             std::string stringip = sConfig.GetStringDefault ("Ra.IP", "0.0.0.0");
             ipaddr_t raip;
             if (!Utility::u2ip (stringip, raip))
-                sLog.outError ("evo-X RA can not bind to ip %s", stringip.c_str ());
+                sLog.outError ("MaNGOS RA can not bind to ip %s", stringip.c_str ());
             else if (RAListenSocket.Bind (raip, raport))
-                sLog.outError ("evo-X RA can not bind to port %d on %s", raport, stringip.c_str ());
+                sLog.outError ("MaNGOS RA can not bind to port %d on %s", raport, stringip.c_str ());
             else
             {
                 h.Add (&RAListenSocket);
@@ -290,9 +288,9 @@ int Master::Run()
         if(Prio)
         {
             if(SetPriorityClass(hProcess,HIGH_PRIORITY_CLASS))
-                sLog.outString("evoXworld process priority class set to HIGH");
+                sLog.outString("mangosd process priority class set to HIGH");
             else
-                sLog.outError("ERROR: Can't set evoXworld process priority class.");
+                sLog.outError("ERROR: Can't set mangosd process priority class.");
             sLog.outString();
         }
     }

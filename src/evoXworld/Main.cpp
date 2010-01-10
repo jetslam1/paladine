@@ -1,8 +1,6 @@
 /*
  * Copyright (C) 2005-2010 MaNGOS <http://getmangos.com/>
  *
- * Copyright (C) 2009-2010 evo-X <http://evo-X-Project.com/evo-X/>
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -37,8 +35,8 @@
 #ifdef WIN32
 #include "ServiceWin32.h"
 char serviceName[] = "evoXworld";
-char serviceLongName[] = "evo-X world service";
-char serviceDescription[] = "evo-X Game Server";
+char serviceLongName[] = "evoXworld service";
+char serviceDescription[] = "evoX Game Server";
 /*
  * -1 - not in service mode
  *  0 - stopped
@@ -149,14 +147,14 @@ extern int main(int argc, char **argv)
     sLog.outString( "%s [world-daemon]", _FULLVERSION(REVISION_DATE,REVISION_TIME,REVISION_NR,REVISION_ID) );
     sLog.outString( "<Ctrl-C> to stop.\n\n" );
 
-	sLog.outTitle( ".########.##.....##..#######..........##.....##");
-	sLog.outTitle( ".##.......##.....##.##.....##..........##...##.");
-	sLog.outTitle( ".##.......##.....##.##.....##...........##.##..");
-	sLog.outTitle( ".######...##.....##.##.....##.#######....###...");
-	sLog.outTitle( ".##........##...##..##.....##...........##.##..");
-	sLog.outTitle( ".##.........##.##...##.....##..........##...##.");
-	sLog.outTitle( ".########....###.....#######..........##.....##");
-	sLog.outTitle( "          http://evo-X-Project.com/evo-X");
+  sLog.outTitle( ".########.##.....##..#######..........##.....##");
+  sLog.outTitle( ".##.......##.....##.##.....##..........##...##.");
+  sLog.outTitle( ".##.......##.....##.##.....##...........##.##..");
+  sLog.outTitle( ".######...##.....##.##.....##.#######....###...");
+  sLog.outTitle( ".##........##...##..##.....##...........##.##..");
+  sLog.outTitle( ".##.........##.##...##.....##..........##...##.");
+  sLog.outTitle( ".########....###.....#######..........##.....##");
+  sLog.outTitle( "          http://evo-X-Project.com/evo-X");
 
     sLog.outString("Using configuration file %s.", cfg_file);
 

@@ -22,7 +22,7 @@ Version 0.15
  * Implement AV battleground.
  * Implement new DB-based gossip system for creatures/gameobjects.
  * Implement realmd support realms for different client versions.
- * New memory allocator for MaNGOS, based on Intel Threading Building Blocks library
+ * New memory allocator for MaNGOS, based on Intel Threading Building Blocks library.
  * Upgrade to client version 3.2.2a (build 10505).
 
 Version 0.14

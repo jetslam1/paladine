@@ -1,3 +1,5 @@
+ALTER TABLE db_version CHANGE COLUMN required_9136_05_mangos_spell_bonus_data required_9136_06_mangos_spell_proc_event bit;
+
 DELETE FROM spell_proc_event WHERE entry IN (55668,55669,55670,55667,58631,63320);
 
 
