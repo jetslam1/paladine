@@ -1395,6 +1395,14 @@ void Spell::EffectDummy(uint32 i)
                     }
                     return;
                 }
+                case 31687: // Summon Water Elemental
+                {
+                if (m_caster->HasAura(70937))
+                m_caster->CastSpell(m_caster, 70908, true);
+                else
+                m_caster->CastSpell(m_caster, 70907, true);
+                return;
+                }
                 case 32826:                                 // Polymorph Cast Visual
                 {
                     if (unitTarget && unitTarget->GetTypeId() == TYPEID_UNIT)
