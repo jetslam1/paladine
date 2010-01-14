@@ -2170,11 +2170,27 @@
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\northrend\icecrown_citadel\the_forge_of_souls\instance_the_forge_of_souls.cpp"
+							RelativePath="..\scripts\northrend\icecrown_citadel\the_forge_of_souls\the_forge_of_souls.cpp"
 							>
 						</File>
 						<File
 							RelativePath="..\scripts\northrend\icecrown_citadel\the_forge_of_souls\the_forge_of_souls.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="icecrown_citadel"
+						>
+						<File
+							RelativePath="..\scripts\northrend\icecrown_citadel\icecrown_citadel\boss_lord_marrowgar.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\icecrown_citadel\icecrown_citadel\def_icecrown_citadel.h"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\icecrown_citadel\icecrown_citadel\instance_icecrown_citadel.cpp"
 							>
 						</File>
 					</Filter>
