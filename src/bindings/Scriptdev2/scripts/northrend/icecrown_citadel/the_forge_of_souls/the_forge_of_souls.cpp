@@ -260,7 +260,7 @@ bool GossipSelect_npc_windrunner(Player* pPlayer, Creature* pCreature, uint32 ui
 
     return true;
 }
-void AddSC_instance_the_forge_of_souls()
+void AddSC_the_forge_of_souls()
 {
     Script* NewScript;
 

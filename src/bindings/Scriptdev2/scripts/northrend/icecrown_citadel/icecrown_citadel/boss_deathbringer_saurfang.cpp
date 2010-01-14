@@ -29,7 +29,7 @@ EndScriptData */
 #define SAY_SLAY -1
 */
 
-struct MANGOS_DLL_DECL boss_deathbringer_saurfangrAI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_deathbringer_saurfangAI : public ScriptedAI
 {
     boss_deathbringer_saurfangAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
