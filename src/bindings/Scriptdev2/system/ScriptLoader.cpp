@@ -349,7 +349,12 @@ extern void AddSC_instance_trial_of_the_champion();
 extern void AddSC_trial_of_the_champion();
 extern void AddSC_instance_icecrown_citadel();             // IceCrownCitadel
 extern void AddSC_boss_lord_marrowgar();
-extern void AddSC_the_forge_of_souls();           // IceCrownCitadel : The Forge of Souls
+extern void AddSC_boss_deathbringer_saurfang();
+extern void AddSC_boss_festergut();
+extern void AddSC_boss_lady_deathwhisper();
+extern void AddSC_boss_professor_putricide();
+extern void AddSC_boss_rotface();
+extern void AddSC_the_forge_of_souls();                    // IceCrownCitadel : The Forge of Souls
 extern void AddSC_boss_bronjahm();
 extern void AddSC_boss_devourer();
 
@@ -787,7 +792,12 @@ void AddScripts()
     AddSC_trial_of_the_champion();
     AddSC_instance_icecrown_citadel();                      // IceCrownCitadel
     AddSC_boss_lord_marrowgar();
-    AddSC_the_forge_of_souls();                         // IceCrownCitadel : The Forge of Souls
+    AddSC_boss_deathbringer_saurfang();
+    AddSC_boss_festergut();
+    AddSC_boss_lady_deathwhisper();
+    AddSC_boss_professor_putricide();
+    AddSC_boss_rotface();
+    AddSC_the_forge_of_souls();                             // IceCrownCitadel : The Forge of Souls
     AddSC_boss_bronjahm();
     AddSC_boss_devourer();
 

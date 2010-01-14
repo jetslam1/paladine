@@ -15,8 +15,8 @@
  */
 
 /* ScriptData
-SDName: Algalon the Observer
-SD%Complete: 0
+SDName: Lord Marrowgar
+SD%Complete: 65%
 SDComment: PH.
 SDCategory: IceCrownCitadel
 EndScriptData */

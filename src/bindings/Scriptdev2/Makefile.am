@@ -426,6 +426,11 @@ scripts/northrend/violet_hold/violet_hold.cpp \
 scripts/northrend/icecrown_citadel/icecrown_citadel/boss_lord_marrowgar.cpp \
 scripts/northrend/icecrown_citadel/icecrown_citadel/instance_icecrown_citadel.cpp \
 scripts/northrend/icecrown_citadel/icecrown_citadel/def_icecrown_citadel.h \
+scripts/northrend/icecrown_citadel/icecrown_citadel/boss_deathbringer_saurfang.cpp \
+scripts/northrend/icecrown_citadel/icecrown_citadel/boss_festergut.cpp \
+scripts/northrend/icecrown_citadel/icecrown_citadel/boss_lady_deathwhisper.cpp \
+scripts/northrend/icecrown_citadel/icecrown_citadel/boss_professor_putricide.cpp \
+scripts/northrend/icecrown_citadel/icecrown_citadel/boss_rotface.cpp \
 scripts/northrend/icecrown_citadel/the_forge_of_souls/boss_bronjahm.cpp \
 scripts/northrend/icecrown_citadel/the_forge_of_souls/boss_devourer.cpp \
 scripts/northrend/icecrown_citadel/the_forge_of_souls/the_forge_of_souls.cpp \
