@@ -7,21 +7,11 @@
 
 enum
 {
-    MAX_ENCOUNTER               = 6,
+    MAX_ENCOUNTER               = 1,
 
     TYPE_LORD_MARROWGAR         = 0,
-	TYPE_LADY_DEATHWHISPER      = 1,
-	TYPE_DEATHBRINGER_SAURFANG  = 2,
-	TYPE_FESTTERGUT             = 3,
-	TYPE_ROTFACE                = 4,
-	TYPE_PROFESSOR_PUTRICIDE    = 5,
 
 	NPC_LORD_MARROWGAR          = 1,
-	NPC_LADY_DEATHWHISPER       = 2,
-	NPC_DEATHBRINGER_SAURFANG   = 3,
-	NPC_FESTTERGUT              = 4,
-	NPC_ROTFACE                 = 5,
-	NPC_PROFESSOR_PUTRICIDE     = 6,
 
 
 	GO_LORD_MARROWGAR_DOOR      = 201857,

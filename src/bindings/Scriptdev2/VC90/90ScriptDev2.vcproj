@@ -2182,27 +2182,7 @@
 						Name="icecrown_citadel"
 						>
 						<File
-							RelativePath="..\scripts\northrend\icecrown_citadel\icecrown_citadel\boss_deathbringer_saurfang.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\scripts\northrend\icecrown_citadel\icecrown_citadel\boss_festergut.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\scripts\northrend\icecrown_citadel\icecrown_citadel\boss_lady_deathwhisper.cpp"
-							>
-						</File>
-						<File
 							RelativePath="..\scripts\northrend\icecrown_citadel\icecrown_citadel\boss_lord_marrowgar.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\scripts\northrend\icecrown_citadel\icecrown_citadel\boss_professor_putricide.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\scripts\northrend\icecrown_citadel\icecrown_citadel\boss_rotface.cpp"
 							>
 						</File>
 						<File
