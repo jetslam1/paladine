@@ -16,7 +16,7 @@
 
 /* ScriptData
 SDName: The Forge of Souls
-SD%Complete: 80%
+SD%Complete: 95%
 SDComment: PH.
 SDCategory: The Forge of Souls
 EndScriptData */
@@ -24,27 +24,28 @@ EndScriptData */
 #include "precompiled.h"
 #include "the_forge_of_souls.h"
 
-#define GOSSIP_START_EVENT "Wahts would you have me, my lady!"
+#define GOSSIP_START_EVENT "What would you have me, my lady!"
+#define GOSSIP_START_EVENT2 "What would you have me, Banshee Queen!"
 // Proudmoore
 #define SOUND_FS_Jaina_FS01  16617
 #define SOUND_FS_Jaina_FS02  16618
 #define SOUND_FS_Jaina_FS03  16619
 #define SOUND_FS_Jaina_FS04  16620
-#define SOUND_FS_Jaina_FS05  16620
-#define SOUND_FS_Jaina_FS06  16621
-#define SOUND_FS_Jaina_FS07  16622
-#define SOUND_FS_Jaina_FS08  16623
-#define SOUND_FS_Jaina_FS09  16624
+#define SOUND_FS_Jaina_FS05  16621
+#define SOUND_FS_Jaina_FS06  16622
+#define SOUND_FS_Jaina_FS07  16623
+#define SOUND_FS_Jaina_FS08  16624
+#define SOUND_FS_Jaina_FS09  16625
 
 #define SAY_FS_Jaina_FS01  "Thanks the Light for seeing you here safely! We have much work to do if we are to defeat the Lich King and put an end to the Scourge."
 #define SAY_FS_Jaina_FS02  "Our allies within the Argend Cursade and the Knights of the Ebon Blade have broken through the front gate of Icecrown and are attemping to establish a foothold within the citadel."
 #define SAY_FS_Jaina_FS03  "Their success hinges upon waht we discover within these cursed halls. Although our mission is a wrought with peril, we must persevere!"
 #define SAY_FS_Jaina_FS04  "With the attention of the Lich King drawn towards the front gate, we will be working our way through the side in the search of Information that will enabele us to defeat the Scourge - once and for all."
-#define SAY_FS_Jaina_FS05  "King Varian´s S1:7 agents have gathered Information about a private sanctum of the Lich King´s deep within a place calle the Halls of Reflection."
+#define SAY_FS_Jaina_FS05  "King Varian SI7 agents have gathered information about a private sanctum of the Lich Kings, deep within a place called the Halls of Reflection."
 #define SAY_FS_Jaina_FS06  "We will carve a path through this wrerched place and find a way to enter the Halls of Reflection. I sense powerful magic hidden away within tohse halls. Magic that could be the key to destroying the Scourge!"
-#define SAY_FS_Jaina_FS07  "Make haste, champions ! I will prepare the troops to fall in behind you."
-#define SAY_FS_Jaina_FS08  ""
-#define SAY_FS_Jaina_FS09  ""
+#define SAY_FS_Jaina_FS07  "Your first mission is to destroy the machines of death within this malevolent engine of souls, and clear a path for our soldiers."
+#define SAY_FS_Jaina_FS08  "Make haste, champions. I will prepare the troops to fall in behind you."
+#define SAY_FS_Jaina_FS09  "Excellent work champions, we shall set up our base camp in these chambers. My magi will get the Scourge transport device working shortly. Step inside it when you're ready for your next mission, I will meet you on the other side."
 
 // Windrunner
 #define SOUND_FS_Sylvanas_FS01  17038
@@ -55,12 +56,13 @@ EndScriptData */
 #define SOUND_FS_Sylvanas_FS06  17043
 #define SOUND_FS_Sylvanas_FS07  17044
 
-#define SAY_FS_Sylvanas_FS01  ""
-#define SAY_FS_Sylvanas_FS02  ""
-#define SAY_FS_Sylvanas_FS03  ""
-#define SAY_FS_Sylvanas_FS04  ""
-#define SAY_FS_Sylvanas_FS05  ""
-#define SAY_FS_Sylvanas_FS06  ""
+#define SAY_FS_Sylvanas_FS01  "The Argent Crusade and the Knights of the Ebon Blade have assaulted the gates of the Icecrown Citadel and are preparing for a massive attack upon the scourge. Our mission is a bit more subtle but equally as important."
+#define SAY_FS_Sylvanas_FS02  "With the attention of the Lich King turned towards the front gate, we'll be working our way through the side in search of information that will enable us to defeat him... Once and for all."
+#define SAY_FS_Sylvanas_FS03  "Our scouts have reported that the Lich King has a private chamber outside of the Frozen Throne, deep within a place called the Halls of Reflection. That is our target, champions."
+#define SAY_FS_Sylvanas_FS04  "We will cut a swath of destruction through this cursed place and find a way to enter the Halls of Reflection. If there is anything of value to be found here, it will be found in the Halls."
+#define SAY_FS_Sylvanas_FS05  "Your first mission is to destroy the machines of death within this wretched engine of souls, and clear a path for our soldiers."
+#define SAY_FS_Sylvanas_FS06  "The Dark Lady watches over you, make haste!"
+#define SAY_FS_Sylvanas_FS07  "Excellent work, champions! We shall set up our base camp in these chambers. My magi will get the scourge transport device working shortly, step inside when you are ready for your next mission. I will meet you on the other side."
 
 struct MANGOS_DLL_DECL npc_proudmooreAI : public ScriptedAI
 {
@@ -80,7 +82,7 @@ struct MANGOS_DLL_DECL npc_proudmooreAI : public ScriptedAI
     {
 		m_creature->MonsterSay(SAY_FS_Jaina_FS01, LANG_UNIVERSAL, 0);
         DoPlaySoundToSet(m_creature, SOUND_FS_Jaina_FS01);
-        Sleep(9000);
+        Sleep(8000);
 
 		m_creature->MonsterSay(SAY_FS_Jaina_FS02, LANG_UNIVERSAL, 0);
 		DoPlaySoundToSet(m_creature, SOUND_FS_Jaina_FS02);
@@ -92,7 +94,7 @@ struct MANGOS_DLL_DECL npc_proudmooreAI : public ScriptedAI
 
         m_creature->MonsterSay(SAY_FS_Jaina_FS04, LANG_UNIVERSAL, 0);
 	    DoPlaySoundToSet(m_creature, SOUND_FS_Jaina_FS04);
-        Sleep(9000);
+        Sleep(11000);
 
         m_creature->MonsterSay(SAY_FS_Jaina_FS05, LANG_UNIVERSAL, 0);
 	    DoPlaySoundToSet(m_creature, SOUND_FS_Jaina_FS05);
@@ -100,19 +102,16 @@ struct MANGOS_DLL_DECL npc_proudmooreAI : public ScriptedAI
 
 		m_creature->MonsterSay(SAY_FS_Jaina_FS06, LANG_UNIVERSAL, 0);
 	    DoPlaySoundToSet(m_creature, SOUND_FS_Jaina_FS06);
-        Sleep(9000);
+        Sleep(12000);
 
 		m_creature->MonsterSay(SAY_FS_Jaina_FS07, LANG_UNIVERSAL, 0);
 	    DoPlaySoundToSet(m_creature, SOUND_FS_Jaina_FS07);
-        Sleep(12000);
+        Sleep(7000);
 
 		m_creature->MonsterSay(SAY_FS_Jaina_FS08, LANG_UNIVERSAL, 0);
 	    DoPlaySoundToSet(m_creature, SOUND_FS_Jaina_FS08);
         Sleep(9000);
 
-		m_creature->MonsterSay(SAY_FS_Jaina_FS09, LANG_UNIVERSAL, 0);
-	    DoPlaySoundToSet(m_creature, SOUND_FS_Jaina_FS09);
-        Sleep(9000);
     }
 
     void KilledUnit(Unit *victim)
@@ -186,23 +185,23 @@ struct MANGOS_DLL_DECL npc_windrunnerAI : public ScriptedAI
     {
 	    m_creature->MonsterSay(SAY_FS_Sylvanas_FS01, LANG_UNIVERSAL, 0);
         DoPlaySoundToSet(m_creature, SOUND_FS_Sylvanas_FS01);
-        Sleep(9000);
+        Sleep(11000);
 
 	    m_creature->MonsterSay(SAY_FS_Sylvanas_FS02, LANG_UNIVERSAL, 0);
         DoPlaySoundToSet(m_creature, SOUND_FS_Sylvanas_FS02);
-        Sleep(9000);
+        Sleep(11000);
 
 	    m_creature->MonsterSay(SAY_FS_Sylvanas_FS03, LANG_UNIVERSAL, 0);
         DoPlaySoundToSet(m_creature, SOUND_FS_Sylvanas_FS03);
-        Sleep(9000);
+        Sleep(11000);
 
 	    m_creature->MonsterSay(SAY_FS_Sylvanas_FS04, LANG_UNIVERSAL, 0);
         DoPlaySoundToSet(m_creature, SOUND_FS_Sylvanas_FS04);
-        Sleep(9000);
+        Sleep(11000);
 
 	    m_creature->MonsterSay(SAY_FS_Sylvanas_FS05, LANG_UNIVERSAL, 0);
         DoPlaySoundToSet(m_creature, SOUND_FS_Sylvanas_FS05);
-        Sleep(9000);
+        Sleep(8000);
 
 	    m_creature->MonsterSay(SAY_FS_Sylvanas_FS06, LANG_UNIVERSAL, 0);
         DoPlaySoundToSet(m_creature, SOUND_FS_Sylvanas_FS06);
@@ -245,7 +244,7 @@ CreatureAI* GetAI_npc_windrunner(Creature* pCreature)
 
 bool GossipHello_npc_windrunner(Player* pPlayer, Creature* pCreature)
 {
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
     return true;
