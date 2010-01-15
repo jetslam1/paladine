@@ -56,6 +56,9 @@ EndScriptData */
 #define SPELL_WAILING_SOULS_H  68912
 #define SPELL_WELL_OF_SOULS    68820
 
+#define NPC_PROUDMOORE  38160
+#define NPC_WINDRUNNER  38161
+
 struct MANGOS_DLL_DECL boss_devourerAI : public ScriptedAI
 {
     boss_devourerAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -97,14 +100,20 @@ struct MANGOS_DLL_DECL boss_devourerAI : public ScriptedAI
             case 0:
                 DoPlaySoundToSet(m_creature, SOUND_FS_FS_DevourerFemale01_Death1);
                 m_creature->MonsterYell(SAY_FS_DevourerMale02_Death, LANG_UNIVERSAL, 0);
+				m_creature->SummonCreature(NPC_PROUDMOORE, 5618.259, 2451.860, 705.851, 0.925806, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 80000);
+                m_creature->SummonCreature(NPC_WINDRUNNER, 5618.259, 2451.860, 705.851, 0.925806, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 80000);
                 break;					
             case 1:
                 DoPlaySoundToSet(m_creature, SOUND_FS_FS_DevourerMale01_Death2);
                 m_creature->MonsterYell(SAY_FS_DevourerMale02_Death, LANG_UNIVERSAL, 0);
+				m_creature->SummonCreature(NPC_PROUDMOORE, 5618.259, 2451.860, 705.851, 0.925806, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 80000);
+                m_creature->SummonCreature(NPC_WINDRUNNER, 5618.259, 2451.860, 705.851, 0.925806, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 80000);
                 break;
 			case 2:
                 DoPlaySoundToSet(m_creature, SOUND_FS_FS_DevourerMale02_Death3);
                 m_creature->MonsterYell(SAY_FS_DevourerMale02_Death, LANG_UNIVERSAL, 0);
+				m_creature->SummonCreature(NPC_PROUDMOORE, 5618.259, 2451.860, 705.851, 0.925806, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 80000);
+                m_creature->SummonCreature(NPC_WINDRUNNER, 5618.259, 2451.860, 705.851, 0.925806, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 80000);
                 break;
 		}
         if (m_pInstance)
