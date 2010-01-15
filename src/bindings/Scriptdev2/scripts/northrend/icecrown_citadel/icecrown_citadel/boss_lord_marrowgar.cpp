@@ -58,7 +58,7 @@ EndScriptData */
 #define SPELL_SABER_LASH             69055
 #define SPELL_SABER_LASH_H           70814
 #define SPELL_SOUL_FEAST             71203
-#define SPELL_COLDFLAME              69146
+#define SPELL_COLDFLAME              69138
 #define SPELL_COLDFLAME_H            70824       
 
 struct MANGOS_DLL_DECL boss_lord_marrowgarAI : public ScriptedAI
