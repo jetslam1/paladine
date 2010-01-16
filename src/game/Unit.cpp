@@ -7878,7 +7878,7 @@ bool Unit::IsHostileTo(Unit const* unit) const
             return false;
 
         // PvP FFA state
-        if(pTester->HasByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_FFA_PVP) && pTarget->HasByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_FFA_PVP))
+        if(pTester->IsFFAPvP() && pTarget->IsFFAPvP())
             return true;
 
         //= PvP states
@@ -7990,7 +7990,7 @@ bool Unit::IsFriendlyTo(Unit const* unit) const
             return true;
 
         // PvP FFA state
-        if(pTester->HasByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_FFA_PVP) && pTarget->HasByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_FFA_PVP))
+        if(pTester->IsFFAPvP() && pTarget->IsFFAPvP())
             return false;
 
         //= PvP states
@@ -12760,6 +12760,9 @@ Pet* Unit::CreateTamedPetFrom(Creature* creatureTarget,uint32 spell_id)
     if(IsPvP())
         pet->SetPvP(true);
 
+    if(IsFFAPvP())
+        pet->SetFFAPvP(true);
+
     uint32 level = (creatureTarget->getLevel() < (getLevel() - 5)) ? (getLevel() - 5) : creatureTarget->getLevel();
 
     if(!pet->InitStatsForLevel(level))
@@ -13118,6 +13121,23 @@ void Unit::SetPvP( bool state )
         RemoveByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_PVP);
 
     CallForAllControlledUnits(SetPvPHelper(state),true,true,true);
+}
+
+struct SetFFAPvPHelper
+{
+    explicit SetFFAPvPHelper(bool _state) : state(_state) {}
+    void operator()(Unit* unit) const { unit->SetFFAPvP(state); }
+    bool state;
+};
+
+void Unit::SetFFAPvP( bool state )
+{
+    if(state)
+        SetByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_FFA_PVP);
+    else
+        RemoveByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_FFA_PVP);
+
+    CallForAllControlledUnits(SetFFAPvPHelper(state),true,true,true);
 }
 
 void Unit::KnockBackFrom(Unit* target, float horizintalSpeed, float verticalSpeed)
