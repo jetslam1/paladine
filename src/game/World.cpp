@@ -63,6 +63,7 @@
 #include "WaypointManager.h"
 #include "GMTicketMgr.h"
 #include "Util.h"
+#include "AuctionHouseBot.h"
 
 INSTANTIATE_SINGLETON_1( World );
 
@@ -1538,6 +1539,9 @@ void World::SetInitialWorldSettings()
     sLog.outString("Starting Autobroadcast system by Xeross..." );
     sLog.outString( "WORLD: World initialized" );
 
+    sLog.outString("Initialize AuctionHouseBot...");
+    auctionbot.Initialize();
+
     uint32 uStartInterval = getMSTimeDiff(uStartTime, getMSTime());
     sLog.outString( "SERVER STARTUP TIME: %i minutes %i seconds", uStartInterval / 60000, (uStartInterval % 60000) / 1000 );
 }
@@ -1608,6 +1612,7 @@ void World::Update(uint32 diff)
     /// <ul><li> Handle auctions when the timer has passed
     if (m_timers[WUPDATE_AUCTIONS].Passed())
     {
+        auctionbot.Update();
         m_timers[WUPDATE_AUCTIONS].Reset();
 
         ///- Update mails (return old mails with item, or delete them)
