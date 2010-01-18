@@ -406,6 +406,7 @@ enum DeathState
     DEAD_FALLING= 5
 };
 
+// internal state flags for some auras and movement generators, other.
 enum UnitState
 {
     // persistent state (applied by aura/etc until expire)
