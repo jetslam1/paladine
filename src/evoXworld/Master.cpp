@@ -39,6 +39,7 @@
 #include "ScriptCalls.h"
 #include "Util.h"
 #include "revision_sql.h"
+#include "evo-chat/IRCClient.h"
 
 #include "sockets/TcpSocket.h"
 #include "sockets/Utility.h"
@@ -217,6 +218,9 @@ int Master::Run()
     if (!_StartDB())
         return 1;
 
+    ///- Load evo-Chat Config (evo-Chat needs DB for gm levels, AutoBroadcast uses world timers)
+    sIRC.LoadConfig(sIRC.CfgFile);
+
     ///- Initialize the World
     sWorld.SetInitialWorldSettings();
 
@@ -294,6 +298,12 @@ int Master::Run()
 
     uint32 realCurrTime, realPrevTime;
     realCurrTime = realPrevTime = getMSTime();
+
+    uint32 socketSelecttime = sWorld.getConfig(CONFIG_SOCKET_SELECTTIME);
+
+    // Start up evo-Chat
+    ACE_Based::Thread irc(new IRCClient);
+    irc.setPriority (ACE_Based::High);
 
     ///- Start up freeze catcher thread
     ACE_Based::Thread* freeze_thread = NULL;
