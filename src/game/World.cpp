@@ -51,7 +51,6 @@
 #include "BattleGroundMgr.h"
 #include "Language.h"
 #include "TemporarySummon.h"
-#include "WaypointMovementGenerator.h"
 #include "VMapFactory.h"
 #include "GlobalEvents.h"
 #include "GameEventMgr.h"
@@ -1519,7 +1518,6 @@ void World::SetInitialWorldSettings()
 
     ///- Initilize static helper structures
     AIRegistry::Initialize();
-    WaypointMovementGenerator<Creature>::Initialize();
     Player::InitVisibleBits();
 
     ///- Initialize MapManager
