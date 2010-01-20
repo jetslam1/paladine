@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software licensed under GPL version 2
  * Please see the included DOCS/LICENSE.TXT for more information */
 
@@ -31,6 +31,25 @@ enum
     TYPE_SAPPHIRON              = 16,
     TYPE_KELTHUZAD              = 17,
 
+    TYPE_BLAUMEUX               = 18,
+    TYPE_RIVENDARE              = 19,
+    TYPE_ZELIEK                 = 20,
+    TYPE_KORTHAZZ               = 21,
+
+    DATA_ANUB_REKHAN            = 30,
+    DATA_FAERLINA               = 31,
+    DATA_GOTHIK_GATE            = 32,
+
+    DATA_THADDIUS               = 33,
+    DATA_STALAGG                = 34,
+    DATA_FEUGEN                 = 35,
+
+    DATA_KORTHAZZ               = 36,
+    DATA_RIVENDARE              = 37,
+    DATA_BLAUMEUX               = 38,
+    DATA_ZELIEK                 = 39,
+    DATA_HEIGAN_ERUPT           = 40,
+
     NPC_ANUB_REKHAN             = 15956,
     NPC_FAERLINA                = 15953,
 
@@ -42,6 +61,7 @@ enum
     NPC_THANE                   = 16064,
     NPC_BLAUMEUX                = 16065,
     NPC_RIVENDARE               = 30549,
+    NPC_HEIGAN                  = 15936,
 
     // Arachnid Quarter
     GO_ARAC_ANUB_DOOR           = 181126,                   //encounter door
@@ -89,7 +109,12 @@ enum
     GO_MILI_PORTAL              = 181578,
     GO_CONS_PORTAL              = 181576,
 
-    AREATRIGGER_FROSTWYRM       = 4120                     //not needed here, but AT to be scripted
+    AREATRIGGER_FROSTWYRM       = 4120,                     //not needed here, but AT to be scripted
+
+    ACHIEVEMENT_HORSEMEN        = 568,
+    H_ACHIEVEMENT_HORSEMEN      = 569,
+    ACHIEVEMENT_TOGETHER        = 2176,
+    H_ACHIEVEMENT_TOGETHER      = 2177,
 };
 
 #endif
