@@ -73,7 +73,7 @@ EndScriptData */
 #define SPELL_SHATTERED_ILLUSION        64173
 
 // Yogg-Saron Phase 2
-#define SPELL_SHADOWY_BARRIER_1         63894
+#define AURA_SHADOWY_BARRIER_1          63894
 
 // Yogg-Saron Phase 3
 #define SPELL_EMPOWERING_SHADOWS        64486
@@ -98,7 +98,10 @@ EndScriptData */
 #define SPELL_TITANIC_STORM             64172
 
 // Ominöse Wolke - Phase 1
-#define SPELL_SUMMON_GUARDIAN           62979
+#define AURA_SUMMON_GUARDIAN            62979
+
+// Sanity Well
+#define AURA_SANITY_WELL                63288
 
 // Wächter von Yogg-Saron - Phase 1
 #define SPELL_DOMINATE_MIND             63042
@@ -113,11 +116,11 @@ EndScriptData */
 
 
 
-struct MANGOS_DLL_DECL boss_yoggsaronAI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_yoggsaronAI : public Scripted_NoMovementAI
 {
-    boss_yoggsaronAI(Creature* pCreature) : ScriptedAI(pCreature)
+    boss_yoggsaronAI(Creature *c) : Scripted_NoMovementAI(c)
     {
-        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        m_pInstance = ((ScriptedInstance*)c->GetInstanceData());
         Reset();
     }
 
@@ -125,6 +128,11 @@ struct MANGOS_DLL_DECL boss_yoggsaronAI : public ScriptedAI
 
     void Reset()
     {
+	    if(!m_creature->HasAura(AURA_SHADOWY_BARRIER_1, 0))
+            m_creature->CastSpell(m_creature, AURA_SHADOWY_BARRIER_1, true);
+
+		if(!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
     }
 
     void KilledUnit(Unit *victim)
@@ -137,6 +145,7 @@ struct MANGOS_DLL_DECL boss_yoggsaronAI : public ScriptedAI
 
     void Aggro(Unit* pWho)
     {
+		DoPlaySoundToSet(m_creature, SOUND_UR_FemaleYogg_Aggro01);
         m_creature->SetInCombatWithZone();
 
         if (m_pInstance)
@@ -341,6 +350,116 @@ struct MANGOS_DLL_DECL npc_mimiron_helpAI : public ScriptedAI
 
 };
 
+
+// Sanity Well
+struct MANGOS_DLL_DECL npc_sanity_wellAI : public ScriptedAI
+{
+    npc_sanity_wellAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
+    }
+
+    ScriptedInstance* m_pInstance;
+
+    void Reset()
+    {
+	    if(!m_creature->HasAura(AURA_SANITY_WELL  , 0))
+            m_creature->CastSpell(m_creature, AURA_SANITY_WELL  , true);
+    }
+
+    void KilledUnit(Unit *victim)
+    {
+    }
+
+    void JustDied(Unit *victim)
+    {
+    }
+
+    void Aggro(Unit* pWho)
+    {
+        m_creature->SetInCombatWithZone();
+
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_YOGGSARON, IN_PROGRESS);
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        DoMeleeAttackIfReady();
+
+        EnterEvadeIfOutOfCombatArea(diff);
+
+    }
+
+};
+
+// Sara - Phase 1
+struct MANGOS_DLL_DECL npc_saraAI : public Scripted_NoMovementAI
+{
+    npc_saraAI(Creature *c) : Scripted_NoMovementAI(c)
+    {
+        m_pInstance = ((ScriptedInstance*)c->GetInstanceData());
+        Reset();
+    }
+
+    ScriptedInstance* m_pInstance;
+
+	bool Phase2;
+
+    void Reset()
+    {
+        Phase2 = false;
+
+		if(!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+    }
+
+    void KilledUnit(Unit *victim)
+    {
+    }
+
+    void JustDied(Unit *victim)
+    {
+		    Phase2 = true;
+			DoCast(m_creature, SPELL_SHADOWY_BARRIER);
+			m_creature->SummonCreature(NPC_YOGGSARON, 1976.812f, -25.675f, 330.980f, 3.124, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 300000000);
+    }
+
+    void Aggro(Unit* pWho)
+    {
+        m_creature->SetInCombatWithZone();
+
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_YOGGSARON, IN_PROGRESS);
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+            DoMeleeAttackIfReady();
+
+        EnterEvadeIfOutOfCombatArea(diff);
+
+    }
+
+};
+
+CreatureAI* GetAI_npc_sara(Creature *_Creature)
+{
+    return new npc_saraAI(_Creature);
+}
+
+CreatureAI* GetAI_npc_sanity_well(Creature* pCreature)
+{
+    return new npc_sanity_wellAI(pCreature);
+}
+
 CreatureAI* GetAI_npc_mimiron_help(Creature* pCreature)
 {
     return new npc_mimiron_helpAI(pCreature);
@@ -361,9 +480,9 @@ CreatureAI* GetAI_npc_freya_help(Creature* pCreature)
     return new npc_freya_helpAI(pCreature);
 }
 
-CreatureAI* GetAI_boss_yoggsaron(Creature* pCreature)
+CreatureAI* GetAI_boss_yoggsaron(Creature *_Creature)
 {
-    return new boss_yoggsaronAI(pCreature);
+    return new boss_yoggsaronAI(_Creature);
 }
 
 void AddSC_boss_yoggsaron()
@@ -392,6 +511,16 @@ void AddSC_boss_yoggsaron()
     newscript = new Script;
     newscript->Name = "npc_mimiron_help";
     newscript->GetAI = &GetAI_npc_mimiron_help;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_sanity_well";
+    newscript->GetAI = &GetAI_npc_sanity_well;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_sara";
+    newscript->GetAI = &GetAI_npc_sara;
     newscript->RegisterSelf();
 
 }

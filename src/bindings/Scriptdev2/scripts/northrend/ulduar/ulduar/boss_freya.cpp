@@ -33,6 +33,7 @@ EndScriptData */
 
 #define NPC_FREYA_DEATH    33241
 #define NPC_FREYA_HELP     33410
+#define NPC_SANITY_WELL    33991
 
 struct MANGOS_DLL_DECL boss_freyaAI : public ScriptedAI
 {
@@ -95,6 +96,9 @@ struct MANGOS_DLL_DECL npc_freya_deathAI : public ScriptedAI
 	void StartEvent(Player* pPlayer)
     {
 		m_creature->SummonCreature(NPC_FREYA_HELP, 1939.287f, 42.167f, 338.459f, 4.864, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 600000000);
+		m_creature->SummonCreature(NPC_SANITY_WELL, 1894.562f, 1.227f, 332.699f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 600000000);
+		m_creature->SummonCreature(NPC_SANITY_WELL, 1893.026f, -50.150f, 332.890f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 600000000);
+		m_creature->SummonCreature(NPC_SANITY_WELL, 1992.024f, -91.553f, 330.021f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 600000000);
 		m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 		m_creature->SetVisibility(VISIBILITY_OFF);
     }

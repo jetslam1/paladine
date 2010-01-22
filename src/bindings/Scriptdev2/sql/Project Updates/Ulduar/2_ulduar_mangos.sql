@@ -10,6 +10,8 @@ UPDATE `creature_template` SET `ScriptName` = 'npc_hodir_help' WHERE `entry` =33
 UPDATE `creature_template` SET `ScriptName` = 'boss_thorim' WHERE `entry` =32865;
 UPDATE `creature_template` SET `ScriptName` = 'npc_thorim_death' WHERE `entry` =33242;
 UPDATE `creature_template` SET `ScriptName` = 'npc_thorim_help' WHERE `entry` =33413;
+UPDATE `creature_template` SET `ScriptName` = 'npc_sanity_well' WHERE `entry` =33991;
+UPDATE `creature_template` SET `ScriptName` = 'npc_sara' WHERE `entry` =33134;
 
 UPDATE `creature_template` SET `npcflag` = '1' WHERE `entry` =33213;
 UPDATE `creature_template` SET `npcflag` = '1' WHERE `entry` =33241;
@@ -23,6 +25,12 @@ UPDATE `creature_template` SET `faction_A` = '35' WHERE `entry` =33241;
 UPDATE `creature_template` SET `faction_H` = '35' WHERE `entry` =33241;
 UPDATE `creature_template` SET `faction_A` = '35' WHERE `entry` =33242;
 UPDATE `creature_template` SET `faction_H` = '35' WHERE `entry` =33242;
+UPDATE `creature_template` SET `faction_A` = '14' WHERE `entry` =33292;
+UPDATE `creature_template` SET `faction_H` = '14' WHERE `entry` =33292;
+UPDATE `creature_template` SET `faction_A` = '35' WHERE `entry` =33134;
+UPDATE `creature_template` SET `faction_H` = '35' WHERE `entry` =33134;
+UPDATE `creature_template` SET `faction_A` = '14' WHERE `entry` =33288;
+UPDATE `creature_template` SET `faction_H` = '14' WHERE `entry` =33288;
 
 UPDATE creature_template SET minlevel =83, maxlevel =83, minhealth = 14433075, maxhealth = 14433075, minmana =0, maxmana =0, rank =3 where entry =33241;
 UPDATE creature_template SET minlevel =83, maxlevel =83, minhealth = 14433075, maxhealth = 14433075, minmana =0, maxmana =0, rank =3 where entry =33410;
