@@ -23,20 +23,20 @@ SDCategory: The Violet Hold
 EndScriptData */
 
 #include "precompiled.h"
-#include "def_violet_hold.h"
+#include "violet_hold.h"
 
 enum
 {
-    SAY_AGGRO                                 = -1608000,
-    SAY_SLAY_1                                = -1608001,
-    SAY_SLAY_2                                = -1608002,
-    SAY_SLAY_3                                = -1608003,
-    SAY_DEATH                                 = -1608004,
-    SAY_SPAWN                                 = -1608005,
-    SAY_DISRUPTION                            = -1608006,
-    SAY_BREATH_ATTACK                         = -1608007,
-    SAY_SPECIAL_ATTACK_1                      = -1608008,
-    SAY_SPECIAL_ATTACK_2                      = -1608009,
+    SAY_AGGRO                                 = -1608045,
+    SAY_SLAY_1                                = -1608046,
+    SAY_SLAY_2                                = -1608047,
+    SAY_SLAY_3                                = -1608048,
+    SAY_DEATH                                 = -1608049,
+    SAY_SPAWN                                 = -1608050,
+    SAY_DISRUPTION                            = -1608051,
+    SAY_BREATH_ATTACK                         = -1608052,
+    SAY_SPECIAL_ATTACK_1                      = -1608053,
+    SAY_SPECIAL_ATTACK_2                      = -1608054,
 
     SPELL_ARCANE_VACUM                        = 58694,
     SPELL_BLIZZARD                            = 58693,
