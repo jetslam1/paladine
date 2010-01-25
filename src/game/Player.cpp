@@ -14811,7 +14811,7 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
     //"resettalents_time, trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, stable_slots, at_login, zone, online, death_expire_time, taxi_path, dungeon_difficulty,"
     // 40           41                42                43                    44          45          46              47           48               49              50
     //"arenaPoints, totalHonorPoints, todayHonorPoints, yesterdayHonorPoints, totalKills, todayKills, yesterdayKills, chosenTitle, knownCurrencies, watchedFaction, drunk,"
-    // 51      52      53      54      55      56      57      58
+    // 51      52      53      54      55      56      57      58      59      60
     //"health, power1, power2, power3, power4, power5, power6, power7, speccount, activespec FROM characters WHERE guid = '%u'", GUID_LOPART(m_guid));
     QueryResult *result = holder->GetResult(PLAYER_LOGIN_QUERY_LOADFROM);
 
@@ -15227,9 +15227,9 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
     // Mail
     _LoadMail();
 
-	m_specsCount = fields[41].GetUInt32();
-    m_activeSpec = fields[42].GetUInt32();
-    delete result;
+	m_specsCount = fields[59].GetUInt32();
+    m_activeSpec = fields[60].GetUInt32();
+    /*delete result;*/
 
     // sanity check
     if (m_specsCount > MAX_TALENT_SPECS || m_activeSpec > MAX_TALENT_SPEC ||
@@ -16507,7 +16507,8 @@ void Player::SaveToDB()
 
     for(uint32 i = 0; i < MAX_POWERS; ++i)
         ss << "," << GetPower(Powers(i));
-
+		
+    ss << ", ";
     ss << uint32(m_specsCount);
     ss << ", ";
     ss << uint32(m_activeSpec);
