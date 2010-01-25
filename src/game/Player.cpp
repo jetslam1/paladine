@@ -15216,8 +15216,8 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
     // Mail
     _LoadMail();
 
-	m_specsCount = fields[41].GetUInt32();
-    m_activeSpec = fields[42].GetUInt32();
+	m_specsCount = fields[59].GetUInt32();
+    m_activeSpec = fields[60].GetUInt32();
     /*delete result;*/
 
     // sanity check
