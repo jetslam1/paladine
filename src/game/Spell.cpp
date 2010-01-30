@@ -4785,6 +4785,8 @@ SpellCastResult Spell::CheckCast(bool strict)
                             return SPELL_FAILED_ALREADY_HAVE_CHARM;
                     }
                 }
+
+                break;
             }
             // Not used for summon?
             case SPELL_EFFECT_SUMMON_PHANTASM:
