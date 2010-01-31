@@ -5283,6 +5283,24 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura* triggeredByAu
                 case 63320:
                     triggered_spell_id = 63321;
                     break;
+                // Item - Shadowmourne Legendary
+                case 71903:
+                {
+                    if (!roll_chance_i(triggerAmount))
+                        return false;
+
+                    Aura *aur = GetAura(71905, 0);
+                    if (aur && aur->GetStackAmount() + 1 >= aur->GetSpellProto()->StackAmount)
+                    {
+                        RemoveAurasDueToSpell(71905);
+                        CastSpell(this, 71904, true);       // Chaos Bane
+                        return true;
+                    }
+                    else
+                        triggered_spell_id = 71905;
+
+                    break;
+                }
             }
             break;
         }
@@ -5602,6 +5620,9 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura* triggeredByAu
                 // Siphon Life
                 case 63108:
                 {
+                    // Glyph of Siphon Life
+                    if (this->HasAura(56216))
+                        triggerAmount += triggerAmount * 25 / 100;
                     basepoints0 = int32(damage * triggerAmount / 100);
                     triggered_spell_id = 63106;
                     break;
@@ -5742,6 +5763,13 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura* triggeredByAu
 
                     basepoints0 = int32(target->GetMaxHealth() * triggerAmount / 100);
                     triggered_spell_id = 56131;
+                    break;
+                }
+                // Glyph of Prayer of Healing
+                case 55680:
+                {
+                    basepoints0 = int32(damage * 20 / 100 / 2);   // divided in two ticks
+                    triggered_spell_id = 56161;
                     break;
                 }
             }
@@ -6801,6 +6829,31 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura* triggeredByAu
                     return false;
                 triggered_spell_id = 61258;
                 target = this;
+                break;
+            }
+            // Sudden Doom
+            if (dummySpell->SpellIconID == 1939)
+            {
+                if (!target || !target->isAlive() || this->GetTypeId() != TYPEID_PLAYER)
+                    return false;
+                
+                // get highest rank of Death Coil spell
+                const PlayerSpellMap& sp_list = ((Player*)this)->GetSpellMap();
+                for (PlayerSpellMap::const_iterator itr = sp_list.begin(); itr != sp_list.end(); ++itr)
+                {
+                    if(!itr->second->active || itr->second->disabled || itr->second->state == PLAYERSPELL_REMOVED)
+                        continue;
+
+                    SpellEntry const *spellInfo = sSpellStore.LookupEntry(itr->first);
+                    if (!spellInfo)
+                        continue;
+
+                    if (spellInfo->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && spellInfo->SpellFamilyFlags & UI64LIT(0x2000))
+                    {
+                        triggered_spell_id = spellInfo->Id;
+                        break;
+                    }
+                }
                 break;
             }
             // Wandering Plague
@@ -8785,6 +8838,18 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
             }
             break;
         }
+        case SPELLFAMILY_PRIEST:
+        {
+            // Glyph of Shadow Word: Pain
+            if (spellProto->Id == 58381 && HasAura(55687))
+            {
+                Aura* glyph = GetAura(55687, 0);
+                //search for shadow word: pain on target
+                if (pVictim->GetAura(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_PRIEST, UI64LIT(0x0000000000008000)))
+                    DoneTotalMod += glyph->GetModifier()->m_amount * DoneTotalMod / 100;
+            }
+            break;
+        }
         case SPELLFAMILY_WARLOCK:
         {
             // Drain Soul
@@ -9398,6 +9463,20 @@ uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint
     for(AuraList::const_iterator i = mHealingGet.begin(); i != mHealingGet.end(); ++i)
         if ((*i)->isAffectedOnSpell(spellProto))
             TakenTotalMod *= ((*i)->GetModifier()->m_amount + 100.0f) / 100.0f;
+
+    //Nourish 20% of heal increase if target is afected by Druids HOTs
+    if(spellProto->SpellFamilyFlags & UI64LIT(0x0200000000000000))
+    {
+        Unit::AuraList const& RejorRegr = pVictim->GetAurasByType(SPELL_AURA_PERIODIC_HEAL);
+        for(Unit::AuraList::const_iterator i = RejorRegr.begin(); i != RejorRegr.end(); ++i)
+        {
+            if((*i)->GetSpellProto()->SpellFamilyName == SPELLFAMILY_DRUID)
+            {
+                TakenTotalMod *= 1.2f;
+                break;
+            }
+        }
+    }
 
     heal = (heal + TakenTotal) * TakenTotalMod;
 
@@ -11063,6 +11142,34 @@ int32 Unit::CalculateSpellDuration(SpellEntry const* spellProto, uint8 effect_in
             duration = int32(int64(duration) * (100+durationMod) /100);
 
         if (duration < 0) duration = 0;
+        if (unitPlayer && target == this)
+        {
+            switch(spellProto->SpellFamilyName)
+            {
+                case SPELLFAMILY_DRUID:
+                    if (spellProto->SpellFamilyFlags & UI64LIT(0x100))
+                    {
+                        // Glyph of Thorns
+                        if (Aura * aur = GetAura(57862, 0))
+                            duration += aur->GetModifier()->m_amount * MINUTE * IN_MILISECONDS;
+                    }
+                    break;
+                case SPELLFAMILY_PALADIN:
+                    if (spellProto->SpellFamilyFlags & UI64LIT(0x00000002))
+                    {
+                        // Glyph of Blessing of Might
+                        if (Aura * aur = GetAura(57958, 0))
+                            duration += aur->GetModifier()->m_amount * MINUTE * IN_MILISECONDS;
+                    }
+                    else if (spellProto->SpellFamilyFlags & UI64LIT(0x00010000))
+                    {
+                        // Glyph of Blessing of Wisdom
+                        if (Aura * aur = GetAura(57979, 0))
+                            duration += aur->GetModifier()->m_amount * MINUTE * IN_MILISECONDS;
+                    }
+                    break;
+            }
+        }
     }
 
     return duration;

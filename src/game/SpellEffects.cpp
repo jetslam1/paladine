@@ -155,7 +155,7 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS]=
     &Spell::EffectSelfResurrect,                            // 94 SPELL_EFFECT_SELF_RESURRECT
     &Spell::EffectSkinning,                                 // 95 SPELL_EFFECT_SKINNING
     &Spell::EffectCharge,                                   // 96 SPELL_EFFECT_CHARGE
-    &Spell::EffectUnused,                                   // 97 SPELL_EFFECT_97
+    &Spell::EffectSummonAllTotems,                          // 97 SPELL_EFFECT_SUMMON_ALL_TOTEMS
     &Spell::EffectKnockBack,                                // 98 SPELL_EFFECT_KNOCK_BACK
     &Spell::EffectDisEnchant,                               // 99 SPELL_EFFECT_DISENCHANT
     &Spell::EffectInebriate,                                //100 SPELL_EFFECT_INEBRIATE
@@ -324,6 +324,7 @@ void Spell::EffectSchoolDMG(uint32 effect_idx)
                     case 45150:                             // Meteor Slash
                     case 64422: case 64688:                 // Sonic Screech
                     case 70492: case 72505:                 // Ooze Eruption
+                    case 71904:                             // Chaos Bane
                     case 72624: case 72625:                 // Ooze Eruption
                     {
                         uint32 count = 0;
@@ -559,12 +560,31 @@ void Spell::EffectSchoolDMG(uint32 effect_idx)
                         // count consumed deadly poison doses at target
                         if (poison)
                         {
+                            bool needConsume = true;
                             uint32 spellId = poison->GetId();
                             uint32 doses = poison->GetStackAmount();
                             if (doses > combo)
                                 doses = combo;
-                            for (int i=0; i< doses; i++)
-                                unitTarget->RemoveSingleSpellAurasFromStack(spellId);
+
+                            // Master Poisoner
+                            Unit::AuraList const& auraList = ((Player*)m_caster)->GetAurasByType(SPELL_AURA_MOD_DURATION_OF_EFFECTS_BY_DISPEL);
+                            for(Unit::AuraList::const_iterator iter = auraList.begin(); iter!=auraList.end(); ++iter)
+                            {
+                                if( (*iter)->GetSpellProto()->SpellFamilyName == SPELLFAMILY_ROGUE && (*iter)->GetSpellProto()->SpellIconID == 1960)
+                                {
+                                    uint32 chance = (*iter)->GetSpellProto()->CalculateSimpleValue(2);
+
+                                    if(chance && roll_chance_i(chance))
+                                        needConsume = false;
+
+                                    break;
+                                }
+                            }
+
+                            if(needConsume)
+                                for (int i=0; i< doses; i++)
+                                    unitTarget->RemoveSingleSpellAurasFromStack(spellId);
+
                             damage *= doses;
                             damage += int32(((Player*)m_caster)->GetTotalAttackPowerValue(BASE_ATTACK) * 0.09f * doses);
                         }
@@ -3042,6 +3062,7 @@ void Spell::EffectEnergize(uint32 i)
         case 31930:                                         // Judgements of the Wise
         case 48542:                                         // Revitalize (mana restore case)
         case 63375:                                         // Improved Stormstrike
+		case 68082:                                         // Glyph of Seal of Command
             damage = damage * unitTarget->GetCreateMana() / 100;
             break;
         default:
@@ -6693,6 +6714,21 @@ void Spell::EffectSummonDeadPet(uint32 /*i*/)
 
     // _player->PetSpellInitialize(); -- action bar not removed at death and not required send at revive
     pet->SavePetToDB(PET_SAVE_AS_CURRENT);
+}
+
+void Spell::EffectSummonAllTotems(uint32 i)
+{
+    if(m_caster->GetTypeId() != TYPEID_PLAYER)
+        return;
+
+    int32 start_button = ACTION_BUTTON_SHAMAN_TOTEMS_BAR + m_spellInfo->EffectMiscValue[i];
+    int32 amount_buttons = m_spellInfo->EffectMiscValueB[i];
+
+    for(int32 slot = 0; slot < amount_buttons; ++slot)
+        if (ActionButton const* actionButton = ((Player*)m_caster)->GetActionButton(start_button+slot))
+            if (actionButton->GetType()==ACTION_BUTTON_SPELL)
+                if (uint32 spell_id = actionButton->GetAction())
+                    m_caster->CastSpell(unitTarget,spell_id,true);
 }
 
 void Spell::EffectDestroyAllTotems(uint32 /*i*/)

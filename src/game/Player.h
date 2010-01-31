@@ -189,6 +189,12 @@ struct ActionButton
     }
 };
 
+// some action button indexes used in code or clarify structure
+enum ActionButtonIndex
+{
+    ACTION_BUTTON_SHAMAN_TOTEMS_BAR = 132,
+};
+
 #define  MAX_ACTION_BUTTONS 144                             //checked in 3.2.0
 
 typedef std::map<uint8,ActionButton> ActionButtonList;
@@ -446,7 +452,7 @@ enum PlayerFlags
     PLAYER_FLAGS_PARTIAL_PLAY_TIME = 0x00001000,            // played long time
     PLAYER_FLAGS_NO_PLAY_TIME      = 0x00002000,            // played too long time
     PLAYER_FLAGS_IS_OUT_OF_BOUNDS  = 0x00004000,            // Lua_IsOutOfBounds
-    PLAYER_FLAGS_UNK16             = 0x00008000,            // strange visual effect (2.0.1), looks like PLAYER_FLAGS_GHOST flag
+    PLAYER_FLAGS_DEVELOPER         = 0x00008000,            // <Dev> prefix for something?
     PLAYER_FLAGS_UNK17             = 0x00010000,            // pre-3.0.3 PLAYER_FLAGS_SANCTUARY flag for player entered sanctuary
     PLAYER_FLAGS_TAXI_BENCHMARK    = 0x00020000,            // taxi benchmark mode (on/off) (2.0.1)
     PLAYER_FLAGS_PVP_TIMER         = 0x00040000,            // 3.0.2, pvp timer active (after you disable pvp manually)
@@ -1712,6 +1718,7 @@ class MANGOS_DLL_SPEC Player : public Unit
         void removeActionButton(uint8 button);
         void SendInitialActionButtons() const { SendActionButtons(0); }
         void SendActionButtons(uint32 state) const;
+		ActionButton const* GetActionButton(uint8 button);
 
         PvPInfo pvpInfo;
         void UpdatePvP(bool state, bool ovrride=false);

@@ -1297,6 +1297,7 @@ bool SpellMgr::canStackSpellRanks(SpellEntry const *spellInfo)
                 if (spellInfo->Effect[i]==SPELL_EFFECT_APPLY_AURA &&
                     spellInfo->EffectApplyAuraName[i] == SPELL_AURA_MOD_SHAPESHIFT)
                     return false;
+                break;
         }
     }
     return true;
@@ -1366,6 +1367,10 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
 
                     // Personalized Weather (thunder effect should overwrite rainy aura)
                     if(spellInfo_1->SpellIconID == 2606 && spellInfo_2->SpellIconID == 2606)
+                        return false;
+
+                    //Kindred Spirits (allow stack for auras)
+                    if (spellInfo_1->SpellIconID == 3559 && spellInfo_2->SpellIconID == 3559)
                         return false;
 
                     // Brood Affliction: Bronze

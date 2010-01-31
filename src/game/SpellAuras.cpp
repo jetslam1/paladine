@@ -1408,16 +1408,50 @@ void Aura::ReapplyAffectedPassiveAuras( Unit* target, bool owner_mode )
     }
 }
 
-/*********************************************************/
-/***               BASIC AURA FUNCTION                 ***/
-/*********************************************************/
-struct AuraHandleAddModifierHelper
+struct ReapplyAffectedPassiveAurasHelper
 {
-    explicit AuraHandleAddModifierHelper(Aura* _aura) : aura(_aura) {}
+    explicit ReapplyAffectedPassiveAurasHelper(Aura* _aura) : aura(_aura) {}
     void operator()(Unit* unit) const { aura->ReapplyAffectedPassiveAuras(unit, true); }
     Aura* aura;
 };
 
+void Aura::ReapplyAffectedPassiveAuras()
+{
+    // not reapply spell mods with charges (use original value because processed and at remove)
+    if (m_spellProto->procCharges)
+        return;
+
+    // not reapply some spell mods ops (mostly speedup case)
+    switch (m_modifier.m_miscvalue)
+    {
+        case SPELLMOD_DURATION:
+        case SPELLMOD_CHARGES:
+        case SPELLMOD_NOT_LOSE_CASTING_TIME:
+        case SPELLMOD_CASTING_TIME:
+        case SPELLMOD_COOLDOWN:
+        case SPELLMOD_COST:
+        case SPELLMOD_ACTIVATION_TIME:
+        case SPELLMOD_CASTING_TIME_OLD:
+            return;
+    }
+
+    // reapply talents to own passive persistent auras
+    ReapplyAffectedPassiveAuras(m_target, true);
+
+    // re-apply talents/passives/area auras applied to pet/totems (it affected by player spellmods)
+    m_target->CallForAllControlledUnits(ReapplyAffectedPassiveAurasHelper(this),true,false,false);
+
+    // re-apply talents/passives/area auras applied to group members (it affected by player spellmods)
+    if (Group* group = ((Player*)m_target)->GetGroup())
+        for(GroupReference *itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            if (Player* member = itr->getSource())
+                if (member != m_target && member->IsInMap(m_target))
+                    ReapplyAffectedPassiveAuras(member, false);
+}
+
+/*********************************************************/
+/***               BASIC AURA FUNCTION                 ***/
+/*********************************************************/
 void Aura::HandleAddModifier(bool apply, bool Real)
 {
     if(m_target->GetTypeId() != TYPEID_PLAYER || !Real)
@@ -1458,18 +1492,16 @@ void Aura::HandleAddModifier(bool apply, bool Real)
 
     ((Player*)m_target)->AddSpellMod(m_spellmod, apply);
 
-    // reapply talents to own passive persistent auras
-    ReapplyAffectedPassiveAuras(m_target, true);
+    ReapplyAffectedPassiveAuras();
 
-    // re-apply talents/passives/area auras applied to pet/totems (it affected by player spellmods)
-    m_target->CallForAllControlledUnits(AuraHandleAddModifierHelper(this),true,false,false);
+    if(m_spellProto->SpellFamilyName == SPELLFAMILY_DRUID && (m_spellmod->mask2 & UI64LIT(0x20000)))
+    {
+        m_target->RemoveAurasDueToSpell(66530);
 
-    // re-apply talents/passives/area auras applied to group members (it affected by player spellmods)
-    if (Group* group = ((Player*)m_target)->GetGroup())
-        for(GroupReference *itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
-            if (Player* member = itr->getSource())
-                if (member != m_target && member->IsInMap(m_target))
-                    ReapplyAffectedPassiveAuras(member, false);
+        // Aura 66530 is immediately applied ONLY when "Improved Barkskin" is learned in Caster/Travel Form
+        if(apply && (m_target->m_form == FORM_NONE || m_target->m_form == FORM_TRAVEL))
+            m_target->CastSpell(m_target,66530,true);
+    }
 }
 
 void Aura::HandleAddTargetTrigger(bool apply, bool /*Real*/)
@@ -3009,6 +3041,7 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
     switch(form)
     {
         case FORM_CAT:
+        case FORM_SHADOW_DANCE:
             PowerType = POWER_ENERGY;
             break;
         case FORM_BEAR:
@@ -3075,7 +3108,8 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
         if(m_target->m_ShapeShiftFormSpellId)
             m_target->RemoveAurasDueToSpell(m_target->m_ShapeShiftFormSpellId, this);
 
-        m_target->SetByteValue(UNIT_FIELD_BYTES_2, 3, form);
+        // For Shadow Dance we must apply Stealth form (30) instead of current (13)
+        m_target->SetByteValue(UNIT_FIELD_BYTES_2, 3, (form == FORM_SHADOW_DANCE) ? uint8(FORM_STEALTH) : form);
 
         if(modelid > 0)
             m_target->SetDisplayId(modelid);
@@ -3144,6 +3178,10 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
                         m_target->SetPower(POWER_RAGE, Rage_val);
                     break;
                 }
+                // Shadow Dance - apply stealth mode stand flag
+                case FORM_SHADOW_DANCE:
+                    m_target->SetStandFlags(UNIT_STAND_FLAGS_CREEP);
+                    break;
                 default:
                     break;
             }
@@ -3183,6 +3221,10 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
             case FORM_MOONKIN:
                 if(Aura* dummy = m_target->GetDummyAura(37324) )
                     m_target->CastSpell(m_target, 37325, true, NULL, dummy);
+                break;
+            // Shadow Dance - remove stealth mode stand flag
+            case FORM_SHADOW_DANCE:
+                m_target->RemoveStandFlags(UNIT_STAND_FLAGS_CREEP);
                 break;
             default:
                 break;
@@ -5239,14 +5281,15 @@ void Aura::HandleAuraModIncreaseHealth(bool apply, bool Real)
         case 44055: case 55915: case 55917: case 67596:     // Tremendous Fortitude (Battlemaster's Alacrity)
         case 50322:                                         // Survival Instincts
         case 54443:                                         // Demonic Empowerment (Voidwalker)
+        case 55233:                                            // Vampiric Blood
         {
             if(Real)
             {
                 if(apply)
                 {
-                    // Demonic Empowerment (Voidwalker) - special case, store percent in data
+                    // Demonic Empowerment (Voidwalker) & Vampiric Blood - special cases, store percent in data
                     // recalculate to full amount at apply for proper remove
-                    if (GetId() == 54443)
+                    if (GetId() == 54443 || GetId() == 55233)
                         m_modifier.m_amount = m_target->GetMaxHealth() * m_modifier.m_amount / 100;
 
                     m_target->HandleStatModifier(UNIT_MOD_HEALTH, TOTAL_VALUE, float(m_modifier.m_amount), apply);
@@ -5941,6 +5984,18 @@ void Aura::HandleShapeshiftBoosts(bool apply)
                 }
             }
 
+            // Improved Barkskin - apply/remove armor bonus due to shapeshift remove
+            if (((Player*)m_target)->HasSpell(63410) || ((Player*)m_target)->HasSpell(63411))
+            {
+                if (form == FORM_TRAVEL)
+                {
+                    m_target->RemoveAurasDueToSpell(66530);
+                    m_target->CastSpell(m_target,66530,true);
+                }
+                else
+                    m_target->RemoveAurasDueToSpell(66530);
+            }
+
             // Heart of the Wild
             if (HotWSpellId)
             {
@@ -5979,6 +6034,12 @@ void Aura::HandleShapeshiftBoosts(bool apply)
             }
             else
                 ++itr;
+        }
+        // Improved Barkskin - apply/remove armor bonus due to shapeshift
+        if (((Player*)m_target)->HasSpell(63410) || ((Player*)m_target)->HasSpell(63411))
+        {
+            m_target->RemoveAurasDueToSpell(66530);
+            m_target->CastSpell(m_target,66530,true);
         }
     }
 }
@@ -6223,6 +6284,28 @@ void Aura::HandleSpellSpecificBoosts(bool apply)
         }
         case SPELLFAMILY_PALADIN:
         {
+            if (m_spellProto->Id == 19746)                  // Aura Mastery (on Concentration Aura remove and apply)
+            {
+                Unit *caster = GetCaster();
+                if (!caster)
+                    return;
+
+                if (apply && caster->HasAura(31821))
+                    caster->CastSpell(caster, 64364, true, NULL, this);
+                else if (!apply)
+                    caster->RemoveAurasDueToSpell(64364);
+            }
+            if (m_spellProto->Id == 31821)                  // Aura Mastery (on Aura Mastery original buff remove)
+            {
+                Unit *caster = GetCaster();
+                if (!caster)
+                    return;
+
+                if (apply && caster->HasAura(19746))
+                    caster->CastSpell(caster, 64364, true, NULL, this);
+                else if (!apply)
+                    caster->RemoveAurasDueToSpell(64364);
+            }
             if (m_spellProto->Id == 31884)                  // Avenging Wrath
             {
                 if(!apply)
@@ -6557,8 +6640,22 @@ void Aura::HandleSchoolAbsorb(bool apply, bool Real)
                 case SPELLFAMILY_PRIEST:
                     // Power Word: Shield
                     if (m_spellProto->SpellFamilyFlags & UI64LIT(0x0000000000000001))
+                    {
                         //+80.68% from +spell bonus
                         DoneActualBenefit = caster->SpellBaseHealingBonus(GetSpellSchoolMask(m_spellProto)) * 0.8068f;
+                        //Borrowed Time
+                        Unit::AuraList const& borrowedTime = caster->GetAurasByType(SPELL_AURA_DUMMY);
+                        for(Unit::AuraList::const_iterator itr = borrowedTime.begin(); itr != borrowedTime.end(); ++itr)
+					    {
+                            SpellEntry const* i_spell = (*itr)->GetSpellProto();
+                            if(i_spell->SpellFamilyName==SPELLFAMILY_PRIEST && i_spell->SpellIconID == 2899 && i_spell->EffectMiscValue[(*itr)->GetEffIndex()] == 24)
+                            {
+                                DoneActualBenefit += DoneActualBenefit * (*itr)->GetModifier()->m_amount / 100;
+                                break;
+                            }
+                        }
+                    }
+
                     break;
                 case SPELLFAMILY_MAGE:
                     // Frost Ward, Fire Ward
@@ -6669,6 +6766,10 @@ void Aura::PeriodicTick()
         case SPELL_AURA_PERIODIC_DAMAGE:
         case SPELL_AURA_PERIODIC_DAMAGE_PERCENT:
         {
+            // don't damage target if not alive, possible death persistent effects
+            if (!m_target->isAlive())
+                return;
+
             Unit *pCaster = GetCaster();
             if(!pCaster)
                 return;
@@ -6800,6 +6901,10 @@ void Aura::PeriodicTick()
         case SPELL_AURA_PERIODIC_LEECH:
         case SPELL_AURA_PERIODIC_HEALTH_FUNNEL:
         {
+            // don't damage target if not alive, possible death persistent effects
+            if (!m_target->isAlive())
+                return;
+
             Unit *pCaster = GetCaster();
             if(!pCaster)
                 return;
@@ -6880,10 +6985,14 @@ void Aura::PeriodicTick()
         case SPELL_AURA_PERIODIC_HEAL:
         case SPELL_AURA_OBS_MOD_HEALTH:
         {
+            // don't heal target if not alive, mostly death persistent effects from items
+            if (!m_target->isAlive())
+                return;
+
             Unit *pCaster = GetCaster();
             if(!pCaster)
                 return;
-
+            
             // heal for caster damage (must be alive)
             if(m_target != pCaster && GetSpellProto()->SpellVisual[0] == 163 && !pCaster->isAlive())
                 return;
@@ -6968,6 +7077,10 @@ void Aura::PeriodicTick()
         }
         case SPELL_AURA_PERIODIC_MANA_LEECH:
         {
+            // don't damage target if not alive, possible death persistent effects
+            if (!m_target->isAlive())
+                return;
+
             if(m_modifier.m_miscvalue < 0 || m_modifier.m_miscvalue >= MAX_POWERS)
                 return;
 
@@ -7041,6 +7154,10 @@ void Aura::PeriodicTick()
         }
         case SPELL_AURA_PERIODIC_ENERGIZE:
         {
+            // don't energize target if not alive, possible death persistent effects
+            if (!m_target->isAlive())
+                return;
+
             // ignore non positive values (can be result apply spellmods to aura damage
             uint32 pdamage = m_modifier.m_amount > 0 ? m_modifier.m_amount : 0;
 
@@ -7066,6 +7183,10 @@ void Aura::PeriodicTick()
         }
         case SPELL_AURA_OBS_MOD_MANA:
         {
+            // don't energize target if not alive, possible death persistent effects
+            if (!m_target->isAlive())
+                return;
+
             // ignore non positive values (can be result apply spellmods to aura damage
             uint32 amount = m_modifier.m_amount > 0 ? m_modifier.m_amount : 0;
 
@@ -7088,6 +7209,10 @@ void Aura::PeriodicTick()
         }
         case SPELL_AURA_POWER_BURN_MANA:
         {
+            // don't mana burn target if not alive, possible death persistent effects
+            if (!m_target->isAlive())
+                return;
+
             Unit *pCaster = GetCaster();
             if(!pCaster)
                 return;
@@ -7134,6 +7259,10 @@ void Aura::PeriodicTick()
         }
         case SPELL_AURA_MOD_REGEN:
         {
+            // don't heal target if not alive, possible death persistent effects
+            if (!m_target->isAlive())
+                return;
+
             int32 gain = m_target->ModifyHealth(m_modifier.m_amount);
             if (Unit *caster = GetCaster())
                 m_target->getHostileRefManager().threatAssist(caster, float(gain) * 0.5f, GetSpellProto());
@@ -7141,6 +7270,10 @@ void Aura::PeriodicTick()
         }
         case SPELL_AURA_MOD_POWER_REGEN:
         {
+            // don't energize target if not alive, possible death persistent effects
+            if (!m_target->isAlive())
+                return;
+
             Powers pt = m_target->getPowerType();
             if(int32(pt) != m_modifier.m_miscvalue)
                 return;
