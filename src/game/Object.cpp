@@ -284,7 +284,7 @@ void Object::BuildMovementUpdate(ByteBuffer * data, uint16 updateFlags, uint32 m
                     }
                 }
                 if(((Unit*)this)->GetVehicleGUID())
-                    flags2 |= (MOVEMENTFLAG_ONTRANSPORT | MOVEMENTFLAG_FLY_UNK1);
+                    moveFlags |= (MOVEMENTFLAG_ONTRANSPORT | MOVEMENTFLAG_FLY_UNK1);
 
             }
             break;
@@ -301,7 +301,7 @@ void Object::BuildMovementUpdate(ByteBuffer * data, uint16 updateFlags, uint32 m
                 moveFlags &= ~MOVEMENTFLAG_SPLINE2;         // will be set manually
 
                 if(((Unit*)this)->GetVehicleGUID())
-                    flags2 |= (MOVEMENTFLAG_ONTRANSPORT | MOVEMENTFLAG_FLY_UNK1);
+                    moveFlags |= (MOVEMENTFLAG_ONTRANSPORT | MOVEMENTFLAG_FLY_UNK1);
 
                 if(((Player*)this)->isInFlight())
                 {
