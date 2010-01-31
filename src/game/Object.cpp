@@ -338,6 +338,7 @@ void Object::BuildMovementUpdate(ByteBuffer * data, uint16 updateFlags, uint32 m
             }
             else if(GetTypeId() == TYPEID_PLAYER)
             {
+				data->append(((Player*)this)->GetTransport()->GetPackGUID());
                 *data << float(((Player*)this)->GetTransOffsetX());
                 *data << float(((Player*)this)->GetTransOffsetY());
                 *data << float(((Player*)this)->GetTransOffsetZ());
