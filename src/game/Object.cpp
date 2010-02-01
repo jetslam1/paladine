@@ -288,7 +288,7 @@ void Object::BuildMovementUpdate(ByteBuffer * data, uint16 updateFlags) const
                     }
                 }
                 if(((Unit*)this)->GetVehicleGUID())
-                    moveFlags |= (MOVEMENTFLAG_ONTRANSPORT | MOVEMENTFLAG_FLY_UNK1);
+                    updateFlags |= (MOVEFLAG_ONTRANSPORT | MOVEFLAG_FLY_UNK1);
 
             }
             break;
@@ -305,7 +305,7 @@ void Object::BuildMovementUpdate(ByteBuffer * data, uint16 updateFlags) const
                 player->m_movementInfo.RemoveMovementFlag(MOVEFLAG_SPLINE2);
 
                 if(((Unit*)this)->GetVehicleGUID())
-                    moveFlags |= (MOVEMENTFLAG_ONTRANSPORT | MOVEMENTFLAG_FLY_UNK1);
+                    updateFlags |= (MOVEFLAG_ONTRANSPORT | MOVEFLAG_FLY_UNK1);
 
                 if(player->isInFlight())
                 {
