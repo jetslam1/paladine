@@ -638,6 +638,7 @@ bool ChatHandler::HandleReloadAllSpellCommand(const char*)
     HandleReloadSpellTargetPositionCommand("a");
     HandleReloadSpellThreatsCommand("a");
     HandleReloadSpellPetAurasCommand("a");
+	HandleReloadSpellDisabledCommand("a");
     return true;
 }
 
@@ -1355,6 +1356,17 @@ bool ChatHandler::HandleReloadVehicleSeatDataCommand(const char*)
     sLog.outString( "Re-Loading `vehicle_seat_data` Table!" );
     sObjectMgr.LoadVehicleSeatData();
     SendGlobalSysMessage("DB table `vehicle_seat_data` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellDisabledCommand(const char* /*arg*/)
+{
+    sLog.outString( "Re-Loading spell disabled table...");
+
+    sObjectMgr.LoadSpellDisabledEntrys();
+
+    SendGlobalSysMessage("DB table `spell_disabled` reloaded.");
+
     return true;
 }
 
