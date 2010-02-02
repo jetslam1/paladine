@@ -1414,6 +1414,7 @@ class MANGOS_DLL_SPEC Unit : public WorldObject
 
             return this;
         }
+        bool IsCharmerOrOwnerPlayerOrPlayerItself() const;
         Player* GetCharmerOrOwnerPlayerOrPlayerItself();
         float GetCombatDistance( const Unit* target ) const;
 
