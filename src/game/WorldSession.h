@@ -29,7 +29,6 @@
 struct ItemPrototype;
 struct AuctionEntry;
 struct DeclinedName;
-struct MovementInfo;
 
 class Creature;
 class Item;
@@ -117,17 +116,10 @@ class MANGOS_DLL_SPEC WorldSession
         bool PlayerLogoutWithSave() const { return m_playerLogout && m_playerSave; }
 
 
-        inline bool Anti__CheatOccurred(uint32 CurTime,const char* Reason,float Speed,const char* Op=NULL,
-                                float Val1=0.0f,uint32 Val2=0,MovementInfo* MvInfo=NULL);
-        bool Anti__ReportCheat(const char* Reason,float Speed,const char* Op=NULL,float Val1=0.0f,uint32 Val2=0,MovementInfo* MvInfo=NULL);
-
         void SizeError(WorldPacket const& packet, uint32 size) const;
 
         void ReadAddonsInfo(WorldPacket &data);
         void SendAddonsInfo();
-
-        void ReadMovementInfo(WorldPacket &data, MovementInfo *mi);
-        void WriteMovementInfo(WorldPacket *data, MovementInfo *mi);
 
         void SendPacket(WorldPacket const* packet);
         void SendNotification(const char *format,...) ATTR_PRINTF(2,3);
