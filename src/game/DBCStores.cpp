@@ -622,7 +622,7 @@ void LoadDBCStores(const std::string& dataPath)
         !sGemPropertiesStore.LookupEntry(1629)     ||       // last gem property added in 3.3.2
         !sItemExtendedCostStore.LookupEntry(2982)  ||       // last item extended cost added in 3.3.2
         !sCharTitlesStore.LookupEntry(177)         ||       // last char title added in 3.3.2
-        !sAreaStore.LookupEntry(4910)              ||       // last area (areaflag) added in 3.3.2
+        !sAreaStore.LookupEntry(3461)              ||       // last area (areaflag) added in 3.3.2
         !sItemStore.LookupEntry(52686)             )        // last client known item added in 3.3.2
     {
         sLog.outError("\nYou have mixed version DBC files. Please re-extract DBC files for one from client build: %s",AcceptableClientBuildsListStr().c_str());

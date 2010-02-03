@@ -6154,6 +6154,12 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura* triggeredByAu
                 }
                 break;
             }
+            // Glyph of Mend Pet
+            if(dummySpell->Id == 57870)
+            {
+                pVictim->CastSpell(pVictim, 57894, true, NULL, NULL, GetGUID());
+                return true;
+            }
             break;
         }
         case SPELLFAMILY_PALADIN:
@@ -6834,6 +6840,13 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura* triggeredByAu
             {
                 // TODO: need more info (cooldowns/PPM)
                 triggered_spell_id = 61607;
+                break;
+            }
+            // Unholy Blight
+            if (dummySpell->Id == 49194)
+            {
+                basepoints0 = triggerAmount * damage / 100;
+                triggered_spell_id = 50536;
                 break;
             }
             // Vendetta
@@ -8520,6 +8533,14 @@ Unit *Unit::GetCharmer() const
     if(uint64 charmerid = GetCharmerGUID())
         return ObjectAccessor::GetUnit(*this, charmerid);
     return NULL;
+}
+
+bool Unit::IsCharmerOrOwnerPlayerOrPlayerItself() const
+{
+    if (GetTypeId()==TYPEID_PLAYER)
+        return true;
+
+    return IS_PLAYER_GUID(GetCharmerOrOwnerGUID());
 }
 
 Player* Unit::GetCharmerOrOwnerPlayerOrPlayerItself()
