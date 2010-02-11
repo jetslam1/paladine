@@ -288,7 +288,7 @@ void Object::BuildMovementUpdate(ByteBuffer * data, uint16 updateFlags) const
                     }
                 }
                 if(((Unit*)this)->GetVehicleGUID())
-                    updateFlags |= (MOVEFLAG_ONTRANSPORT | MOVEFLAG_FLYING);
+                    moveFlags2 |= (MOVEFLAG_ONTRANSPORT | MOVEFLAG_ROOT);
 
             }
             break;
@@ -305,8 +305,7 @@ void Object::BuildMovementUpdate(ByteBuffer * data, uint16 updateFlags) const
                 player->m_movementInfo.RemoveMovementFlag(MOVEFLAG_SPLINE_ENABLED);
 
                 if(((Unit*)this)->GetVehicleGUID())
-                    updateFlags |= (MOVEFLAG_ONTRANSPORT | MOVEFLAG_FLYING);
-
+                    moveFlags2 |= (MOVEFLAG_ONTRANSPORT | MOVEFLAG_ROOT);
                 if(player->isInFlight())
                 {
                     ASSERT(player->GetMotionMaster()->GetCurrentMovementGeneratorType() == FLIGHT_MOTION_TYPE);
@@ -550,7 +549,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *
     bool IsPerCasterAuraState = false;
     if (updatetype == UPDATETYPE_CREATE_OBJECT || updatetype == UPDATETYPE_CREATE_OBJECT2)
     {
-        if (isType(TYPEMASK_GAMEOBJECT) && !((GameObject*)this)->IsDynTransport())
+        if (isType(TYPEMASK_GAMEOBJECT) && !((GameObject*)this)->IsTransport())
         {
             if ( ((GameObject*)this)->ActivateToQuest(target) || target->isGameMaster())
                 IsActivateToQuest = true;
@@ -1355,7 +1354,7 @@ float WorldObject::GetAngle( const float x, const float y ) const
     float dy = y - GetPositionY();
 
     float ang = atan2(dy, dx);
-    ang = (ang >= 0) ? ang : 2 * M_PI + ang;
+    ang = (ang >= 0) ? ang : 2 * M_PI_F + ang;
     return ang;
 }
 
@@ -1368,19 +1367,19 @@ bool WorldObject::HasInArc(const float arcangle, const WorldObject* obj) const
     float arc = arcangle;
 
     // move arc to range 0.. 2*pi
-    while( arc >= 2.0f * M_PI )
-        arc -=  2.0f * M_PI;
+    while( arc >= 2.0f * M_PI_F )
+        arc -=  2.0f * M_PI_F;
     while( arc < 0 )
-        arc +=  2.0f * M_PI;
+        arc +=  2.0f * M_PI_F;
 
     float angle = GetAngle( obj );
     angle -= m_orientation;
 
     // move angle to range -pi ... +pi
-    while( angle > M_PI)
-        angle -= 2.0f * M_PI;
-    while(angle < -M_PI)
-        angle += 2.0f * M_PI;
+    while( angle > M_PI_F)
+        angle -= 2.0f * M_PI_F;
+    while(angle < -M_PI_F)
+        angle += 2.0f * M_PI_F;
 
     float lborder =  -1 * (arc/2.0f);                       // in range -pi..0
     float rborder = (arc/2.0f);                             // in range 0..pi
@@ -1394,7 +1393,7 @@ bool WorldObject::isInFrontInMap(WorldObject const* target, float distance,  flo
 
 bool WorldObject::isInBackInMap(WorldObject const* target, float distance, float arc) const
 {
-    return IsWithinDistInMap(target, distance) && !HasInArc( 2 * M_PI - arc, target );
+    return IsWithinDistInMap(target, distance) && !HasInArc( 2 * M_PI_F - arc, target );
 }
 
 bool WorldObject::isInFront(WorldObject const* target, float distance,  float arc) const
@@ -1404,7 +1403,7 @@ bool WorldObject::isInFront(WorldObject const* target, float distance,  float ar
 
 bool WorldObject::isInBack(WorldObject const* target, float distance, float arc) const
 {
-    return IsWithinDist(target, distance) && !HasInArc( 2 * M_PI - arc, target );
+    return IsWithinDist(target, distance) && !HasInArc( 2 * M_PI_F - arc, target );
 }
 
 void WorldObject::GetRandomPoint( float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z) const
@@ -1418,7 +1417,7 @@ void WorldObject::GetRandomPoint( float x, float y, float z, float distance, flo
     }
 
     // angle to face `obj` to `this`
-    float angle = rand_norm()*2*M_PI;
+    float angle = rand_norm()*2*M_PI_F;
     float new_dist = rand_norm()*distance;
 
     rand_x = x + new_dist * cos(angle);
@@ -1460,10 +1459,6 @@ void WorldObject::MonsterTextEmote(const char* text, uint64 TargetGuid, bool IsB
 {
     WorldPacket data(SMSG_MESSAGECHAT, 200);
     BuildMonsterChat(&data,IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE,text,LANG_UNIVERSAL,GetName(),TargetGuid);
-    Unit * eye = Unit::GetUnit((*this), TargetGuid);
-    if (eye && eye->isCharmed() && eye->GetEntry() == 28511)
-        SendMessageToSet(&data, true);
-    else
     SendMessageToSetInRange(&data,sWorld.getConfig(IsBossEmote ? CONFIG_LISTEN_RANGE_YELL : CONFIG_LISTEN_RANGE_TEXTEMOTE),true);
 }
 
@@ -1741,8 +1736,8 @@ namespace MaNGOS
 
                 float x,y,z;
 
-                if( !c->isAlive() || c->hasUnitState(UNIT_STAT_NOT_MOVE & ~UNIT_STAT_ON_VEHICLE) || 
-					!c->GetMotionMaster()->GetDestination(x,y,z) )
+                if( !c->isAlive() || c->hasUnitState(UNIT_STAT_NOT_MOVE) ||
+                    !c->GetMotionMaster()->GetDestination(x,y,z) )
                 {
                     x = c->GetPositionX();
                     y = c->GetPositionY();
@@ -1776,10 +1771,10 @@ namespace MaNGOS
                 float angle = i_object.GetAngle(u)-i_angle;
 
                 // move angle to range -pi ... +pi
-                while( angle > M_PI)
-                    angle -= 2.0f * M_PI;
-                while(angle < -M_PI)
-                    angle += 2.0f * M_PI;
+                while( angle > M_PI_F)
+                    angle -= 2.0f * M_PI_F;
+                while(angle < -M_PI_F)
+                    angle += 2.0f * M_PI_F;
 
                 // dist include size of u
                 float dist2d = i_object.GetDistance2d(x,y);

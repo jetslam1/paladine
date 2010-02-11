@@ -114,7 +114,7 @@ bool ForcedDespawnDelayEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)
 
 Creature::Creature(CreatureSubtype subtype) :
 Unit(), i_AI(NULL),
-lootForPickPocketed(false), lootForBody(false), m_groupLootTimer(0), lootingGroupLeaderGUID(0),
+lootForPickPocketed(false), lootForBody(false), m_groupLootTimer(0), m_groupLootId(0),
 m_lootMoney(0), m_lootRecipient(0),
 m_deathTimer(0), m_respawnTime(0), m_respawnDelay(25), m_corpseDelay(60), m_respawnradius(0.0f),
 m_subtype(subtype), m_defaultMovementType(IDLE_MOTION_TYPE), m_DBTableGuid(0), m_equipmentId(0),
@@ -263,10 +263,10 @@ bool Creature::InitEntry(uint32 Entry, uint32 team, const CreatureData *data )
 
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
 
-    SetSpeedRate(MOVE_WALK, cinfo->speed);
-    SetSpeedRate(MOVE_RUN,  cinfo->speed);
-    SetSpeedRate(MOVE_SWIM, cinfo->speed);
-    SetSpeedRate(MOVE_FLIGHT,   cinfo->speed);
+    SetSpeedRate(MOVE_WALK, cinfo->speed );
+    SetSpeedRate(MOVE_RUN,  cinfo->speed );
+    SetSpeedRate(MOVE_SWIM, cinfo->speed );
+    SetSpeedRate(MOVE_FLIGHT, cinfo->speed );
 
     SetFloatValue(OBJECT_FIELD_SCALE_X, cinfo->scale);
 
@@ -397,7 +397,7 @@ void Creature::Update(uint32 diff)
             else
             {
                 m_deathTimer -= diff;
-                if (m_groupLootTimer && lootingGroupLeaderGUID)
+                if (m_groupLootTimer && m_groupLootId)
                 {
                     if(diff <= m_groupLootTimer)
                     {
@@ -405,10 +405,10 @@ void Creature::Update(uint32 diff)
                     }
                     else
                     {
-                        if (Group* group = sObjectMgr.GetGroupByLeaderLowGUID(GUID_LOPART(lootingGroupLeaderGUID)))
+                        if (Group* group = sObjectMgr.GetGroupById(m_groupLootId))
                             group->EndRoll();
                         m_groupLootTimer = 0;
-                        lootingGroupLeaderGUID = 0;
+                        m_groupLootId = 0;
                     }
                 }
             }
@@ -1721,8 +1721,8 @@ bool Creature::LoadCreaturesAddon(bool reload)
     if (cainfo->emote != 0)
         SetUInt32Value(UNIT_NPC_EMOTESTATE, cainfo->emote);
 
-    if (cainfo->move_flags != 0)
-        SetSplineFlags(SplineFlags(cainfo->move_flags));
+    if (cainfo->splineFlags != 0)
+        SetSplineFlags(SplineFlags(cainfo->splineFlags));
 
     if(cainfo->auras)
     {

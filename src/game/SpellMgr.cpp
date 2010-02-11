@@ -1340,16 +1340,6 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
             {
                 case SPELLFAMILY_GENERIC:                   // same family case
                 {
-                    // Eye of Acherus
-                    if ((spellInfo_1->Id == 51890 && spellInfo_2->Id == 51852) ||
-                        (spellInfo_2->Id == 51852 && spellInfo_1->Id == 51890))
-                        return false;
-
-                    // Eye of Acherus 1
-                    if ((spellInfo_1->Id == 51890 && spellInfo_2->Id == 51923) ||
-                        (spellInfo_2->Id == 51923 && spellInfo_1->Id == 51890))
-                        return false;
-
                     // Thunderfury
                     if ((spellInfo_1->Id == 21992 && spellInfo_2->Id == 27648) ||
                         (spellInfo_2->Id == 21992 && spellInfo_1->Id == 27648))
@@ -1372,10 +1362,6 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
 
                     // Personalized Weather (thunder effect should overwrite rainy aura)
                     if(spellInfo_1->SpellIconID == 2606 && spellInfo_2->SpellIconID == 2606)
-                        return false;
-
-                    //Kindred Spirits (allow stack for auras)
-                    if (spellInfo_1->SpellIconID == 3559 && spellInfo_2->SpellIconID == 3559)
                         return false;
 
                     // Brood Affliction: Bronze

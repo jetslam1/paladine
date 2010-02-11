@@ -485,12 +485,12 @@ void WorldSession::HandleQueryQuestsCompleted( WorldPacket & recv_data )
     SendPacket(&data);
 }
 
-void WorldSession::HandleQuestPOIQuery(WorldPacket & recv_data)
+void WorldSession::HandleQuestPOIQuery(WorldPacket& recv_data)
 {
     uint32 count;
     recv_data >> count;                                     // quest count, max=25
 
-    if(count >= MAX_QUEST_LOG_SIZE)
+    if(count > MAX_QUEST_LOG_SIZE)
     {
         recv_data.rpos(recv_data.wpos());                   // set to end to avoid warnings spam
         return;
@@ -499,7 +499,7 @@ void WorldSession::HandleQuestPOIQuery(WorldPacket & recv_data)
     WorldPacket data(SMSG_QUEST_POI_QUERY_RESPONSE, 4+(4+4)*count);
     data << uint32(count);                                  // count
 
-    for(int i = 0; i < count; ++i)
+    for(uint32 i = 0; i < count; ++i)
     {
         uint32 questId;
         recv_data >> questId;                               // quest id
@@ -526,7 +526,7 @@ void WorldSession::HandleQuestPOIQuery(WorldPacket & recv_data)
                     data << uint32(index);                  // POI index
                     data << int32(itr->ObjectiveIndex);     // objective index
                     data << uint32(itr->MapId);             // mapid
-                    data << uint32(itr->Unk1);              // WorldMapArea.dbc index
+                    data << uint32(itr->Unk1);              // unknown
                     data << uint32(itr->Unk2);              // unknown
                     data << uint32(itr->Unk3);              // unknown
                     data << uint32(itr->Unk4);              // unknown
@@ -553,8 +553,8 @@ void WorldSession::HandleQuestPOIQuery(WorldPacket & recv_data)
         }
     }
 
+    data.hexlike();
     SendPacket(&data);
-    
 }
 
 void WorldSession::SendQueryTimeResponse()

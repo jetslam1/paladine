@@ -639,7 +639,7 @@ void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket &recv_data)
 
     if(Vehicle *vehicle = ObjectAccessor::GetVehicle(vehicleGUID))
     {
-    MovementInfo movementInfo(recv_data);
+        MovementInfo mi(recv_data);
         //_player->m_movementInfo = mi;
 
         uint64 guid = 0;

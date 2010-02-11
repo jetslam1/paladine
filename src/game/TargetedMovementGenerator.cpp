@@ -34,8 +34,8 @@ void TargetedMovementGeneratorMedium<T,D>::_setTargetLocation(T &owner)
     if (!i_target.isValid() || !i_target->IsInWorld())
         return;
 
-    if (owner.hasUnitState(UNIT_STAT_NOT_MOVE & ~UNIT_STAT_ON_VEHICLE))
-		return;
+    if (owner.hasUnitState(UNIT_STAT_NOT_MOVE))
+        return;
 
     // prevent redundant micro-movement for pets, other followers.
     if (i_offset && i_target->IsWithinDistInMap(&owner,2*i_offset))
@@ -112,10 +112,10 @@ bool TargetedMovementGeneratorMedium<T,D>::Update(T &owner, const uint32 & time_
     if (!owner.isAlive())
         return true;
 
-    if (owner.hasUnitState(UNIT_STAT_NOT_MOVE & ~UNIT_STAT_ON_VEHICLE))
+    if (owner.hasUnitState(UNIT_STAT_NOT_MOVE))
     {
         D::_clearUnitStateMove(owner);
-		return true;
+        return true;
     }
 
     // prevent movement while casting spells with cast time or channel time

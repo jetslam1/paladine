@@ -281,7 +281,7 @@ void WorldSession::HandleLogoutRequestOpcode( WorldPacket & /*recv_data*/ )
 
     //instant logout in taverns/cities or on taxi or for admins, gm's, mod's if its enabled in mangosd.conf
     if (GetPlayer()->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) || GetPlayer()->isInFlight() ||
-        GetSecurity() >= sWorld.getConfig(CONFIG_INSTANT_LOGOUT))
+        GetSecurity() >= (AccountTypes)sWorld.getConfig(CONFIG_INSTANT_LOGOUT))
     {
         LogoutPlayer(true);
         return;
@@ -589,7 +589,7 @@ void WorldSession::HandleSetContactNotesOpcode( WorldPacket & recv_data )
     uint64 guid;
     std::string note;
     recv_data >> guid >> note;
-    _player->GetSocial()->SetFriendNote(guid, note);
+    _player->GetSocial()->SetFriendNote(GUID_LOPART(guid), note);
 }
 
 void WorldSession::HandleBugOpcode( WorldPacket & recv_data )
@@ -986,7 +986,7 @@ void WorldSession::HandleSetActionButtonOpcode(WorldPacket& recv_data)
                 sLog.outError( "MISC: Unknown action button type %u for action %u into button %u", type, action, button );
                 return;
         }
-        GetPlayer()->addActionButton(button, action, type);
+        GetPlayer()->addActionButton(GetPlayer()->m_activeSpec, button, action, type);
     }
 }
 

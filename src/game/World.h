@@ -77,8 +77,7 @@ enum WorldTimers
     WUPDATE_UPTIME      = 4,
     WUPDATE_CORPSES     = 5,
     WUPDATE_EVENTS      = 6,
-    WUPDATE_AUTOBROADCAST = 7,
-    WUPDATE_COUNT         = 8
+    WUPDATE_COUNT       = 7
 };
 
 /// Configuration elements
@@ -119,7 +118,6 @@ enum WorldConfigs
     CONFIG_MIN_LEVEL_FOR_HEROIC_CHARACTER_CREATING,
     CONFIG_SKIP_CINEMATICS,
     CONFIG_MAX_PLAYER_LEVEL,
-    CONFIG_MIN_DUALSPEC_LEVEL,
     CONFIG_START_PLAYER_LEVEL,
     CONFIG_START_HEROIC_PLAYER_LEVEL,
     CONFIG_START_PLAYER_MONEY,
@@ -214,7 +212,7 @@ enum WorldConfigs
     CONFIG_ARENA_QUEUE_ANNOUNCER_ENABLE,
     CONFIG_ARENA_SEASON_ID,
     CONFIG_ARENA_SEASON_IN_PROGRESS,
-    CONFIG_OFFHAND_CHECK_AT_SPELL_UNLEARN,
+    CONFIG_OFFHAND_CHECK_AT_TALENTS_RESET,
     CONFIG_CLIENTCACHE_VERSION,
     CONFIG_GUILD_EVENT_LOG_COUNT,
     CONFIG_GUILD_BANK_EVENT_LOG_COUNT,
@@ -385,7 +383,6 @@ class World
 
         WorldSession* FindSession(uint32 id) const;
         void AddSession(WorldSession *s);
-        void SendBroadcast();
         bool RemoveSession(uint32 id);
         /// Get the number of current active sessions
         void UpdateMaxSessionCounters();

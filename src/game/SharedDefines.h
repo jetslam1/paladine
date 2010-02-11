@@ -449,10 +449,7 @@ const uint32 ItemQualityColors[MAX_ITEM_QUALITY] = {
 #define SPELL_ATTR_EX6_UNK30                      0x40000000            // 30 not set in 3.0.3
 #define SPELL_ATTR_EX6_UNK31                      0x80000000            // 31 not set in 3.0.3
 
-#define MIN_TALENT_SPEC         0
-#define MAX_TALENT_SPEC         1
-#define MIN_TALENT_SPECS        1
-#define MAX_TALENT_SPECS        2
+#define MAX_TALENT_SPEC_COUNT   2
 #define MAX_GLYPH_SLOT_INDEX    6
 
 enum SheathTypes
@@ -2462,8 +2459,8 @@ enum CustomVehicleFLags
     VF_CAN_BE_HEALED                = 0x0010,                   // vehicle can be healed
     VF_GIVE_EXP                     = 0x0020,                   // vehicle will give exp for killing enemies
     VF_MOVEMENT                     = 0x0040,                   // vehicle will move on its own, not depending on rider, however rider can cast spells
-    VF_NON_SELECTABLE               = 0x0080,                   // vehicle will be not selectable after rider enter
-    VF_FLYING                       = 0x0100                    // Hack for now (256 in DB)
+    VF_NON_SELECTABLE               = 0x0080                    // vehicle will be not selectable after rider enter
+    //VF_HAS_FUEL                     = 0x0100,                   // TODO : find out what energy type is fuel and implement this
 };
 
 enum CustomVehicleSeatFLags

@@ -95,12 +95,6 @@ struct PlayerSpell
     bool disabled          : 1;                             // first rank has been learned in result talent learn but currently talent unlearned, save max learned ranks
 };
 
-struct PlayerTalent
-{
-    PlayerSpellState state : 8;
-    uint8 spec             : 8;
-};
-
 // Spell modifier (used for modify other spells)
 struct SpellModifier
 {
@@ -126,7 +120,6 @@ struct SpellModifier
     Spell const* lastAffected;
 };
 
-typedef UNORDERED_MAP<uint32, PlayerTalent*> PlayerTalentMap;
 typedef UNORDERED_MAP<uint32, PlayerSpell*> PlayerSpellMap;
 typedef std::list<SpellModifier*> SpellModList;
 
@@ -170,11 +163,10 @@ enum ActionButtonType
 
 struct ActionButton
 {
-    ActionButton() : packedData(0), uState( ACTIONBUTTON_NEW ), canRemoveByClient(true){}
+    ActionButton() : packedData(0), uState( ACTIONBUTTON_NEW ) {}
 
     uint32 packedData;
     ActionButtonUpdateState uState;
-    bool canRemoveByClient;
 
     // helpers
     ActionButtonType GetType() const { return ActionButtonType(ACTION_BUTTON_TYPE(packedData)); }
@@ -785,8 +777,6 @@ enum ArenaTeamInfoType
     ARENA_TEAM_END              = 7
 };
 
-
-
 enum RestType
 {
     REST_TYPE_NO        = 0,
@@ -857,9 +847,7 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOADBGDATA               = 21,
     PLAYER_LOGIN_QUERY_LOADACCOUNTDATA          = 22,
     PLAYER_LOGIN_QUERY_LOADSKILLS               = 23,
-    PLAYER_LOGIN_QUERY_LOADGLYPHS               = 24,
-    PLAYER_LOGIN_QUERY_LOADTALENTS              = 25,
-    MAX_PLAYER_LOGIN_QUERY                      = 26
+    MAX_PLAYER_LOGIN_QUERY                      = 24
 };
 
 enum PlayerDelayedOperations
@@ -1390,7 +1378,6 @@ class MANGOS_DLL_SPEC Player : public Unit
 
         bool LoadFromDB(uint32 guid, SqlQueryHolder *holder);
 
-        bool MinimalLoadFromDB(QueryResult *result, uint32 guid);
         static bool   LoadValuesArrayFromDB(Tokens& data,uint64 guid);
         static uint32 GetUInt32ValueFromArray(Tokens const& data, uint16 index);
         static float  GetFloatValueFromArray(Tokens const& data, uint16 index);
@@ -1540,28 +1527,21 @@ class MANGOS_DLL_SPEC Player : public Unit
         void LearnTalent(uint32 talentId, uint32 talentRank);
         void LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank);
 
-        bool AddTalent(uint32 spell, uint8 spec, bool learning);
-        bool HasTalent(uint32 spell_id, uint8 spec) const;
-
         uint32 CalculateTalentsPoints() const;
 
         // Dual Spec
-        void UpdateSpecCount(uint8 count);
-        uint32 GetActiveSpec() { return m_activeSpec; }
-        void SetActiveSpec(uint8 spec){ m_activeSpec = spec; }
+        uint8 GetActiveSpec() { return m_activeSpec; }
+        void SetActiveSpec(uint8 spec) { m_activeSpec = spec; }
         uint8 GetSpecsCount() { return m_specsCount; }
         void SetSpecsCount(uint8 count) { m_specsCount = count; }
-        void ActivateSpec(uint8 spec);
+        void ActivateSpec(uint8 specNum);
+        void UpdateSpecCount(uint8 count);
 
         void InitGlyphsForLevel();
         void SetGlyphSlot(uint8 slot, uint32 slottype) { SetUInt32Value(PLAYER_FIELD_GLYPH_SLOTS_1 + slot, slottype); }
         uint32 GetGlyphSlot(uint8 slot) { return GetUInt32Value(PLAYER_FIELD_GLYPH_SLOTS_1 + slot); }
-        void SetGlyph(uint8 slot, uint32 glyph)
-        {
-            m_Glyphs[m_activeSpec][slot] = glyph;
-            SetUInt32Value(PLAYER_FIELD_GLYPHS_1 + slot, glyph);
-        }
-        uint32 GetGlyph(uint8 slot) { return m_Glyphs[m_activeSpec][slot]; }
+        void SetGlyph(uint8 slot, uint32 glyph) { SetUInt32Value(PLAYER_FIELD_GLYPHS_1 + slot, glyph); }
+        uint32 GetGlyph(uint8 slot) { return GetUInt32Value(PLAYER_FIELD_GLYPHS_1 + slot); }
 
         uint32 GetFreePrimaryProfessionPoints() const { return GetUInt32Value(PLAYER_CHARACTER_POINTS2); }
         void SetFreePrimaryProfessions(uint16 profs) { SetUInt32Value(PLAYER_CHARACTER_POINTS2, profs); }
@@ -1630,11 +1610,10 @@ class MANGOS_DLL_SPEC Player : public Unit
         }
 
         static bool IsActionButtonDataValid(uint8 button, uint32 action, uint8 type, Player* player);
-        ActionButton* addActionButton(uint8 button, uint32 action, uint8 type);
+        ActionButton* addActionButton(uint8 spec, uint8 button, uint32 action, uint8 type);
         void removeActionButton(uint8 button);
-        void SendInitialActionButtons() const { SendActionButtons(0); }
-        void SendActionButtons(uint32 state) const;
-		ActionButton const* GetActionButton(uint8 button);
+        void SendInitialActionButtons() const;
+        ActionButton const* GetActionButton(uint8 button);
 
         PvPInfo pvpInfo;
         void UpdatePvP(bool state, bool ovrride=false);
@@ -1683,10 +1662,15 @@ class MANGOS_DLL_SPEC Player : public Unit
         // Arena Team
         void SetInArenaTeam(uint32 ArenaTeamId, uint8 slot, uint8 type)
         {
-            SetUInt32Value(PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (slot * ARENA_TEAM_END) + ARENA_TEAM_ID, ArenaTeamId);
-            SetUInt32Value(PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (slot * ARENA_TEAM_END) + ARENA_TEAM_TYPE, type);
+            SetArenaTeamInfoField(slot, ARENA_TEAM_ID, ArenaTeamId);
+            SetArenaTeamInfoField(slot, ARENA_TEAM_TYPE, type);
         }
-        uint32 GetArenaTeamId(uint8 slot) { return GetUInt32Value(PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (slot * ARENA_TEAM_END)); }
+        void SetArenaTeamInfoField(uint8 slot, ArenaTeamInfoType type, uint32 value)
+        {
+            SetUInt32Value(PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (slot * ARENA_TEAM_END) + type, value);
+        }
+        uint32 GetArenaTeamId(uint8 slot) { return GetUInt32Value(PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (slot * ARENA_TEAM_END) + ARENA_TEAM_ID); }
+        uint32 GetArenaPersonalRating(uint8 slot) { return GetUInt32Value(PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (slot * ARENA_TEAM_END) + ARENA_TEAM_PERSONAL_RATING); }
         static uint32 GetArenaTeamIdFromDB(uint64 guid, uint8 slot);
         void SetArenaTeamIdInvited(uint32 ArenaTeamId) { m_ArenaTeamIdInvited = ArenaTeamId; }
         uint32 GetArenaTeamIdInvited() { return m_ArenaTeamIdInvited; }
@@ -2291,7 +2275,7 @@ class MANGOS_DLL_SPEC Player : public Unit
         /***                   LOAD SYSTEM                     ***/
         /*********************************************************/
 
-        void _LoadActions(QueryResult *result, bool startup);
+        void _LoadActions(QueryResult *result);
         void _LoadAuras(QueryResult *result, uint32 timediff);
         void _LoadGlyphAuras();
         void _LoadBoundInstances(QueryResult *result);
@@ -2310,8 +2294,6 @@ class MANGOS_DLL_SPEC Player : public Unit
         void _LoadArenaTeamInfo(QueryResult *result);
         void _LoadEquipmentSets(QueryResult *result);
         void _LoadBGData(QueryResult* result);
-        void _LoadGlyphs(QueryResult *result);
-        void _LoadTalents(QueryResult *result);
 
         /*********************************************************/
         /***                   SAVE SYSTEM                     ***/
@@ -2327,8 +2309,6 @@ class MANGOS_DLL_SPEC Player : public Unit
         void _SaveSpells();
         void _SaveEquipmentSets();
         void _SaveBGData();
-        void _SaveGlyphs();
-        void _SaveTalents();
 
         void _SetCreateBits(UpdateMask *updateMask, Player *target) const;
         void _SetUpdateBits(UpdateMask *updateMask, Player *target) const;
@@ -2381,15 +2361,12 @@ class MANGOS_DLL_SPEC Player : public Unit
         PlayerMails m_mail;
         PlayerSpellMap m_spells;
         SpellCooldowns m_spellCooldowns;
-        PlayerTalentMap *m_talents[MAX_TALENT_SPECS];
         uint32 m_lastPotionId;                              // last used health/mana potion in combat, that block next potion use
 
-        uint32 m_activeSpec;
-        uint32 m_specsCount;
+        uint8 m_activeSpec;
+        uint8 m_specsCount;
 
-        uint32 m_Glyphs[MAX_TALENT_SPECS][MAX_GLYPH_SLOT_INDEX];
-
-        ActionButtonList m_actionButtons;
+        ActionButtonList m_actionButtons[MAX_TALENT_SPEC_COUNT];
 
         float m_auraBaseMod[BASEMOD_END][MOD_END];
         int16 m_baseRatingValue[MAX_COMBAT_RATING];
