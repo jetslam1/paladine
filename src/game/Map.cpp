@@ -1264,7 +1264,7 @@ void GridMap::unloadData()
     m_gridGetHeight = &GridMap::getHeightFromFlat;
 }
 
-bool GridMap::loadAreaData(FILE *in, uint32 offset, uint32 size)
+bool GridMap::loadAreaData(FILE *in, uint32 offset, uint32 /*size*/)
 {
     map_areaHeader header;
     fseek(in, offset, SEEK_SET);
@@ -1281,7 +1281,7 @@ bool GridMap::loadAreaData(FILE *in, uint32 offset, uint32 size)
     return true;
 }
 
-bool  GridMap::loadHeightData(FILE *in, uint32 offset, uint32 size)
+bool  GridMap::loadHeightData(FILE *in, uint32 offset, uint32 /*size*/)
 {
     map_heightHeader header;
     fseek(in, offset, SEEK_SET);
@@ -1324,7 +1324,7 @@ bool  GridMap::loadHeightData(FILE *in, uint32 offset, uint32 size)
     return true;
 }
 
-bool  GridMap::loadLiquidData(FILE *in, uint32 offset, uint32 size)
+bool  GridMap::loadLiquidData(FILE *in, uint32 offset, uint32 /*size*/)
 {
     map_liquidHeader header;
     fseek(in, offset, SEEK_SET);
@@ -1607,7 +1607,7 @@ float  GridMap::getLiquidLevel(float x, float y)
 uint8  GridMap::getTerrainType(float x, float y)
 {
     if (!m_liquid_type)
-        return m_liquidType;
+        return (uint8)m_liquidType;
 
     x = 16 * (32 - x/SIZE_OF_GRIDS);
     y = 16 * (32 - y/SIZE_OF_GRIDS);

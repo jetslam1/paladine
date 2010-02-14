@@ -281,7 +281,7 @@ void WorldSession::HandleLogoutRequestOpcode( WorldPacket & /*recv_data*/ )
 
     //instant logout in taverns/cities or on taxi or for admins, gm's, mod's if its enabled in mangosd.conf
     if (GetPlayer()->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) || GetPlayer()->isInFlight() ||
-        GetSecurity() >= sWorld.getConfig(CONFIG_INSTANT_LOGOUT))
+        GetSecurity() >= (AccountTypes)sWorld.getConfig(CONFIG_INSTANT_LOGOUT))
     {
         LogoutPlayer(true);
         return;
@@ -589,7 +589,7 @@ void WorldSession::HandleSetContactNotesOpcode( WorldPacket & recv_data )
     uint64 guid;
     std::string note;
     recv_data >> guid >> note;
-    _player->GetSocial()->SetFriendNote(guid, note);
+    _player->GetSocial()->SetFriendNote(GUID_LOPART(guid), note);
 }
 
 void WorldSession::HandleBugOpcode( WorldPacket & recv_data )
@@ -733,8 +733,8 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
         float playerBoxDistX = pl->GetPositionX() - atEntry->x;
         float playerBoxDistY = pl->GetPositionY() - atEntry->y;
 
-        float rotPlayerX = atEntry->x + playerBoxDistX * cosVal - playerBoxDistY*sinVal;
-        float rotPlayerY = atEntry->y + playerBoxDistY * cosVal + playerBoxDistX*sinVal;
+        float rotPlayerX = float(atEntry->x + playerBoxDistX * cosVal - playerBoxDistY*sinVal);
+        float rotPlayerY = float(atEntry->y + playerBoxDistY * cosVal + playerBoxDistX*sinVal);
 
         // box edges are parallel to coordiante axis, so we can treat every dimension independently :D
         float dz = pl->GetPositionZ() - atEntry->z;
@@ -963,7 +963,7 @@ void WorldSession::HandleSetActionButtonOpcode(WorldPacket& recv_data)
     if (!packetData)
     {
         sLog.outDetail( "MISC: Remove action from button %u", button );
-        GetPlayer()->removeActionButton(button);
+        GetPlayer()->removeActionButton(GetPlayer()->GetActiveSpec(),button);
     }
     else
     {
@@ -986,7 +986,7 @@ void WorldSession::HandleSetActionButtonOpcode(WorldPacket& recv_data)
                 sLog.outError( "MISC: Unknown action button type %u for action %u into button %u", type, action, button );
                 return;
         }
-        GetPlayer()->addActionButton(button, action, type);
+        GetPlayer()->addActionButton(GetPlayer()->m_activeSpec, button, action, type);
     }
 }
 
@@ -1557,7 +1557,7 @@ void WorldSession::HandleQueryInspectAchievements( WorldPacket & recv_data )
         player->GetAchievementMgr().SendRespondInspectAchievements(_player);
 }
 
-void WorldSession::HandleWorldStateUITimerUpdate(WorldPacket& recv_data)
+void WorldSession::HandleWorldStateUITimerUpdate(WorldPacket& /*recv_data*/)
 {
     // empty opcode
     sLog.outDebug("WORLD: CMSG_WORLD_STATE_UI_TIMER_UPDATE");
@@ -1567,7 +1567,7 @@ void WorldSession::HandleWorldStateUITimerUpdate(WorldPacket& recv_data)
     SendPacket(&data);
 }
 
-void WorldSession::HandleReadyForAccountDataTimes(WorldPacket& recv_data)
+void WorldSession::HandleReadyForAccountDataTimes(WorldPacket& /*recv_data*/)
 {
     // empty opcode
     sLog.outDebug("WORLD: CMSG_READY_FOR_ACCOUNT_DATA_TIMES");

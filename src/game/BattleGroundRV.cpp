@@ -16,13 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include "Player.h"
 #include "BattleGround.h"
 #include "BattleGroundRV.h"
-#include "ObjectAccessor.h"
 #include "Language.h"
-#include "Player.h"
-#include "WorldPacket.h"
-#include "GameObject.h"
 
 BattleGroundRV::BattleGroundRV()
 {
@@ -63,69 +60,19 @@ void BattleGroundRV::AddPlayer(Player *plr)
     BattleGroundRVScore* sc = new BattleGroundRVScore;
 
     m_PlayerScores[plr->GetGUID()] = sc;
-
-    UpdateArenaWorldState();
 }
 
 void BattleGroundRV::RemovePlayer(Player * /*plr*/, uint64 /*guid*/)
 {
-    if (GetStatus() == STATUS_WAIT_LEAVE)
-        return;
-
-    UpdateArenaWorldState();
-    CheckArenaWinConditions();
 }
 
 void BattleGroundRV::HandleKillPlayer(Player* player, Player* killer)
 {
-    if (GetStatus() != STATUS_IN_PROGRESS)
-        return;
-
-    if (!killer)
-    {
-        sLog.outError("BattleGroundRV: Killer player not found");
-        return;
-    }
-
     BattleGround::HandleKillPlayer(player, killer);
-
-    UpdateArenaWorldState();
-    CheckArenaWinConditions();
 }
 
-bool BattleGroundRV::HandlePlayerUnderMap(Player *player)
+void BattleGroundRV::HandleAreaTrigger(Player * /*Source*/, uint32 /*Trigger*/)
 {
-    player->TeleportTo(GetMapId(), 763.5, -284, 28.276, 2.422, false);
-    return true;
-}
-
-void BattleGroundRV::HandleAreaTrigger(Player *Source, uint32 Trigger)
-{
-    if (GetStatus() != STATUS_IN_PROGRESS)
-        return;
-
-    switch(Trigger)
-    {
-        case 5224:
-        case 5226:
-            break;
-        default:
-            sLog.outError("WARNING: Unhandled AreaTrigger in Battleground: %u", Trigger);
-            Source->GetSession()->SendAreaTriggerMessage("Warning: Unhandled AreaTrigger in Battleground: %u", Trigger);
-            break;
-    }
-}
-
-void BattleGroundRV::FillInitialWorldStates(WorldPacket &data)
-{
-    data << uint32(0xe1a) << uint32(1);
-    UpdateArenaWorldState();
-}
-
-void BattleGroundRV::Reset()
-{
-    //call parent's class reset
-    BattleGround::Reset();
 }
 
 bool BattleGroundRV::SetupBattleGround()

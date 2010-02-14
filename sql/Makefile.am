@@ -26,9 +26,9 @@ pkgdatadir = $(datadir)/mangos/sql
 ## Files to be installed
 #  Install basic SQL files to datadir
 pkgdata_DATA = \
-	evoX_world.sql \
-	evoX_logon.sql \
-	evoX_characters.sql \
+	mangos.sql \
+	realmd.sql \
+	characters.sql \
 	create_mysql.sql \
 	drop_mysql.sql
 
@@ -37,6 +37,6 @@ pkgdata_DATA = \
 EXTRA_DIST = \
 	create_mysql.sql \
 	drop_mysql.sql \
-	evoX_characters.sql \
-	evoX_world.sql \
-	evoX_logon.sql
+	characters.sql \
+	mangos.sql \
+	realmd.sql

@@ -41,8 +41,8 @@ ConfusedMovementGenerator<T>::Initialize(T &unit)
 
     for(unsigned int idx=0; idx < MAX_CONF_WAYPOINTS+1; ++idx)
     {
-        const float wanderX=wander_distance*rand_norm() - wander_distance/2;
-        const float wanderY=wander_distance*rand_norm() - wander_distance/2;
+        const float wanderX=wander_distance*rand_norm_f() - wander_distance/2;
+        const float wanderY=wander_distance*rand_norm_f() - wander_distance/2;
 
         i_waypoints[idx][0] = x + wanderX;
         i_waypoints[idx][1] = y + wanderY;
@@ -109,13 +109,13 @@ bool ConfusedMovementGenerator<T>::Update(T &unit, const uint32 &diff)
         return true;
 
     // ignore in case other no reaction state
-    if (unit.hasUnitState(UNIT_STAT_CAN_NOT_REACT & ~UNIT_STAT_CONFUSED & ~UNIT_STAT_ON_VEHICLE))
-		return true;
+    if (unit.hasUnitState(UNIT_STAT_CAN_NOT_REACT & ~UNIT_STAT_CONFUSED))
+        return true;
 
-    if( i_nextMoveTime.Passed())
+    if (i_nextMoveTime.Passed())
     {
         // currently moving, update location
-		unit.addUnitState(UNIT_STAT_CONFUSED_MOVE);
+        unit.addUnitState(UNIT_STAT_CONFUSED_MOVE);
         Traveller<T> traveller(unit);
         if( i_destinationHolder.UpdateTraveller(traveller, diff, false))
         {

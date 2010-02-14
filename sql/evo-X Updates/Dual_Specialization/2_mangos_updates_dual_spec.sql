@@ -1,1 +1,0 @@
-INSERT INTO `achievement_criteria_requirement` (`criteria_id`,`type`,`value1`) VALUES ('9619','0','63624');

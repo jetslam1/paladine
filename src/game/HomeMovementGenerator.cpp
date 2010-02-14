@@ -42,8 +42,8 @@ HomeMovementGenerator<Creature>::_setTargetLocation(Creature & owner)
     if( !&owner )
         return;
 
-    if( owner.hasUnitState(UNIT_STAT_NOT_MOVE & ~UNIT_STAT_ON_VEHICLE) )
-		return;
+    if( owner.hasUnitState(UNIT_STAT_NOT_MOVE) )
+        return;
 
     float x, y, z;
     owner.GetRespawnCoord(x, y, z);

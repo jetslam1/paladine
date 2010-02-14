@@ -470,9 +470,6 @@ void Vehicle::AddPassenger(Unit *unit, int8 seatId, bool force)
                 data3 << (uint32)(0);
                 SendMessageToSet(&data3,false);
             }
-            //Make vehicle fly
-            if(GetVehicleFlags() & VF_FLYING)
-                CastSpell(this, 49303, false);
         }
 
         SpellClickInfoMapBounds clickPair = sObjectMgr.GetSpellClickInfoMapBounds(GetEntry());
@@ -694,16 +691,6 @@ void Vehicle::InstallAllAccessories()
             InstallAccessory(33142,1); // Leviathan Defense Turret
             break;
         case 33214:InstallAccessory(33218,1,false,false);break; // Mechanolift 304-A
-	    case 35637:InstallAccessory(34705,0,false);break;
-        case 35633:InstallAccessory(34702,0,false);break;
-        case 35768:InstallAccessory(34701,0,false);break;
-        case 34658:InstallAccessory(34657,0,false);break;
-        case 35636:InstallAccessory(34703,0,false);break;
-        case 35638:InstallAccessory(35572,0,false);break;
-        case 35635:InstallAccessory(35569,0,false);break;
-        case 35640:InstallAccessory(35571,0,false);break;
-        case 35641:InstallAccessory(35570,0,false);break;
-        case 35634:InstallAccessory(35617,0,false);break;
     }
 }
 

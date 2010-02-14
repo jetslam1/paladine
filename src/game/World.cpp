@@ -49,7 +49,6 @@
 #include "CreatureAIRegistry.h"
 #include "Policies/SingletonImp.h"
 #include "BattleGroundMgr.h"
-#include "Language.h"
 #include "TemporarySummon.h"
 #include "VMapFactory.h"
 #include "GlobalEvents.h"
@@ -62,7 +61,6 @@
 #include "WaypointManager.h"
 #include "GMTicketMgr.h"
 #include "Util.h"
-#include "AuctionHouseBot.h"
 #include "evo-chat/IRCClient.h"
 
 INSTANTIATE_SINGLETON_1( World );
@@ -254,7 +252,7 @@ World::AddSession_ (WorldSession* s)
     // Updates the population
     if (pLimit > 0)
     {
-        float popu = GetActiveSessionCount ();              // updated number of users on the server
+        float popu = float(GetActiveSessionCount());        // updated number of users on the server
         popu /= pLimit;
         popu *= 2;
         loginDatabase.PExecute ("UPDATE realmlist SET population = '%f' WHERE id = '%d'", popu, realmID);
@@ -320,7 +318,7 @@ bool World::RemoveQueuedPlayer(WorldSession* sess)
         --sessions;
 
     // accept first in queue
-    if( (!m_playerLimit || sessions < m_playerLimit) && !m_QueuedPlayer.empty() )
+    if( (!m_playerLimit || (int32)sessions < m_playerLimit) && !m_QueuedPlayer.empty() )
     {
         WorldSession* pop_sess = m_QueuedPlayer.front();
         pop_sess->SetInQueue(false);
@@ -704,8 +702,6 @@ void World::LoadConfigSettings(bool reload)
         m_configs[CONFIG_MAX_PLAYER_LEVEL] = MAX_LEVEL;
     }
 
-    m_configs[CONFIG_MIN_DUALSPEC_LEVEL] = sConfig.GetIntDefault("MinDualSpecLevel", 40);
-
     m_configs[CONFIG_START_PLAYER_LEVEL] = sConfig.GetIntDefault("StartPlayerLevel", 1);
     if(m_configs[CONFIG_START_PLAYER_LEVEL] < 1)
     {
@@ -857,28 +853,28 @@ void World::LoadConfigSettings(bool reload)
     m_configs[CONFIG_SKILL_MILLING] = sConfig.GetBoolDefault("SkillChance.Milling",false);
 
     m_configs[CONFIG_SKILL_GAIN_CRAFTING]  = sConfig.GetIntDefault("SkillGain.Crafting", 1);
-    if(m_configs[CONFIG_SKILL_GAIN_CRAFTING] < 0)
+    if(m_configs[CONFIG_SKILL_GAIN_CRAFTING] < 0)           // warning: comparison of unsigned expression < 0 is always false
     {
         sLog.outError("SkillGain.Crafting (%i) can't be negative. Set to 1.",m_configs[CONFIG_SKILL_GAIN_CRAFTING]);
         m_configs[CONFIG_SKILL_GAIN_CRAFTING] = 1;
     }
 
     m_configs[CONFIG_SKILL_GAIN_DEFENSE]  = sConfig.GetIntDefault("SkillGain.Defense", 1);
-    if(m_configs[CONFIG_SKILL_GAIN_DEFENSE] < 0)
+    if(m_configs[CONFIG_SKILL_GAIN_DEFENSE] < 0)            // warning: comparison of unsigned expression < 0 is always false
     {
         sLog.outError("SkillGain.Defense (%i) can't be negative. Set to 1.",m_configs[CONFIG_SKILL_GAIN_DEFENSE]);
         m_configs[CONFIG_SKILL_GAIN_DEFENSE] = 1;
     }
 
     m_configs[CONFIG_SKILL_GAIN_GATHERING]  = sConfig.GetIntDefault("SkillGain.Gathering", 1);
-    if(m_configs[CONFIG_SKILL_GAIN_GATHERING] < 0)
+    if(m_configs[CONFIG_SKILL_GAIN_GATHERING] < 0)          // warning: comparison of unsigned expression < 0 is always false
     {
         sLog.outError("SkillGain.Gathering (%i) can't be negative. Set to 1.",m_configs[CONFIG_SKILL_GAIN_GATHERING]);
         m_configs[CONFIG_SKILL_GAIN_GATHERING] = 1;
     }
 
     m_configs[CONFIG_SKILL_GAIN_WEAPON]  = sConfig.GetIntDefault("SkillGain.Weapon", 1);
-    if(m_configs[CONFIG_SKILL_GAIN_WEAPON] < 0)
+    if(m_configs[CONFIG_SKILL_GAIN_WEAPON] < 0)             // warning: comparison of unsigned expression < 0 is always false
     {
         sLog.outError("SkillGain.Weapon (%i) can't be negative. Set to 1.",m_configs[CONFIG_SKILL_GAIN_WEAPON]);
         m_configs[CONFIG_SKILL_GAIN_WEAPON] = 1;
@@ -978,7 +974,7 @@ void World::LoadConfigSettings(bool reload)
     m_configs[CONFIG_ARENA_SEASON_ID]                           = sConfig.GetIntDefault ("Arena.ArenaSeason.ID", 1);
     m_configs[CONFIG_ARENA_SEASON_IN_PROGRESS]                  = sConfig.GetBoolDefault("Arena.ArenaSeason.InProgress", true);
 
-    m_configs[CONFIG_OFFHAND_CHECK_AT_SPELL_UNLEARN] = sConfig.GetBoolDefault("OffhandCheckAtSpellUnlearn", false);
+    m_configs[CONFIG_OFFHAND_CHECK_AT_TALENTS_RESET] = sConfig.GetBoolDefault("OffhandCheckAtTalentsReset", false);
 
     if(int clientCacheId = sConfig.GetIntDefault("ClientCacheVersion", 0))
     {
@@ -1175,6 +1171,9 @@ void World::SetInitialWorldSettings()
     sLog.outString( "Packing instances..." );
     sInstanceSaveMgr.PackInstances();
 
+    sLog.outString( "Packing groups..." );
+    sObjectMgr.PackGroupIds();
+
     sLog.outString();
     sLog.outString( "Loading Localization strings..." );
     sObjectMgr.LoadCreatureLocales();
@@ -1351,9 +1350,6 @@ void World::SetInitialWorldSettings()
     sLog.outString( "Loading Player level dependent mail rewards..." );
     sObjectMgr.LoadMailLevelRewards();
 
-    sLog.outString( "Loading Spell Disabled..." );
-    sObjectMgr.LoadSpellDisabledEntrys();
-
     sLog.outString( "Loading Loot Tables..." );
     sLog.outString();
     LoadLootTables();
@@ -1486,10 +1482,8 @@ void World::SetInitialWorldSettings()
     sprintf( isoDate, "%04d-%02d-%02d %02d:%02d:%02d",
         local.tm_year+1900, local.tm_mon+1, local.tm_mday, local.tm_hour, local.tm_min, local.tm_sec);
 
-    loginDatabase.PExecute("INSERT INTO uptime (realmid, starttime, startstring, uptime) VALUES('%u', " UI64FMTD ", '%s', 0)", realmID, uint64(m_startTime), isoDate);
-
-    static uint32 abtimer = 0;
-    abtimer = sConfig.GetIntDefault("AutoBroadcast.Timer", 60000);
+    loginDatabase.PExecute("INSERT INTO uptime (realmid, starttime, startstring, uptime) VALUES('%u', " UI64FMTD ", '%s', 0)",
+        realmID, uint64(m_startTime), isoDate);
 
     m_timers[WUPDATE_OBJECTS].SetInterval(0);
     m_timers[WUPDATE_SESSIONS].SetInterval(0);
@@ -1499,13 +1493,13 @@ void World::SetInitialWorldSettings()
                                                             //Update "uptime" table based on configuration entry in minutes.
     m_timers[WUPDATE_CORPSES].SetInterval(20*MINUTE*IN_MILISECONDS);
                                                             //erase corpses every 20 minutes
-    m_timers[WUPDATE_AUTOBROADCAST].SetInterval(abtimer);
+
     //to set mailtimer to return mails every day between 4 and 5 am
     //mailtimer is increased when updating auctions
     //one second is 1000 -(tested on win system)
-    mail_timer = ((((localtime( &m_gameTime )->tm_hour + 20) % 24)* HOUR * IN_MILISECONDS) / m_timers[WUPDATE_AUCTIONS].GetInterval() );
+    mail_timer = uint32((((localtime( &m_gameTime )->tm_hour + 20) % 24)* HOUR * IN_MILISECONDS) / m_timers[WUPDATE_AUCTIONS].GetInterval() );
                                                             //1440
-    mail_timer_expires = ( (DAY * IN_MILISECONDS) / (m_timers[WUPDATE_AUCTIONS].GetInterval()));
+    mail_timer_expires = uint32( (DAY * IN_MILISECONDS) / (m_timers[WUPDATE_AUCTIONS].GetInterval()));
     sLog.outDebug("Mail timer set to: %u, mail return is called every %u minutes", mail_timer, mail_timer_expires);
 
     ///- Initilize static helper structures
@@ -1537,11 +1531,8 @@ void World::SetInitialWorldSettings()
     sLog.outString("Starting Game Event system..." );
     uint32 nextGameEvent = sGameEventMgr.Initialize();
     m_timers[WUPDATE_EVENTS].SetInterval(nextGameEvent);    //depend on next event
-    sLog.outString("Starting Autobroadcast system by Xeross..." );
-    sLog.outString( "WORLD: World initialized" );
 
-    sLog.outString("Initialize AuctionHouseBot...");
-    auctionbot.Initialize();
+    sLog.outString( "WORLD: World initialized" );
 
     uint32 uStartInterval = getMSTimeDiff(uStartTime, getMSTime());
     sLog.outString( "SERVER STARTUP TIME: %i minutes %i seconds", uStartInterval / 60000, (uStartInterval % 60000) / 1000 );
@@ -1613,7 +1604,6 @@ void World::Update(uint32 diff)
     /// <ul><li> Handle auctions when the timer has passed
     if (m_timers[WUPDATE_AUCTIONS].Passed())
     {
-        auctionbot.Update();
         m_timers[WUPDATE_AUCTIONS].Reset();
 
         ///- Update mails (return old mails with item, or delete them)
@@ -1660,7 +1650,7 @@ void World::Update(uint32 diff)
     /// <li> Update uptime table
     if (m_timers[WUPDATE_UPTIME].Passed())
     {
-        uint32 tmpDiff = (m_gameTime - m_startTime);
+        uint32 tmpDiff = uint32(m_gameTime - m_startTime);
         uint32 maxClientsNum = GetMaxActiveSessionCount();
 
         m_timers[WUPDATE_UPTIME].Reset();
@@ -1695,16 +1685,6 @@ void World::Update(uint32 diff)
         uint32 nextGameEvent = sGameEventMgr.Update();
         m_timers[WUPDATE_EVENTS].SetInterval(nextGameEvent);
         m_timers[WUPDATE_EVENTS].Reset();
-    }
-    static uint32 autobroadcaston = 0;
-    autobroadcaston = sConfig.GetIntDefault("AutoBroadcast.On", 0);
-    if(autobroadcaston == 1)
-    {
-        if (m_timers[WUPDATE_AUTOBROADCAST].Passed())
-        {
-            m_timers[WUPDATE_AUTOBROADCAST].Reset();
-            SendBroadcast();
-        }
     }
 
     /// </ul>
@@ -2116,57 +2096,6 @@ void World::ProcessCliCommands()
     // print the console message here so it looks right
     if (zprint)
         zprint("mangos>");
-}
-
-void World::SendBroadcast()
-{
-    std::string msg;
-    static int nextid;
-
-    QueryResult *result;
-    if(nextid != 0)
-    {
-        result = loginDatabase.PQuery("SELECT `text`, `next` FROM `autobroadcast` WHERE `id` = %u", nextid);
-    }
-    else
-    {
-        result = loginDatabase.PQuery("SELECT `text`, `next` FROM `autobroadcast` ORDER BY RAND() LIMIT 1");
-    }
-
-    if(!result)
-        return;
-
-    Field *fields = result->Fetch();
-    nextid  = fields[1].GetUInt32();
-    msg = fields[0].GetString();
-    delete result;
-
-    static uint32 abcenter = 0;
-    abcenter = sConfig.GetIntDefault("AutoBroadcast.Center", 0);
-    if(abcenter == 0)
-    {
-        sWorld.SendWorldText(LANG_AUTO_BROADCAST, msg.c_str());
-
-        sLog.outString("AutoBroadcast: '%s'",msg.c_str());
-    }
-    if(abcenter == 1)
-    {
-        WorldPacket data(SMSG_NOTIFICATION, (msg.size()+1));
-        data << msg;
-        sWorld.SendGlobalMessage(&data);
-
-        sLog.outString("AutoBroadcast: '%s'",msg.c_str());
-    }
-    if(abcenter == 2)
-    {
-        sWorld.SendWorldText(LANG_AUTO_BROADCAST, msg.c_str());
-
-        WorldPacket data(SMSG_NOTIFICATION, (msg.size()+1));
-        data << msg;
-        sWorld.SendGlobalMessage(&data);
-
-        sLog.outString("AutoBroadcast: '%s'",msg.c_str());
-   }
 }
 
 void World::InitResultQueue()

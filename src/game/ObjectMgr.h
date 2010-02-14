@@ -260,16 +260,17 @@ struct QuestPOIPoint
 
 struct QuestPOI
 {
+    uint32 PoiId;
     int32 ObjectiveIndex;
     uint32 MapId;
-    uint32 Unk1;
+    uint32 AreaId;
     uint32 Unk2;
     uint32 Unk3;
     uint32 Unk4;
     std::vector<QuestPOIPoint> points;
 
-    QuestPOI() : ObjectiveIndex(0), MapId(0), Unk1(0), Unk2(0), Unk3(0), Unk4(0) {}
-    QuestPOI(int32 objIndex, uint32 mapId, uint32 unk1, uint32 unk2, uint32 unk3, uint32 unk4) : ObjectiveIndex(objIndex), MapId(mapId), Unk1(unk1), Unk2(unk2), Unk3(unk3), Unk4(unk4) {}
+    QuestPOI() : PoiId(0), ObjectiveIndex(0), MapId(0), AreaId(0), Unk2(0), Unk3(0), Unk4(0) {}
+    QuestPOI(uint32 poiId, int32 objIndex, uint32 mapId, uint32 areaId, uint32 unk2, uint32 unk3, uint32 unk4) : PoiId(poiId), ObjectiveIndex(objIndex), MapId(mapId), AreaId(areaId), Unk2(unk2), Unk3(unk3), Unk4(unk4) {}
 };
 
 typedef std::vector<QuestPOI> QuestPOIVector;
@@ -420,10 +421,10 @@ class ObjectMgr
         void LoadGameobjectInfo();
         void AddGameobjectInfo(GameObjectInfo *goinfo);
 
-        Group * GetGroupByLeaderLowGUID(uint32 lowguid) const;
+        void PackGroupIds();
+        Group* GetGroupById(uint32 id) const;
         void AddGroup(Group* group);
         void RemoveGroup(Group* group);
-        void UpdateGroup(uint32 old_guidlow, Group* group); // when need update leader guid as group key
 
         Guild* GetGuildByLeader(uint64 const&guid) const;
         Guild* GetGuildById(uint32 GuildId) const;
@@ -671,6 +672,7 @@ class ObjectMgr
         uint32 GenerateAuctionID();
         uint64 GenerateEquipmentSetGuid();
         uint32 GenerateGuildId();
+        uint32 GenerateGroupId();
         uint32 GenerateItemTextID();
         uint32 GenerateMailID();
         uint32 GeneratePetNumber();
@@ -819,20 +821,6 @@ class ObjectMgr
 
         static bool CheckDeclinedNames(std::wstring mainpart, DeclinedName const& names);
 
-        void LoadSpellDisabledEntrys();
-        uint8 IsSpellDisabled(uint32 spellid)
-        {
-            uint8 result=0;
-            SpellDisabledMap::const_iterator itr = m_spell_disabled.find(spellid);
-            if(itr != m_spell_disabled.end())
-            {
-                result=1;
-                if(itr->second != 0)
-                    result=2;
-            }
-            return result;
-        }
-
         int GetIndexForLocale(LocaleConstant loc);
         LocaleConstant GetLocaleForIndex(int i);
 
@@ -941,8 +929,9 @@ class ObjectMgr
         uint32 m_ItemTextId;
         uint32 m_mailid;
         uint32 m_hiPetNumber;
+        uint32 m_groupId;
 
-        // first free low guid for seelcted guid type
+        // first free low guid for selected guid type
         uint32 m_hiCharGuid;
         uint32 m_hiCreatureGuid;
 		uint32 m_hiVehicleGuid;
@@ -984,9 +973,6 @@ class ObjectMgr
         //character reserved names
         typedef std::set<std::wstring> ReservedNamesMap;
         ReservedNamesMap    m_ReservedNames;
-
-        typedef UNORDERED_MAP<uint32, uint32> SpellDisabledMap;
-        SpellDisabledMap  m_spell_disabled;
 
         GraveYardMap        mGraveYardMap;
 

@@ -63,15 +63,14 @@ bool PointMovementGenerator<T>::Update(T &unit, const uint32 &diff)
     if(!&unit)
         return false;
 
-    if(unit.hasUnitState(UNIT_STAT_CAN_NOT_MOVE & ~UNIT_STAT_ON_VEHICLE))
+    if(unit.hasUnitState(UNIT_STAT_CAN_NOT_MOVE))
     {
         unit.clearUnitState(UNIT_STAT_ROAMING_MOVE);
-		return true;
+        return true;
     }
 
-	unit.addUnitState(UNIT_STAT_ROAMING_MOVE);
+    unit.addUnitState(UNIT_STAT_ROAMING_MOVE);
     Traveller<T> traveller(unit);
-
     i_destinationHolder.UpdateTraveller(traveller, diff, false);
 
     if(i_destinationHolder.HasArrived())

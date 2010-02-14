@@ -226,9 +226,9 @@ struct CreatureDataAddon
     uint32 bytes1;
     uint32 bytes2;
     uint32 emote;
-    uint32 move_flags;
+	uint32 splineFlags;
     uint32 vehicle_id;
-    CreatureDataAddonPassengers const* passengers;          // loaded as char* "entry1 seatid1 entry2 seatid2 ... "
+    CreatureDataAddonPassengers const* passengers;          // loaded as char* "entry1 seatid1 entry2 seatid2 ... "  
     CreatureDataAddonAura const* auras;                     // loaded as char* "spell1 eff1 spell2 eff2 ... "
 };
 
@@ -370,7 +370,7 @@ typedef std::map<uint32,time_t> CreatureSpellCooldowns;
 // max different by z coordinate for creature aggro reaction
 #define CREATURE_Z_ATTACK_RANGE 3
 
-#define MAX_VENDOR_ITEMS 200                                // Limitation in 3.3.0a item count in SMSG_LIST_INVENTORY
+#define MAX_VENDOR_ITEMS 150                                // Limitation in 3.x.x item count in SMSG_LIST_INVENTORY
 
 enum CreatureSubtype
 {
@@ -405,14 +405,15 @@ class MANGOS_DLL_SPEC Creature : public Unit
         void GetRespawnCoord(float &x, float &y, float &z, float* ori = NULL, float* dist =NULL) const;
         uint32 GetEquipmentId() const { return m_equipmentId; }
 
+        bool CreateVehicleKit(uint32 id);
+        Vehicle *GetVehicleKit()const { return m_vehicleKit; }
+
         CreatureSubtype GetSubtype() const { return m_subtype; }
         bool isPet() const { return m_subtype == CREATURE_SUBTYPE_PET; }
         bool isVehicle() const { return m_subtype == CREATURE_SUBTYPE_VEHICLE; }
         bool isTotem() const { return m_subtype == CREATURE_SUBTYPE_TOTEM; }
         bool isTemporarySummon() const { return m_subtype == CREATURE_SUBTYPE_TEMPORARY_SUMMON; }
 
-        bool CreateVehicleKit(uint32 id);
-        Vehicle *GetVehicleKit()const { return m_vehicleKit; }
         void SetCorpseDelay(uint32 delay) { m_corpseDelay = delay; }
         bool isRacialLeader() const { return GetCreatureInfo()->RacialLeader; }
         bool isCivilian() const { return GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_CIVILIAN; }
@@ -597,7 +598,7 @@ class MANGOS_DLL_SPEC Creature : public Unit
         void SetRespawnRadius(float dist) { m_respawnradius = dist; }
 
         uint32 m_groupLootTimer;                            // (msecs)timer used for group loot
-        uint64 lootingGroupLeaderGUID;                      // used to find group which is looting corpse
+        uint32 m_groupLootId;                               // used to find group which is looting corpse
 
         void SendZoneUnderAttackMessage(Player* attacker);
 
