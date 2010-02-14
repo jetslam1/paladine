@@ -276,7 +276,7 @@ void ObjectMgr::LoadCreatureLocales()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -344,7 +344,7 @@ void ObjectMgr::LoadGossipMenuItemsLocales()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -408,7 +408,7 @@ void ObjectMgr::LoadPointOfInterestLocales()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -1143,7 +1143,7 @@ void ObjectMgr::LoadCreatures()
                 if (GetMapDifficultyData(i,Difficulty(k)))
                     spawnMasks[i] |= (1 << k);
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -1335,7 +1335,7 @@ void ObjectMgr::LoadGameobjects()
                 if (GetMapDifficultyData(i,Difficulty(k)))
                     spawnMasks[i] |= (1 << k);
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -1503,7 +1503,7 @@ void ObjectMgr::LoadCreatureRespawnTimes()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -1545,7 +1545,7 @@ void ObjectMgr::LoadGameobjectRespawnTimes()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -1676,7 +1676,7 @@ void ObjectMgr::LoadItemLocales()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -2195,7 +2195,7 @@ void ObjectMgr::LoadItemRequiredTarget()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -2299,7 +2299,7 @@ void ObjectMgr::LoadPetLevelInfo()
             return;
         }
 
-        barGoLink bar( result->GetRowCount() );
+        barGoLink bar( (int)result->GetRowCount() );
 
         do
         {
@@ -2413,7 +2413,7 @@ void ObjectMgr::LoadPlayerInfo()
             exit(1);
         }
 
-        barGoLink bar( result->GetRowCount() );
+        barGoLink bar( (int)result->GetRowCount() );
 
         do
         {
@@ -2505,7 +2505,7 @@ void ObjectMgr::LoadPlayerInfo()
         }
         else
         {
-            barGoLink bar( result->GetRowCount() );
+            barGoLink bar( (int)result->GetRowCount() );
 
             do
             {
@@ -2574,7 +2574,7 @@ void ObjectMgr::LoadPlayerInfo()
         }
         else
         {
-            barGoLink bar( result->GetRowCount() );
+            barGoLink bar( (int)result->GetRowCount() );
 
             do
             {
@@ -2633,7 +2633,7 @@ void ObjectMgr::LoadPlayerInfo()
         }
         else
         {
-            barGoLink bar( result->GetRowCount() );
+            barGoLink bar( (int)result->GetRowCount() );
 
             do
             {
@@ -2692,7 +2692,7 @@ void ObjectMgr::LoadPlayerInfo()
             exit(1);
         }
 
-        barGoLink bar( result->GetRowCount() );
+        barGoLink bar( (int)result->GetRowCount() );
 
         do
         {
@@ -2788,7 +2788,7 @@ void ObjectMgr::LoadPlayerInfo()
             exit(1);
         }
 
-        barGoLink bar( result->GetRowCount() );
+        barGoLink bar( (int)result->GetRowCount() );
 
         do
         {
@@ -2911,7 +2911,7 @@ void ObjectMgr::LoadPlayerInfo()
             exit(1);
         }
 
-        barGoLink bar( result->GetRowCount() );
+        barGoLink bar( (int)result->GetRowCount() );
 
         do
         {
@@ -3100,7 +3100,7 @@ void ObjectMgr::LoadGuilds()
     //                                                                      0       1     2   3       4
     QueryResult *guildBankTabRightsResult = CharacterDatabase.Query("SELECT guildid,TabId,rid,gbright,SlotPerDay FROM guild_bank_right ORDER BY guildid ASC, TabId ASC");
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -3169,7 +3169,7 @@ void ObjectMgr::LoadArenaTeams()
         "SELECT arenateamid,member.guid,played_week,wons_week,played_season,wons_season,personal_rating,name,class "
         "FROM arena_team_member member LEFT JOIN characters chars on member.guid = chars.guid ORDER BY member.arenateamid ASC");
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -3213,7 +3213,7 @@ void ObjectMgr::LoadGroups()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -3248,7 +3248,7 @@ void ObjectMgr::LoadGroups()
     {
         Group* group = NULL;                                // used as cached pointer for avoid relookup group for each member
 
-        barGoLink bar2( result->GetRowCount() );
+        barGoLink bar2( (int)result->GetRowCount() );
         do
         {
             bar2.step();
@@ -3314,7 +3314,7 @@ void ObjectMgr::LoadGroups()
     {
         Group* group = NULL;                                // used as cached pointer for avoid relookup group for each member
 
-        barGoLink bar2( result->GetRowCount() );
+        barGoLink bar2( (int)result->GetRowCount() );
         do
         {
             bar2.step();
@@ -3429,7 +3429,7 @@ void ObjectMgr::LoadQuests()
     // create multimap previous quest for each existed quest
     // some quests can have many previous maps set by NextQuestId in previous quest
     // for example set of race quests can lead to single not race specific quest
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar((int) result->GetRowCount() );
     do
     {
         bar.step();
@@ -4057,7 +4057,7 @@ void ObjectMgr::LoadQuestLocales()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -4201,7 +4201,7 @@ void ObjectMgr::LoadScripts(ScriptMapMap& scripts, char const* tablename)
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -4591,7 +4591,7 @@ void ObjectMgr::LoadItemTexts()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     Field* fields;
     do
@@ -4673,7 +4673,7 @@ void ObjectMgr::LoadPageTextLocales()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -4767,7 +4767,7 @@ void ObjectMgr::LoadGossipText()
 
     int cic;
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -4834,7 +4834,7 @@ void ObjectMgr::LoadNpcTextLocales()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -4907,7 +4907,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
     //delitems << "DELETE FROM item_instance WHERE guid IN ( ";
     //delmails << "DELETE FROM mail WHERE id IN ( "
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
     uint32 count = 0;
     Field *fields;
 
@@ -5006,7 +5006,7 @@ void ObjectMgr::LoadQuestAreaTriggers()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar((int) result->GetRowCount() );
 
     do
     {
@@ -5071,7 +5071,7 @@ void ObjectMgr::LoadTavernAreaTriggers()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -5115,7 +5115,7 @@ void ObjectMgr::LoadAreaTriggerScripts()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -5301,7 +5301,7 @@ void ObjectMgr::LoadGraveyardZones()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -5519,7 +5519,7 @@ void ObjectMgr::LoadAreaTriggerTeleports()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -5979,7 +5979,7 @@ void ObjectMgr::LoadGameObjectLocales()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -6284,7 +6284,7 @@ void ObjectMgr::LoadExplorationBaseXP()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -6333,7 +6333,7 @@ void ObjectMgr::LoadPetNames()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -6412,7 +6412,7 @@ void ObjectMgr::LoadCorpses()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -6461,7 +6461,7 @@ void ObjectMgr::LoadReputationOnKill()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -6538,7 +6538,7 @@ void ObjectMgr::LoadPointsOfInterest()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -6592,7 +6592,7 @@ void ObjectMgr::LoadQuestPOI()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -6656,7 +6656,7 @@ void ObjectMgr::LoadNPCSpellClickSpells()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -6885,7 +6885,7 @@ void ObjectMgr::LoadQuestRelationsHelper(QuestRelations& map,char const* table)
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -6986,7 +6986,7 @@ void ObjectMgr::LoadReservedPlayersNames()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar((int) result->GetRowCount() );
 
     Field* fields;
     do
@@ -7300,7 +7300,7 @@ bool ObjectMgr::LoadMangosStrings(DatabaseType& db, char const* table, int32 min
 
     uint32 count = 0;
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -7400,7 +7400,7 @@ void ObjectMgr::LoadFishingBaseSkillLevel()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar((int) result->GetRowCount() );
 
     do
     {
@@ -7787,7 +7787,7 @@ void ObjectMgr::LoadGameTele()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -7915,7 +7915,7 @@ void ObjectMgr::LoadMailLevelRewards()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar((int) result->GetRowCount() );
 
     do
     {
@@ -7985,7 +7985,7 @@ void ObjectMgr::LoadTrainerSpell()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     std::set<uint32> talentIds;
 
@@ -8098,7 +8098,7 @@ void ObjectMgr::LoadVendors()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     uint32 count = 0;
     do
@@ -8144,7 +8144,7 @@ void ObjectMgr::LoadNpcTextId()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar((int) result->GetRowCount() );
 
     uint32 count = 0;
     uint32 guid,textid;
@@ -8196,7 +8196,7 @@ void ObjectMgr::LoadGossipMenu()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     uint32 count = 0;
 
@@ -8274,7 +8274,7 @@ void ObjectMgr::LoadGossipMenuItems()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     uint32 count = 0;
 
@@ -8520,7 +8520,7 @@ void ObjectMgr::LoadScriptNames()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
     uint32 count = 0;
 
     do
@@ -8673,7 +8673,7 @@ void ObjectMgr::LoadVehicleData()
 
     uint32 count = 0;
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
     do
     {
         bar.step();
@@ -8748,7 +8748,7 @@ void ObjectMgr::LoadVehicleSeatData()
     }
     uint32 count = 0;
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
     do
     {
         bar.step();

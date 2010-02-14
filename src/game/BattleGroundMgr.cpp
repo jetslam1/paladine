@@ -1664,7 +1664,7 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
@@ -2054,7 +2054,7 @@ void BattleGroundMgr::LoadBattleMastersEntry()
         return;
     }
 
-    barGoLink bar( result->GetRowCount() );
+    barGoLink bar( (int)result->GetRowCount() );
 
     do
     {
@@ -2152,7 +2152,7 @@ void BattleGroundMgr::LoadBattleEventIndexes()
         return;
     }
 
-    barGoLink bar(result->GetRowCount());
+    barGoLink bar((int)result->GetRowCount());
 
     do
     {
