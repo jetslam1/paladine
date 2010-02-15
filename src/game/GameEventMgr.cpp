@@ -122,7 +122,7 @@ void GameEventMgr::LoadFromDB()
     uint32 count = 0;
 
     {
-        barGoLink bar( result->GetRowCount() );
+        barGoLink bar( (int)result->GetRowCount() );
         do
         {
             ++count;
@@ -188,7 +188,7 @@ void GameEventMgr::LoadFromDB()
     else
     {
 
-        barGoLink bar( result->GetRowCount() );
+        barGoLink bar( (int)result->GetRowCount() );
         do
         {
             Field *fields = result->Fetch();
@@ -234,7 +234,7 @@ void GameEventMgr::LoadFromDB()
     else
     {
 
-        barGoLink bar( result->GetRowCount() );
+        barGoLink bar( (int)result->GetRowCount() );
         do
         {
             Field *fields = result->Fetch();
@@ -282,7 +282,7 @@ void GameEventMgr::LoadFromDB()
     else
     {
 
-        barGoLink bar( result->GetRowCount() );
+        barGoLink bar( (int)result->GetRowCount() );
         do
         {
             Field *fields = result->Fetch();
@@ -339,7 +339,7 @@ void GameEventMgr::LoadFromDB()
     else
     {
 
-        barGoLink bar( result->GetRowCount() );
+        barGoLink bar( (int)result->GetRowCount() );
         do
         {
             Field *fields = result->Fetch();
@@ -383,7 +383,7 @@ void GameEventMgr::LoadFromDB()
     else
     {
 
-        barGoLink bar2( result->GetRowCount() );
+        barGoLink bar2( (int)result->GetRowCount() );
         do
         {
             Field *fields = result->Fetch();
@@ -482,7 +482,7 @@ void GameEventMgr::UnApplyEvent(uint16 event_id)
 
 void GameEventMgr::ApplyNewEvent(uint16 event_id)
 {
-    switch(sWorld.getConfig(CONFIG_EVENT_ANNOUNCE))
+    switch(sWorld.getConfig(CONFIG_UINT32_EVENT_ANNOUNCE))
     {
         case 0:                                             // disable
             break;
