@@ -1,4 +1,18 @@
-﻿INSERT INTO `quest_poi` (`questId`, `poiId`, `objIndex`, `mapId`, `areaId`, `floorId`, `unk3`, `unk4`) VALUES ('1', '0', '-1', '0', '23', '0', '0', '1');
+﻿DROP TABLE IF EXISTS `quest_poi`;
+CREATE TABLE IF NOT EXISTS `quest_poi` (
+  `questId` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `poiId` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `objIndex` int(11) NOT NULL DEFAULT '0',
+  `mapId` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `areaId` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `floorId` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `unk3` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `unk4` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  KEY `questId` (`poiId`,`questId`),
+  KEY `poiId` (`poiId`,`questId`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+INSERT INTO `quest_poi` (`questId`, `poiId`, `objIndex`, `mapId`, `areaId`, `floorId`, `unk3`, `unk4`) VALUES ('1', '0', '-1', '0', '23', '0', '0', '1');
 INSERT INTO `quest_poi` (`questId`, `poiId`, `objIndex`, `mapId`, `areaId`, `floorId`, `unk3`, `unk4`) VALUES ('2', '0', '4', '1', '43', '0', '0', '1');
 INSERT INTO `quest_poi` (`questId`, `poiId`, `objIndex`, `mapId`, `areaId`, `floorId`, `unk3`, `unk4`) VALUES ('2', '1', '-1', '1', '43', '0', '0', '1');
 INSERT INTO `quest_poi` (`questId`, `poiId`, `objIndex`, `mapId`, `areaId`, `floorId`, `unk3`, `unk4`) VALUES ('5', '0', '-1', '0', '34', '0', '0', '1');
