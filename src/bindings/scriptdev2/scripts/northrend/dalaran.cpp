@@ -70,4 +70,3 @@ void AddSC_dalaran()
     newscript->pGossipSelect = &GossipSelect_npc_zidormi;
     newscript->RegisterSelf();
 }
-
