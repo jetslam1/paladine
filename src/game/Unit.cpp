@@ -13368,7 +13368,7 @@ void Unit::EnterVehicle(Vehicle *vehicle, int8 seat_id, bool force)
     data << uint8(4);                                       // unknown
     data << float(0);                                       // facing angle
 
-    data << uint32(SPLINEFLAG_UNKNOWN9);
+    data << uint32(SPLINEFLAG_UNKNOWN5);
 
     data << uint32(0);                                      // Time in between points
     data << uint32(1);                                      // 1 single waypoint
