@@ -140,40 +140,6 @@ bool AreaTrigger_at_torp_farm(Player* pPlayer, AreaTriggerEntry *pAt)
     return true;
 }
 
-// Dalaran no fly zone - Credits go to hondacrx
-bool AreaTrigger_at_no_fly_zone(Player* pPlayer, AreaTriggerEntry *pAt)
-{
-    if(pPlayer->IsFlying() == 0)// Check if the player is flying or not. Have not tested with druid yet.
-    {
-        return true;
-    }
-    else
-    {
-        pPlayer->PlayDirectSound(9417); // Fel Reaver sound
-        pPlayer->CastSpell(pPlayer, 58600, true); //Restricted flight spell - needs to be a debuff
-        pPlayer->MonsterTextEmote("Warning: You've entered a no-fly zone and are about to be dismounted!",pPlayer->GetGUID(),true);
-        int32 fly_timer = 10;
-        int32 diff;
-        time_t curr = time(NULL);
-        while(fly_timer > 0)
-        {
-            if(curr != time(NULL))
-            {
-                int32 diff = time(NULL) - curr;
-                fly_timer -= diff;
-                curr += diff;
-            }
-        }
-                if(fly_timer < diff)
-                {
-                    pPlayer->CastSpell(pPlayer, 61286, true);  //World generic dismount spell - Not the right way but it works.
-                    pPlayer->CastSpell(pPlayer, 45472, true);  //Slow fall
-                    //pPlayer->RemoveAura(58600, true);  //no need to remove the buff as it has a Duration
-                }
-        return false;
-    }
-}  
-
 void AddSC_areatrigger_scripts()
 {
     Script *newscript;
@@ -207,11 +173,4 @@ void AddSC_areatrigger_scripts()
     newscript->Name = "at_torp_farm";
     newscript->pAreaTrigger = &AreaTrigger_at_torp_farm;
     newscript->RegisterSelf();
-
-	newscript = new Script;
-    newscript->Name = "at_no_fly_zone";
-    newscript->pAreaTrigger = &AreaTrigger_at_no_fly_zone;
-    newscript->RegisterSelf();  
 }
-
-/* INSERT INTO `areatrigger_scripts` VALUES (5283, at_no_fly_zone);   */
