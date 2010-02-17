@@ -8,6 +8,8 @@ UPDATE `creature_template` SET `ScriptName`='mob_scarlet_miner',ainame="" WHERE 
 -- How To Win Friends And Influence Enemies
 UPDATE `creature_template` SET `ScriptName`='npc_crusade_persuaded',ainame="" WHERE `entry` IN (28939,28940,28610);
 
+-- An End To All Things...
+UPDATE creature_template SET InhabitType = 3 WHERE entry = 28670;
 
 -- Ambush At The Overlook
 DELETE FROM `creature` WHERE `id` = 28957;
