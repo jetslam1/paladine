@@ -3970,12 +3970,12 @@ void Spell::EffectSummonWild(uint32 i, uint32 forceFaction)
 }
 
 void Spell::EffectSummonPosessed(uint32 i)
- {
-        uint32 creature_entry = m_spellInfo->EffectMiscValue[i];
+{
+     uint32 creature_entry = m_spellInfo->EffectMiscValue[i];
      if(!creature_entry)
          return;
 
-        int32 duration = GetSpellDuration(m_spellInfo);
+     int32 duration = GetSpellDuration(m_spellInfo);
 
         float px, py, pz;
      // If dest location if present
@@ -3988,17 +3988,17 @@ void Spell::EffectSummonPosessed(uint32 i)
      }
      // Summon if dest location not present near caster
      else
-         m_caster->GetClosePoint(px,py,pz,1.0f);
+         m_caster->GetClosePoint(px, py, pz, 1.0f);
 
         TempSummonType summonType = (duration == 0) ? TEMPSUMMON_DEAD_DESPAWN : TEMPSUMMON_TIMED_OR_DEAD_DESPAWN;
-        Creature *spawnCreature = m_caster->SummonCreature(creature_entry,px,py,pz,m_caster->GetOrientation(),summonType,duration);
+        Creature *spawnCreature = m_caster->SummonCreature(creature_entry, px, py, pz, m_caster->GetOrientation(), summonType, duration);
 
         if(!spawnCreature->IsPositionValid())
-         {
-         sLog.outError("Pet (guidlow %d, entry %d) not created base at creature. Suggested coordinates isn't valid (X: %f Y: %f)",
-         spawnCreature->GetGUIDLow(), spawnCreature->GetEntry(), spawnCreature->GetPositionX(), spawnCreature->GetPositionY());
-         delete spawnCreature;
-         return;
+        {
+            sLog.outError("Pet (guidlow %d, entry %d) not created base at creature. Suggested coordinates isn't valid (X: %f Y: %f)",
+            spawnCreature->GetGUIDLow(), spawnCreature->GetEntry(), spawnCreature->GetPositionX(), spawnCreature->GetPositionY());
+            delete spawnCreature;
+            return;
         }
 
         spawnCreature->setFaction(m_caster->getFaction());
@@ -4010,18 +4010,18 @@ void Spell::EffectSummonPosessed(uint32 i)
 
 	 if(m_caster->GetTypeId()==TYPEID_PLAYER)
         {
-         ((Player*)m_caster)->SetCharm(spawnCreature);
-         ((Player*)m_caster)->SetFarSightGUID(spawnCreature->GetGUID());
-         ((Player*)m_caster)->SetClientControl(spawnCreature, 1);
-         ((Player*)m_caster)->SetMover(spawnCreature);
-         ((Player*)m_caster)->PossessSpellInitialize();
+            ((Player*)m_caster)->SetCharm(spawnCreature);
+            ((Player*)m_caster)->SetFarSightGUID(spawnCreature->GetGUID());
+            ((Player*)m_caster)->SetClientControl(spawnCreature, 1);
+            ((Player*)m_caster)->SetMover(spawnCreature);
+            ((Player*)m_caster)->PossessSpellInitialize();
         }
         spawnCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
         spawnCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
         spawnCreature->CombatStop();
         spawnCreature->DeleteThreatList();
- }
+}
 
 void Spell::EffectSummonGuardian(uint32 i, uint32 forceFaction)
 {
@@ -5134,7 +5134,7 @@ void Spell::EffectScriptEffect(uint32 effIndex)
                     if(eye->isInCombat())
                     return;
 
-                    eye->GetMap()->CreatureRelocation(eye,2325,-5660,427,3.83);
+                    eye->GetMap()->CreatureRelocation(eye, 2325.0f, -5660.0f, 427.0f, 3.83f);
                     eye->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
                     eye->SetCharmerGUID(0);
 
@@ -5144,7 +5144,7 @@ void Spell::EffectScriptEffect(uint32 effIndex)
                     player->RemoveAurasDueToSpell(51890);
                     player->SetCharm(NULL);
                     player->SetFarSightGUID(0);
-                    player->SetClientControl(m_caster,0);
+                    player->SetClientControl(m_caster, 0);
                     player->SetMover(NULL);
                     player->RemovePetActionBar();
 
