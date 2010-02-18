@@ -61,6 +61,7 @@
 #include "WaypointManager.h"
 #include "GMTicketMgr.h"
 #include "Util.h"
+#include "evo-chat/IRCClient.h"
 
 INSTANTIATE_SINGLETON_1( World );
 
