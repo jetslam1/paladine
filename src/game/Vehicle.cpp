@@ -388,7 +388,7 @@ void Vehicle::RellocatePassengers(Map *map)
             float xx = GetPositionX() + passengers->m_SeatData.OffsetX;
             float yy = GetPositionY() + passengers->m_SeatData.OffsetY;
             float zz = GetPositionZ() + passengers->m_SeatData.OffsetZ;
-            //float oo = passengers->m_SeatData.Orientation;
+            // float oo = passengers->m_SeatData.Orientation;
             // this is not correct, we should recalculate
             // actual rotation depending on vehicle
             float oo = passengers->GetOrientation();
@@ -407,7 +407,7 @@ void Vehicle::RellocatePassengers(Map *map)
             float xx = GetPositionX() + passengers->m_SeatData.OffsetX;
             float yy = GetPositionY() + passengers->m_SeatData.OffsetY;
             float zz = GetPositionZ() + passengers->m_SeatData.OffsetZ;
-            //float oo = passengers->m_SeatData.Orientation;
+            // float oo = passengers->m_SeatData.Orientation;
             // this is not correct, we should recalculate
             // actual rotation depending on vehicle
             float oo = passengers->GetOrientation();
@@ -470,6 +470,9 @@ void Vehicle::AddPassenger(Unit *unit, int8 seatId, bool force)
                 data3 << (uint32)(0);
                 SendMessageToSet(&data3,false);
             }
+            // Make vehicle fly
+            if(GetVehicleFlags() & VF_FLYING)
+                CastSpell(this, 49303, false);
         }
 
         SpellClickInfoMapBounds clickPair = sObjectMgr.GetSpellClickInfoMapBounds(GetEntry());
@@ -670,7 +673,7 @@ void Vehicle::InstallAllAccessories()
     switch(GetEntry())
     {
         //case 27850:InstallAccessory(27905,1);break;
-        case 28782:InstallAccessory(28768,1,true);break; // Acherus Deathcharger
+        case 28782:InstallAccessory(28768,1, true);break; // Acherus Deathcharger
         case 28312:InstallAccessory(28319,7,true);break;
         case 32627:InstallAccessory(32629,7,true);break;
         case 32930:
