@@ -845,7 +845,7 @@ void IRCCmd::Lookup_Player(_CDATA *CD)
                 ChrRacesEntry const* prace = sChrRacesStore.LookupEntry(praceid);
                 ChrClassesEntry const* pclass = sChrClassesStore.LookupEntry(pclassid);
 
-                if (atoi(plevel.c_str()) < sWorld.getConfig(CONFIG_MAX_PLAYER_LEVEL))
+                if (atoi(plevel.c_str()) < sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
                     plevel += " (" + pxp + "/" + pmaxxp + ")";
                 unsigned int gold = money / 10000;
                 unsigned int silv = (money % 10000) / 100;
@@ -1271,7 +1271,7 @@ void IRCCmd::Level_Player(_CDATA *CD)
     {
         Send_IRCA(CD->USER, "\0034[ERROR] : Player Not Found!", true, "ERROR");
         return;
-    } else if ( i_newlvl < 1 || i_newlvl > sWorld.getConfig(CONFIG_MAX_PLAYER_LEVEL) )
+    } else if ( i_newlvl < 1 || i_newlvl > sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL) )
     {
         Send_IRCA(CD->USER, MakeMsg("\0034[ERROR] : Level Must Be Between 1 And %i!",sConfig.GetIntDefault("MaxPlayerLevel", 70)), true, "ERROR");
         return;
