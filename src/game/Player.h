@@ -55,6 +55,10 @@ class InstanceSave;
 class Spell;
 class Item;
 
+// Playerbot mod
+class PlayerbotAI;
+class PlayerbotMgr;
+
 typedef std::deque<Mail*> PlayerMails;
 
 #define PLAYER_MAX_SKILLS       127
@@ -2285,6 +2289,16 @@ class MANGOS_DLL_SPEC Player : public Unit
 
         bool isActiveObject() const { return true; }
         bool canSeeSpellClickOn(Creature const* creature) const;
+
+        // Playerbot mod:
+        // A Player can either have a playerbotMgr (to manage its bots), or have playerbotAI (if it is a bot), or
+        // neither. Code that enables bots must create the playerbotMgr and set it using SetPlayerbotMgr.
+        void SetPlayerbotAI(PlayerbotAI* ai) { assert(!m_playerbotAI && !m_playerbotMgr); m_playerbotAI=ai; }
+        PlayerbotAI* GetPlayerbotAI() { return m_playerbotAI; }
+        void SetPlayerbotMgr(PlayerbotMgr* mgr) { assert(!m_playerbotAI && !m_playerbotMgr); m_playerbotMgr=mgr; }
+        PlayerbotMgr* GetPlayerbotMgr() { return m_playerbotMgr; }
+        void SetBotDeathTimer() { m_deathTimer = 0; }
+
     protected:
 
         uint32 m_contestedPvPTimer;
@@ -2531,6 +2545,10 @@ class MANGOS_DLL_SPEC Player : public Unit
 
         GridReference<Player> m_gridRef;
         MapReference m_mapRef;
+
+         // Playerbot mod:
+        PlayerbotAI* m_playerbotAI;
+	PlayerbotMgr* m_playerbotMgr;
 
         // Homebind coordinates
         uint32 m_homebindMapId;
