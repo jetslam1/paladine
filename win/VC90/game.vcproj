@@ -1655,6 +1655,125 @@
 			RelativePath="..\..\src\game\pchdef.h"
 			>
 		</File>
+		<Filter
+			Name="IRC">
+			<File
+				RelativePath="..\..\src\game\evo-chat\IRCClient.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\IRCClient.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\IRCCmd.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\IRCCmd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\IRCCmde.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\IRCConf.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\IRCConf.h.in"
+				>
+				<FileConfiguration
+				Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Build SystemConfig.h"
+						CommandLine="copy ..\..\src\game\evo-chat\IRCConf.h.in ..\..\src\game\evo-chat\IRCConf.h"
+						Outputs="..\..\src\game\evo-chat\IRCConf.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Build SystemConfig.h"
+						CommandLine="copy ..\..\src\game\evo-chat\IRCConf.h.in ..\..\src\game\evo-chat\IRCConf.h"
+						Outputs="..\..\src\game\evo-chat\IRCConf.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Build SystemConfig.h"
+						CommandLine="copy ..\..\src\game\evo-chat\IRCConf.h.in ..\..\src\game\evo-chat\IRCConf.h"
+						Outputs="..\..\src\game\evo-chat\IRCConf.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Build SystemConfig.h"
+						CommandLine="copy ..\..\src\game\evo-chat\IRCConf.h.in ..\..\src\game\evo-chat\IRCConf.h"
+						Outputs="..\..\src\game\evo-chat\IRCConf.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug_NoPCH|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Build SystemConfig.h"
+						CommandLine="copy ..\..\src\game\evo-chat\IRCConf.h.in ..\..\src\game\evo-chat\IRCConf.h"
+						Outputs="..\..\src\game\evo-chat\IRCConf.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug_NoPCH|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Build SystemConfig.h"
+						CommandLine="copy ..\..\src\game\evo-chat\IRCConf.h.in ..\..\src\game\evo-chat\IRCConf.h"
+						Outputs="..\..\src\game\evo-chat\IRCConf.h"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\IRCFunc.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\IRCIO.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\IRCLog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\IRCLog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\IRCSock.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\MCS_OnlinePlayers.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\game\evo-chat\MCS_OnlinePlayers.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

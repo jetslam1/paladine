@@ -296,6 +296,9 @@ AC_CONFIG_FILES([
    src/realmd/realmd.conf.dist
    src/mangosd/Makefile
    src/mangosd/mangosd.conf.dist
+   src/game/evo-chat/evo-chat.conf.dist
+   src/game/evo-chat/Makefile
+   src/game/evo-chat/IRCConf.h
    src/bindings/Makefile
    src/bindings/universal/Makefile
 ])

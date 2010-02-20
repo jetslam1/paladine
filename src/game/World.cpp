@@ -62,6 +62,7 @@
 #include "GMTicketMgr.h"
 #include "Util.h"
 #include "AuctionHouseBot.h"
+#include "evo-chat/IRCClient.h"
 
 INSTANTIATE_SINGLETON_1( World );
 
