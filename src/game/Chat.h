@@ -504,6 +504,7 @@ class ChatHandler
         bool HandleFlushArenaPointsCommand(const char *args);
         bool HandleRepairitemsCommand(const char* args);
         bool HandleWaterwalkCommand(const char* args);
+        bool HandlePlayerbotCommand(const char* args);
         bool HandleQuitCommand(const char* args);
 
         //! Development Commands
